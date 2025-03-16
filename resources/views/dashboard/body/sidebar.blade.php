@@ -95,15 +95,15 @@
                 </li>
                 @endif
 
-                <hr>
+                {{-- <hr> --}}
 
                 @if (auth()->user()->can('employee.menu'))
-                <li class="{{ Request::is('employees*') ? 'active' : '' }}">
+                {{-- <li class="{{ Request::is('employees*') ? 'active' : '' }}">
                     <a href="{{ route('employees.index') }}" class="svg-icon">
                         <i class="fa-solid fa-users"></i>
                         <span class="ml-3">Employees</span>
                     </a>
-                </li>
+                </li> --}}
                 @endif
 
                 @if (auth()->user()->can('customer.menu'))
@@ -116,16 +116,16 @@
                 @endif
 
                 @if (auth()->user()->can('supplier.menu'))
-                <li class="{{ Request::is('suppliers*') ? 'active' : '' }}">
+                {{-- <li class="{{ Request::is('suppliers*') ? 'active' : '' }}">
                     <a href="{{ route('suppliers.index') }}" class="svg-icon">
                         <i class="fa-solid fa-users"></i>
                         <span class="ml-3">Suppliers</span>
                     </a>
-                </li>
+                </li> --}}
                 @endif
 
                 @if (auth()->user()->can('salary.menu'))
-                <li>
+                {{-- <li>
                     <a href="#advance-salary" class="collapsed" data-toggle="collapse" aria-expanded="false">
                     <i class="fa-solid fa-cash-register"></i>
                         <span class="ml-3">Salary</span>
@@ -156,10 +156,10 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 @endif
 
-                @if (auth()->user()->can('attendence.menu'))
+                {{-- @if (auth()->user()->can('attendence.menu'))
                 <li>
                     <a href="#attendence" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <i class="fa-solid fa-calendar-days"></i>
@@ -182,7 +182,7 @@
                         </li>
                     </ul>
                 </li>
-                @endif
+                @endif --}}
 
                 <hr>
 
@@ -225,14 +225,14 @@
                 </li>
                 @endif
 
-                @if (auth()->user()->can('database.menu'))
+                {{-- @if (auth()->user()->can('database.menu'))
                 <li class="{{ Request::is('database/backup*') ? 'active' : '' }}">
                     <a href="{{ route('backup.index') }}" class="svg-icon">
                         <i class="fa-solid fa-database"></i>
                         <span class="ml-3">Backup Database</span>
                     </a>
                 </li>
-                @endif
+                @endif --}}
             </ul>
         </nav>
         <div class="p-3"></div>
