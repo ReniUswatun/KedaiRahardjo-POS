@@ -8,6 +8,6 @@ class MenuController extends Controller
 {
     public function index()
     {
-        return view('customer.menu.index');
+        return view('customer.menus.index');
     }
 }

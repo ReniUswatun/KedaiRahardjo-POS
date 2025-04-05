@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Customer\MenuController;
 use App\Http\Controllers\Admin\{
     DashboardController,
     ProfileController,
@@ -15,6 +13,7 @@ use App\Http\Controllers\Admin\{
     DatabaseBackupController,
     RoleController
 };
+use App\Http\Controllers\Customer\MenuController;
 
 /*
 |--------------------------------------------------------------------------
