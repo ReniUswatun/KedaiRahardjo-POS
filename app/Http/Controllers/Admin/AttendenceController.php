@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Employee;
 use App\Models\Attendence;
@@ -56,7 +56,7 @@ class AttendenceController extends Controller
         // Delete if the date is already created (it is just for updating new attendance). If not it will create new attendance
         Attendence::where('date', $validatedData['date'])->delete();
 
-        for ($i=1; $i <= $countEmployee; $i++) {
+        for ($i = 1; $i <= $countEmployee; $i++) {
             $status = 'status' . $i;
             $attend = new Attendence();
 

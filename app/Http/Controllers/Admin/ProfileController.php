@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\View\View;
@@ -54,8 +54,8 @@ class ProfileController extends Controller
         $rules = [
             'name' => 'required|max:50',
             'photo' => 'image|file|max:1024',
-            'email' => 'required|email|max:50|unique:users,email,'.$user->id,
-            'username' => 'required|min:4|max:25|alpha_dash:ascii|unique:users,username,'.$user->id
+            'email' => 'required|email|max:50|unique:users,email,' . $user->id,
+            'username' => 'required|min:4|max:25|alpha_dash:ascii|unique:users,username,' . $user->id
         ];
 
         $validatedData = $request->validate($rules);
@@ -68,7 +68,7 @@ class ProfileController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/profile/';
 
             $file->storeAs($path, $fileName);

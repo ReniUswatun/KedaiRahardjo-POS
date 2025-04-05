@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class AdvanceSalaryController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        if(request('search')){
+        if (request('search')) {
             Employee::firstWhere('name', request('search'));
         }
 

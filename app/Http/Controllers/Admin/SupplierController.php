@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -32,8 +32,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view('suppliers.create', [
-        ]);
+        return view('suppliers.create', []);
     }
 
     /**
@@ -62,7 +61,7 @@ class SupplierController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/suppliers/';
 
             $file->storeAs($path, $fileName);
@@ -102,8 +101,8 @@ class SupplierController extends Controller
         $rules = [
             'photo' => 'image|file|max:1024',
             'name' => 'required|string|max:50',
-            'email' => 'required|email|max:50|unique:suppliers,email,'.$supplier->id,
-            'phone' => 'required|string|max:15|unique:suppliers,phone,'.$supplier->id,
+            'email' => 'required|email|max:50|unique:suppliers,email,' . $supplier->id,
+            'phone' => 'required|string|max:15|unique:suppliers,phone,' . $supplier->id,
             'shopname' => 'required|string|max:50',
             'type' => 'required|string|max:25',
             'account_holder' => 'max:50',
@@ -120,13 +119,13 @@ class SupplierController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/suppliers/';
 
             /**
              * Delete photo if exists.
              */
-            if($supplier->photo){
+            if ($supplier->photo) {
                 Storage::delete($path . $supplier->photo);
             }
 
@@ -147,7 +146,7 @@ class SupplierController extends Controller
         /**
          * Delete photo if exists.
          */
-        if($supplier->photo){
+        if ($supplier->photo) {
             Storage::delete('public/suppliers/' . $supplier->photo);
         }
 

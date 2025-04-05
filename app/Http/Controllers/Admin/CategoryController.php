@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -77,8 +77,8 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $rules = [
-            'name' => 'required|unique:categories,name,'.$category->id,
-            'slug' => 'required|alpha_dash|unique:categories,slug,'.$category->id,
+            'name' => 'required|unique:categories,name,' . $category->id,
+            'slug' => 'required|alpha_dash|unique:categories,slug,' . $category->id,
         ];
 
         $validatedData = $request->validate($rules);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Models\Product;
@@ -126,9 +126,9 @@ class OrderController extends Controller
     {
         $order = Order::where('id', $order_id)->first();
         $orderDetails = OrderDetails::with('product')
-                        ->where('order_id', $order_id)
-                        ->orderBy('id', 'DESC')
-                        ->get();
+            ->where('order_id', $order_id)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         return view('orders.details-order', [
             'order' => $order,
@@ -148,7 +148,7 @@ class OrderController extends Controller
 
         foreach ($products as $product) {
             Product::where('id', $product->product_id)
-                    ->update(['product_store' => DB::raw('product_store-'.$product->quantity)]);
+                ->update(['product_store' => DB::raw('product_store-' . $product->quantity)]);
         }
 
         Order::findOrFail($order_id)->update(['order_status' => 'complete']);
@@ -160,9 +160,9 @@ class OrderController extends Controller
     {
         $order = Order::where('id', $order_id)->first();
         $orderDetails = OrderDetails::with('product')
-                        ->where('order_id', $order_id)
-                        ->orderBy('id', 'DESC')
-                        ->get();
+            ->where('order_id', $order_id)
+            ->orderBy('id', 'DESC')
+            ->get();
 
         // show data (only for debugging)
         return view('orders.invoice-order', [

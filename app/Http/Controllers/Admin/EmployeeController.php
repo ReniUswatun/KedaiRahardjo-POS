@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ class EmployeeController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/employees/';
 
             $file->storeAs($path, $fileName);
@@ -98,8 +98,8 @@ class EmployeeController extends Controller
         $rules = [
             'photo' => 'image|file|max:1024',
             'name' => 'required|string|max:50',
-            'email' => 'required|email|max:50|unique:employees,email,'.$employee->id,
-            'phone' => 'required|string|max:20|unique:employees,phone,'.$employee->id,
+            'email' => 'required|email|max:50|unique:employees,email,' . $employee->id,
+            'phone' => 'required|string|max:20|unique:employees,phone,' . $employee->id,
             'experience' => 'string|max:6|nullable',
             'salary' => 'numeric',
             'vacation' => 'max:50|nullable',
@@ -113,13 +113,13 @@ class EmployeeController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/employees/';
 
             /**
              * Delete photo if exists.
              */
-            if($employee->photo){
+            if ($employee->photo) {
                 Storage::delete($path . $employee->photo);
             }
 
@@ -140,7 +140,7 @@ class EmployeeController extends Controller
         /**
          * Delete photo if exists.
          */
-        if($employee->photo){
+        if ($employee->photo) {
             Storage::delete('public/employees/' . $employee->photo);
         }
 

@@ -1,21 +1,20 @@
 <?php
 
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\ProductController;
-use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\CustomerController;
-use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\SupplierController;
-use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Dashboard\PaySalaryController;
-use App\Http\Controllers\Dashboard\AttendenceController;
-use App\Http\Controllers\Dashboard\AdvanceSalaryController;
-use App\Http\Controllers\Dashboard\DatabaseBackupController;
-use App\Http\Controllers\Dashboard\OrderController;
-use App\Http\Controllers\Dashboard\PosController;
-use App\Http\Controllers\Dashboard\RoleController;
-use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Customer\MenuController;
+use App\Http\Controllers\Admin\{
+    DashboardController,
+    ProfileController,
+    UserController,
+    CustomerController,
+    ProductController,
+    CategoryController,
+    PosController,
+    OrderController,
+    DatabaseBackupController,
+    RoleController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -33,10 +32,12 @@ Route::get('/', function () {
 });
 
 //route baru//
-
-
-
-
+// Layout baru untuk customer dalam membuat pesanan
+// ====== CUSTOMER ======
+Route::get(
+    "/customer",
+    [MenuController::class, "index"]
+)->name("customer.index");
 
 
 
@@ -77,7 +78,7 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 // });
 
 // ====== SALARY EMPLOYEE ======
-// Route::middleware(['permission:salary.menu'])->group(function () {
+// phpRoute::middleware(['permission:salary.menu'])->group(function () {
 //     // PaySalary
 //     Route::resource('/pay-salary', PaySalaryController::class)->except(['show', 'create', 'edit', 'update']);
 //     Route::get('/pay-salary/history', [PaySalaryController::class, 'payHistory'])->name('pay-salary.payHistory');

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -187,7 +187,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $permissions = $request->permission_id;
 
-        if(!empty($permissions)) {
+        if (!empty($permissions)) {
             $role->syncPermissions($permissions);
         }
 
@@ -198,7 +198,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        if(!is_null($role)) {
+        if (!is_null($role)) {
             $role->delete();
         }
 

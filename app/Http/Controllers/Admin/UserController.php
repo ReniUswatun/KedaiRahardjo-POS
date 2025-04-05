@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -60,7 +60,7 @@ class UserController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/profile/';
 
             $file->storeAs($path, $fileName);
@@ -69,7 +69,7 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
-        if($request->role) {
+        if ($request->role) {
             $user->assignRole($request->role);
         }
 
@@ -103,11 +103,11 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|max:50',
             'photo' => 'image|file|max:1024',
-            'email' => 'required|email|max:50|unique:users,email,'.$user->id,
-            'username' => 'required|min:4|max:25|alpha_dash:ascii|unique:users,username,'.$user->id,
+            'email' => 'required|email|max:50|unique:users,email,' . $user->id,
+            'username' => 'required|min:4|max:25|alpha_dash:ascii|unique:users,username,' . $user->id,
         ];
 
-        if($request->password || $request->confirm_password) {
+        if ($request->password || $request->confirm_password) {
             $rules['password'] = 'min:6|required_with:password_confirmation';
             $rules['password_confirmation'] = 'min:6|same:password';
         }
@@ -119,13 +119,13 @@ class UserController extends Controller
          * Handle upload image with Storage.
          */
         if ($file = $request->file('photo')) {
-            $fileName = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $fileName = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
             $path = 'public/profile/';
 
             /**
              * Delete photo if exists.
              */
-            if($user->photo){
+            if ($user->photo) {
                 Storage::delete($path . $user->photo);
             }
 
@@ -136,7 +136,7 @@ class UserController extends Controller
         $userData = User::findOrFail($user->id);
         $userData->update($validatedData);
 
-        if($request->role) {
+        if ($request->role) {
             $userData->syncRoles($request->role);
         }
 
@@ -151,7 +151,7 @@ class UserController extends Controller
         /**
          * Delete photo if exists.
          */
-        if($user->photo){
+        if ($user->photo) {
             Storage::delete('public/profile/' . $user->photo);
         }
 

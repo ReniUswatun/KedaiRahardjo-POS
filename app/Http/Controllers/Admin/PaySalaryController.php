@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Employee;
 use App\Models\PaySalary;
@@ -22,7 +22,7 @@ class PaySalaryController extends Controller
             abort(400, 'The row parameter must be an integer between 1 and 100.');
         }
 
-        if(request('search')){
+        if (request('search')) {
             Employee::firstWhere('name', request('search'));
         }
 
@@ -56,17 +56,17 @@ class PaySalaryController extends Controller
             abort(400, 'The row parameter must be an integer between 1 and 100.');
         }
 
-        if(request('search')){
+        if (request('search')) {
             Employee::firstWhere('name', request('search'));
         }
 
         return view('pay-salary.history', [
             'paySalaries' => PaySalary::with(['employee'])
-            ->orderByDesc('date')
-            ->filter(request(['search']))
-            ->sortable()
-            ->paginate($row)
-            ->appends(request()->query()),
+                ->orderByDesc('date')
+                ->filter(request(['search']))
+                ->sortable()
+                ->paginate($row)
+                ->appends(request()->query()),
         ]);
     }
 
@@ -74,8 +74,8 @@ class PaySalaryController extends Controller
     {
         return view('pay-salary.history-details', [
             'paySalary' => PaySalary::with(['employee'])
-            ->where('id', $id)
-            ->first(),
+                ->where('id', $id)
+                ->first(),
         ]);
     }
 
