@@ -22,7 +22,7 @@ class CustomerController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('customers.index', [
+        return view('admin.customers.index', [
             'customers' => Customer::filter(request(['search']))->sortable()->paginate($row)->appends(request()->query()),
         ]);
     }
@@ -32,7 +32,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('customers.create');
+        return view('admin.customers.create');
     }
 
     /**
@@ -77,7 +77,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        return view('customers.show', [
+        return view('admin.customers.show', [
             'customer' => $customer,
         ]);
     }
@@ -87,7 +87,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        return view('customers.edit', [
+        return view('admin.customers.edit', [
             'customer' => $customer
         ]);
     }

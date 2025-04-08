@@ -22,7 +22,7 @@ class SupplierController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('suppliers.index', [
+        return view('admin.suppliers.index', [
             'suppliers' => Supplier::filter(request(['search']))->sortable()->paginate($row)->appends(request()->query()),
         ]);
     }
@@ -32,7 +32,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return view('suppliers.create', []);
+        return view('admin.suppliers.create', []);
     }
 
     /**
@@ -78,7 +78,7 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        return view('suppliers.show', [
+        return view('admin.suppliers.show', [
             'supplier' => $supplier,
         ]);
     }
@@ -88,7 +88,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        return view('suppliers.edit', [
+        return view('admin.suppliers.edit', [
             'supplier' => $supplier
         ]);
     }

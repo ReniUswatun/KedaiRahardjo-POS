@@ -31,7 +31,7 @@ class ProductController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('products.index', [
+        return view('admin.products.index', [
             'products' => Product::with(['category', 'supplier'])
                 ->filter(request(['search']))
                 ->sortable()
@@ -45,7 +45,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create', [
+        return view('admin.products.create', [
             'categories' => Category::all(),
             'suppliers' => Supplier::all(),
         ]);
@@ -107,7 +107,7 @@ class ProductController extends Controller
 
         $barcode = $generator->getBarcode($product->product_code, $generator::TYPE_CODE_128);
 
-        return view('products.show', [
+        return view('admin.products.show', [
             'product' => $product,
             'barcode' => $barcode,
         ]);
@@ -118,7 +118,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('products.edit', [
+        return view('admin.products.edit', [
             'categories' => Category::all(),
             'suppliers' => Supplier::all(),
             'product' => $product
@@ -190,7 +190,7 @@ class ProductController extends Controller
      */
     public function importView()
     {
-        return view('products.import');
+        return view('admin.products.import');
     }
 
     public function importStore(Request $request)

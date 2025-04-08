@@ -18,14 +18,14 @@ class RoleController extends Controller
     {
         $permissions = QueryBuilder::for(Permission::class)->paginate();
 
-        return view('roles.permission-index', [
+        return view('admin.roles.permission-index', [
             'permissions' => $permissions,
         ]);
     }
 
     public function permissionCreate()
     {
-        return view('roles.permission-create');
+        return view('admin.roles.permission-create');
     }
 
     public function permissionStore(Request $request)
@@ -46,7 +46,7 @@ class RoleController extends Controller
     {
         $permission = Permission::findById($id);
 
-        return view('roles.permission-edit', [
+        return view('admin.roles.permission-edit', [
             'permission' => $permission,
         ]);
     }
@@ -77,14 +77,14 @@ class RoleController extends Controller
     {
         $roles = QueryBuilder::for(Role::class)->paginate();
 
-        return view('roles.role-index', [
+        return view('admin.roles.role-index', [
             'roles' => $roles,
         ]);
     }
 
     public function roleCreate()
     {
-        return view('roles.role-create');
+        return view('admin.roles.role-create');
     }
 
     public function roleStore(Request $request)
@@ -104,7 +104,7 @@ class RoleController extends Controller
     {
         $role = Role::findById($id);
 
-        return view('roles.role-edit', [
+        return view('admin.roles.role-edit', [
             'role' => $role,
         ]);
     }
@@ -133,7 +133,7 @@ class RoleController extends Controller
     {
         $roles = QueryBuilder::for(Role::class)->paginate();
 
-        return view('roles.role-permission-index', [
+        return view('admin.roles.role-permission-index', [
             'roles' => $roles,
         ]);
     }
@@ -146,7 +146,7 @@ class RoleController extends Controller
         $permissions = Permission::all();
         $permission_groups = User::getPermissionGroups();
 
-        return view('roles.role-permission-create', [
+        return view('admin.roles.role-permission-create', [
             'roles' => $roles,
             'permissions' => $permissions,
             'permission_groups' => $permission_groups
@@ -175,7 +175,7 @@ class RoleController extends Controller
         $permissions = Permission::all();
         $permission_groups = User::getPermissionGroups();
 
-        return view('roles.role-permission-edit', [
+        return view('admin.roles.role-permission-edit', [
             'role' => $role,
             'permissions' => $permissions,
             'permission_groups' => $permission_groups

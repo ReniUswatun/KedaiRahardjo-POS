@@ -26,7 +26,7 @@ class PaySalaryController extends Controller
             Employee::firstWhere('name', request('search'));
         }
 
-        return view('pay-salary.index', [
+        return view('admin.pay-salary.index', [
             'advanceSalaries' => AdvanceSalary::with(['employee'])
                 ->orderByDesc('date')
                 ->filter(request(['search']))
@@ -41,7 +41,7 @@ class PaySalaryController extends Controller
      */
     public function paySalary(String $id)
     {
-        return view('pay-salary.create', [
+        return view('admin.pay-salary.create', [
             'advanceSalary' => AdvanceSalary::with(['employee'])
                 ->where('id', $id)
                 ->first(),
@@ -60,7 +60,7 @@ class PaySalaryController extends Controller
             Employee::firstWhere('name', request('search'));
         }
 
-        return view('pay-salary.history', [
+        return view('admin.pay-salary.history', [
             'paySalaries' => PaySalary::with(['employee'])
                 ->orderByDesc('date')
                 ->filter(request(['search']))
@@ -72,7 +72,7 @@ class PaySalaryController extends Controller
 
     public function payHistoryDetail(String $id)
     {
-        return view('pay-salary.history-details', [
+        return view('admin.pay-salary.history-details', [
             'paySalary' => PaySalary::with(['employee'])
                 ->where('id', $id)
                 ->first(),

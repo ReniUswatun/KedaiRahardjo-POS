@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard.index', [
+        return view('admin.dashboard.index', [
             'total_paid' => Order::sum('pay'),
             'total_due' => Order::sum('due'),
             'complete_orders' => Order::where('order_status', 'complete')->get(),

@@ -29,7 +29,7 @@ class OrderController extends Controller
 
         $orders = Order::where('order_status', 'pending')->sortable()->paginate($row);
 
-        return view('orders.pending-orders', [
+        return view('admin.orders.pending-orders', [
             'orders' => $orders
         ]);
     }
@@ -44,7 +44,7 @@ class OrderController extends Controller
 
         $orders = Order::where('order_status', 'complete')->sortable()->paginate($row);
 
-        return view('orders.complete-orders', [
+        return view('admin.orders.complete-orders', [
             'orders' => $orders
         ]);
     }
@@ -57,7 +57,7 @@ class OrderController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('stock.index', [
+        return view('admin.stock.index', [
             'products' => Product::with(['category', 'supplier'])
                 ->filter(request(['search']))
                 ->sortable()
@@ -130,7 +130,7 @@ class OrderController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        return view('orders.details-order', [
+        return view('admin.orders.details-order', [
             'order' => $order,
             'orderDetails' => $orderDetails,
         ]);
@@ -165,7 +165,7 @@ class OrderController extends Controller
             ->get();
 
         // show data (only for debugging)
-        return view('orders.invoice-order', [
+        return view('admin.orders.invoice-order', [
             'order' => $order,
             'orderDetails' => $orderDetails,
         ]);
@@ -183,7 +183,7 @@ class OrderController extends Controller
             ->sortable()
             ->paginate($row);
 
-        return view('orders.pending-due', [
+        return view('admin.orders.pending-due', [
             'orders' => $orders
         ]);
     }

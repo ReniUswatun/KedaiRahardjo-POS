@@ -21,7 +21,7 @@ class AttendenceController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('attendence.index', [
+        return view('admin.attendence.index', [
             'attendences' => Attendence::sortable()
                 ->select('date')
                 ->groupBy('date')
@@ -36,7 +36,7 @@ class AttendenceController extends Controller
      */
     public function create()
     {
-        return view('attendence.create', [
+        return view('admin.attendence.create', [
             'employees' => Employee::all()->sortBy('name'),
         ]);
     }
@@ -83,7 +83,7 @@ class AttendenceController extends Controller
      */
     public function edit(Attendence $attendence)
     {
-        return view('attendence.edit', [
+        return view('admin.attendence.edit', [
             'attendences' => Attendence::with(['employee'])->where('date', $attendence->date)->get(),
             'date' => $attendence->date
         ]);

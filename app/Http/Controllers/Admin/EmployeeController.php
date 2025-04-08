@@ -22,7 +22,7 @@ class EmployeeController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('employees.index', [
+        return view('admin.employees.index', [
             'employees' => Employee::filter(request(['search']))->sortable()->paginate($row)->appends(request()->query()),
         ]);
     }
@@ -32,7 +32,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+        return view('admin.employees.create');
     }
 
     /**
@@ -75,7 +75,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        return view('employees.show', [
+        return view('admin.employees.show', [
             'employee' => $employee,
         ]);
     }
@@ -85,7 +85,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        return view('employees.edit', [
+        return view('admin.employees.edit', [
             'employee' => $employee,
         ]);
     }

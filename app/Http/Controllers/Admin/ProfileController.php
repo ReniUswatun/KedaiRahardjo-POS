@@ -19,7 +19,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request): View
     {
-        return view('profile.index', [
+        return view('admin.profile.index', [
             'user' => $request->user(),
         ]);
     }
@@ -29,7 +29,7 @@ class ProfileController extends Controller
      */
     public function changePassword(Request $request): View
     {
-        return view('profile.change-password', [
+        return view('admin.profile.change-password', [
             'user' => $request->user(),
         ]);
     }
@@ -39,7 +39,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('admin.profile.edit', [
             'user' => $request->user(),
         ]);
     }

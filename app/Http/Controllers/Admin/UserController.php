@@ -24,7 +24,7 @@ class UserController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('users.index', [
+        return view('admin.users.index', [
             'users' => User::filter(request(['search']))->sortable()->paginate($row)->appends(request()->query()),
         ]);
     }
@@ -34,7 +34,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create', [
+        return view('admin.users.create', [
             'roles' => Role::all(),
         ]);
     }
@@ -89,7 +89,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', [
+        return view('admin.users.edit', [
             'userData' => $user,
             'roles' => Role::all(),
         ]);

@@ -21,7 +21,7 @@ class PosController extends Controller
             abort(400, 'The per-page parameter must be an integer between 1 and 100.');
         }
 
-        return view('pos.index', [
+        return view('admin.pos.index', [
             'customers' => Customer::all()->sortBy('name'),
             'productItem' => Cart::content(),
             'products' => Product::where('expire_date', '>', $todayDate)->filter(request(['search']))
@@ -82,7 +82,7 @@ class PosController extends Controller
         $customer = Customer::where('id', $validatedData['customer_id'])->first();
         $content = Cart::content();
 
-        return view('pos.create-invoice', [
+        return view('admin.pos.create-invoice', [
             'customer' => $customer,
             'content' => $content
         ]);
@@ -98,7 +98,7 @@ class PosController extends Controller
         $customer = Customer::where('id', $validatedData['customer_id'])->first();
         $content = Cart::content();
 
-        return view('pos.print-invoice', [
+        return view('admin.pos.print-invoice', [
             'customer' => $customer,
             'content' => $content
         ]);
