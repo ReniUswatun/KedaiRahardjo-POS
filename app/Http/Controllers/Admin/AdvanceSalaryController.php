@@ -26,7 +26,7 @@ class AdvanceSalaryController extends Controller
             Employee::firstWhere('name', request('search'));
         }
 
-        return view('advance-salary.index', [
+        return view('admin.advance-salary.index', [
             'advance_salaries' => AdvanceSalary::with(['employee'])
                 ->orderByDesc('date')
                 ->filter(request(['search']))
@@ -41,7 +41,7 @@ class AdvanceSalaryController extends Controller
      */
     public function create()
     {
-        return view('advance-salary.create', [
+        return view('admin.advance-salary.create', [
             'employees' => Employee::all()->sortBy('name'),
         ]);
     }
@@ -92,7 +92,7 @@ class AdvanceSalaryController extends Controller
      */
     public function edit(AdvanceSalary $advanceSalary)
     {
-        return view('advance-salary.edit', [
+        return view('admin.advance-salary.edit', [
             'employees' => Employee::all()->sortBy('name'),
             'advance_salary' => $advanceSalary,
         ]);
