@@ -1,4 +1,4 @@
-@extends('auth.body.main')
+@extends('admin.auth.body.main')
 
 @section('container')
 <div class="row align-items-center justify-content-center height-self-center">
