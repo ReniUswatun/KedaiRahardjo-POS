@@ -24,9 +24,9 @@
 
     <!-- Wrapper Start -->
     <div class="wrapper">
-        @include('dashboard.body.sidebar')
+        @include('admin.dashboard.body.sidebar')
 
-        @include('dashboard.body.navbar')
+        @include('admin.dashboard.body.navbar')
 
         <div class="content-page">
             @yield('container')
@@ -34,7 +34,7 @@
     </div>
     <!-- Wrapper End-->
 
-    @include('dashboard.body.footer')
+    @include('admin.dashboard.body.footer')
 
     <!-- Backend Bundle JavaScript -->
     <script src="{{ asset('assets/js/backend-bundle.min.js') }}"></script>
