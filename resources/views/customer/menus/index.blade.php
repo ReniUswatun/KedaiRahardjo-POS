@@ -6,4 +6,9 @@
         <li class="bg-white p-4 rounded shadow">Mie Rebus</li>
         <li class="bg-white p-4 rounded shadow">Es Teh</li>
     </ul>
+    <p class="text-red-500 font-bold text-xl">
+    Jika teks ini merah dan tebal, maka Tailwind aktif 🎉
+</p>
+
+
 </x-customer.app-layout>
