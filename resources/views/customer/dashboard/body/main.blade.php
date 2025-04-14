@@ -1,12 +1,13 @@
 <x-customer.app-layout>
-@section('container')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Welcome to the Customer Dashboard</h1>
-                <p>This is the main content area for the customer dashboard.</p>
-            </div>
+    <x-slot name="header">
+        @include('customer.dashboard.body.navbar')
+    </x-slot>
+    <x-slot name="content">
+         <div class="content-page">
+            @yield('container')
         </div>
-    </div>
-@endsection
+    </x-slot>
+     <x-slot name="bottomNav">
+        @include('customer.dashboard.body.bottom-nav')
+    </x-slot>
 </x-customer.app-layout>

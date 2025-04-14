@@ -9,7 +9,21 @@
 
     <!-- Container utama untuk membatasi lebar dan center -->
     <div class="max-w-xl mx-auto min-h-screen bg-white shadow-md">
-        {{ $slot }}
+        <header>
+            <div class="bg-gray-800 text-white p-4">
+                {{ $header }}
+            </div>
+        </header>
+        <main>
+            <div class="p-4">
+                {{ $content }}
+            </div>
+        </main>
+        <bottom>
+            <div class="bg-gray-800 text-white p-4 text-center">
+                {{$bottomNav}}
+            </div>
+        </bottom>
     </div>
 
 </body>
