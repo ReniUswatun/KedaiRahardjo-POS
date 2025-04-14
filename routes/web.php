@@ -13,7 +13,11 @@ use App\Http\Controllers\Admin\{
     DatabaseBackupController,
     RoleController
 };
-use App\Http\Controllers\Customer\MenuController;
+use App\Http\Controllers\Customer\{
+    DashboardController as CustomerDashboardController,
+    MenuController as CustomerMenuController
+};
+
 
 /*
 |--------------------------------------------------------------------------
@@ -34,15 +38,15 @@ Route::get('/', function () {
 // Layout baru untuk customer dalam membuat pesanan
 // ====== CUSTOMER ======
 Route::get(
-    "/customer",
-    [MenuController::class, "index"]
+    "/dashboard",
+    [CustomerDashboardController::class, "index"]
 )->name("customer.index");
 
 
 
 
 // DEFAULT DASHBOARD & PROFILE
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
