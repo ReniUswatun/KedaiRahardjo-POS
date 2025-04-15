@@ -1,6 +1,6 @@
 <!-- resources/views/components/customer/navbar.blade.php -->
-<nav class="bg-gray-200 p-4 shadow">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+<nav class="fixed top-0 left-0 right-0 max-w-xl mx-auto bg-white shadow p-4">
+    <div class="max-w-7xl mx-auto flex justify-around">
         <!-- Logo/nama aplikasi -->
         <div>
             <a href="" class="text-xl font-bold text-gray-800">
