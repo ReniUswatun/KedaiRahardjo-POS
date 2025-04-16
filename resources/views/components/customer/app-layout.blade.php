@@ -6,6 +6,9 @@
     @vite('resources/css/app.css') 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+
+
 </head>
 <body class="bg-gray-100">
 
@@ -17,7 +20,7 @@
             </div>
         </header>
         <main>
-            <div class="mt-20">
+            <div class="mt-16 pt-2">
                 {{ $content }}
             </div>
         </main>

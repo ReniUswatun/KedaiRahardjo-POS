@@ -1,12 +1,8 @@
 @extends('customer.dashboard.body.main')
 
 @section('container')
-    <div class="h-screeno">
-        {{-- <h1 class="text-2xl font-bold mb-4">Welcome to Your Dashboard</h1>
-        <p class="text-gray-600">Here you can manage your account and orders.</p>
-        <div class="mt-6">
-            <p class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View Orders</p>
-        </div> --}}
+    <div class="h-screeno mx-4">
+        <h1 class="text-2xl font-bold mb-4">Welcome to Kedai Rahardjo!</h1>
     <!-- Sliding Carousel -->
     <div x-data="{ 
         activeSlide: 0, 
@@ -34,7 +30,7 @@
           this.activeSlide = (this.activeSlide + 1) % this.slides.length;
         }
       }" 
-      class="w-full px-4 mt-2"
+      class="w-full mt-2"
       @mouseenter="stopAutoSlide()"
       @mouseleave="autoSlide()">
       
@@ -82,8 +78,17 @@
       </div>
     </div>
 
+   <div class="bg-gradient-to-r from-amber-100 to-yellow-50 p-6 rounded-xl shadow-lg my-6 text-center">
+  <p class="text-xl font-bold text-gray-800 tracking-wide">
+    Order now and <span class="text-yellow-600">savor your favorite dishes</span><br>
+    from <span class="text-yellow-700">Kedai Rahardjo</span> 🍜
+  </p>
+</div>
+
+
+
      <!-- Menu Kategori -->
-    <div class="px-4 mt-6 mb-4">
+    <div class="mt-6 mb-4">
       <h2 class="text-lg font-bold">Menu Kategori</h2>
       <div class="grid grid-cols-2 gap-4 mt-4">
 
