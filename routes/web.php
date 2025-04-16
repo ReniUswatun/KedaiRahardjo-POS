@@ -42,6 +42,11 @@ Route::get(
     [CustomerDashboardController::class, "index"]
 )->name("customer.index");
 
+Route::get('/menu/{jenis}', function($jenis) {
+    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
+})->where('jenis', 'makanan|minuman|snack');
+
+
 
 
 

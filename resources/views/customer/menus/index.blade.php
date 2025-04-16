@@ -7,9 +7,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
-<body class="bg-gray-100 text-gray-800 pb-16">
+<body class="bg-gray-100 text-gray-800 pb-16 overflow-hidden">
   <!-- Container utama dengan maksimum lebar mobile -->
-  <div class="max-w-md mx-auto bg-white min-h-screen shadow-md">
+  <div class="fixed inset-0 m-auto max-w-md w-full bg-white min-h-screen shadow-md relative">
     <!-- Header -->
     <div class="p-4">
       <h1 class="text-xl font-semibold text-red-600">Kedai Rahardjo</h1>
@@ -97,10 +97,10 @@
       <div class="grid grid-cols-2 gap-4 mt-4">
 
         <!-- Makanan -->
-        <div class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm">
+        <a href="/menu/makanan" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/ios/50/FA5252/rice-bowl.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Makanan</p>
-        </div>
+        </a>
 
         <!-- Minuman -->
         <div class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm">
@@ -124,14 +124,27 @@
     </div>
     
     <!-- Bottom Navigation -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2 shadow-lg">
-      <div class="max-w-md w-full mx-auto flex justify-around">
-        <button class="flex flex-col items-center text-gray-400">
-          <img src="https://img.icons8.com/fluency-systems-regular/48/home--v1.png" class="w-10 h-10" />
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2 shadow-lg"
+        x-data="{ activeTab: 'home' }">
+      <div class="w-full flex justify-around">
+        <!-- Beranda -->
+        <button 
+          class="flex flex-col items-center transition-colors"
+          :class="activeTab === 'home' ? 'text-red-600' : 'text-gray-400 hover:text-red-500'"
+          @click="activeTab = 'home'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M4 10v10h6v-6h4v6h6V10"/>
+          </svg>
           <span class="text-xs">Beranda</span>
         </button>
-        <button class="flex flex-col items-center text-gray-400">
-          <img src="https://img.icons8.com/windows/32/menu--v1.png" class="w-10 h-10" />
+        <!-- Menu -->
+        <button 
+          class="flex flex-col items-center transition-colors"
+          :class="activeTab === 'menu' ? 'text-red-600' : 'text-gray-400 hover:text-red-500'"
+          @click="activeTab = 'menu'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
           <span class="text-xs">Menu</span>
         </button>
       </div>
