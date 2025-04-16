@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-100 text-gray-800 pb-16 overflow-hidden">
   <!-- Container utama dengan maksimum lebar mobile -->
-  <div class="fixed inset-0 m-auto max-w-md w-full bg-white min-h-screen shadow-md relative">
+  <div class="inset-0 m-auto max-w-md w-full bg-white min-h-screen shadow-md relative">
     <!-- Header -->
     <div class="p-4">
       <h1 class="text-xl font-semibold text-red-600">Kedai Rahardjo</h1>

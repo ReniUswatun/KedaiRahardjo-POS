@@ -1,12 +1,12 @@
 <!-- resources/views/components/customer/bottom-nav.blade.php -->
-<div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white shadow p-4">
+<div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white shadow p-3">
     <div class="max-w-7xl mx-auto flex justify-around">
         <a href="" class="text-gray-700 hover:text-gray-900 text-center">
-            <svg class="w-6 h-6 mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" 
+            <svg class="w-6 h-6 mx-auto mb-1 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" 
                  viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"></path>
             </svg>
-            Dashboard
+            Home
         </a>
         <a href="" class="text-gray-700 hover:text-gray-900 text-center">
             <svg class="w-6 h-6 mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" 
