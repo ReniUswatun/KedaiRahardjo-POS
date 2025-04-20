@@ -1,21 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashboard\ProductController;
-use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\CustomerController;
-use App\Http\Controllers\Dashboard\EmployeeController;
-use App\Http\Controllers\Dashboard\SupplierController;
-use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Dashboard\PaySalaryController;
-use App\Http\Controllers\Dashboard\AttendenceController;
-use App\Http\Controllers\Dashboard\AdvanceSalaryController;
-use App\Http\Controllers\Dashboard\DatabaseBackupController;
-use App\Http\Controllers\Dashboard\OrderController;
-use App\Http\Controllers\Dashboard\PosController;
-use App\Http\Controllers\Dashboard\RoleController;
-use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Admin\{
+    DashboardController,
+    ProfileController,
+    UserController,
+    CustomerController,
+    ProductController,
+    CategoryController,
+    PosController,
+    OrderController,
+    DatabaseBackupController,
+    RoleController
+};
+use App\Http\Controllers\Customer\{
+    DashboardController as CustomerDashboardController,
+    MenuController as CustomerMenuController
+};
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,16 +35,23 @@ Route::get('/', function () {
 });
 
 //route baru//
+// Layout baru untuk customer dalam membuat pesanan
+// ====== CUSTOMER ======
+Route::get(
+    "/dashboard",
+    [CustomerDashboardController::class, "index"]
+)->name("customer.index");
 
-
-
+Route::get('/menu/{jenis}', function($jenis) {
+    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
+})->where('jenis', 'makanan|minuman|snack');
 
 
 
 
 
 // DEFAULT DASHBOARD & PROFILE
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -62,31 +71,31 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 });
 
 // ====== SUPPLIERS ======
-Route::middleware(['permission:supplier.menu'])->group(function () {
-    Route::resource('/suppliers', SupplierController::class);
-});
+// Route::middleware(['permission:supplier.menu'])->group(function () {
+//     Route::resource('/suppliers', SupplierController::class);
+// });
 
 // ====== EMPLOYEES ======
-Route::middleware(['permission:employee.menu'])->group(function () {
-    Route::resource('/employees', EmployeeController::class);
-});
+// Route::middleware(['permission:employee.menu'])->group(function () {
+//     Route::resource('/employees', EmployeeController::class);
+// });
 
 // ====== EMPLOYEE ATTENDENCE ======
-Route::middleware(['permission:attendence.menu'])->group(function () {
-    Route::resource('/employee/attendence', AttendenceController::class)->except(['show', 'update', 'destroy']);
-});
+// Route::middleware(['permission:attendence.menu'])->group(function () {
+//     Route::resource('/employee/attendence', AttendenceController::class)->except(['show', 'update', 'destroy']);
+// });
 
 // ====== SALARY EMPLOYEE ======
-Route::middleware(['permission:salary.menu'])->group(function () {
-    // PaySalary
-    Route::resource('/pay-salary', PaySalaryController::class)->except(['show', 'create', 'edit', 'update']);
-    Route::get('/pay-salary/history', [PaySalaryController::class, 'payHistory'])->name('pay-salary.payHistory');
-    Route::get('/pay-salary/history/{id}', [PaySalaryController::class, 'payHistoryDetail'])->name('pay-salary.payHistoryDetail');
-    Route::get('/pay-salary/{id}', [PaySalaryController::class, 'paySalary'])->name('pay-salary.paySalary');
+// phpRoute::middleware(['permission:salary.menu'])->group(function () {
+//     // PaySalary
+//     Route::resource('/pay-salary', PaySalaryController::class)->except(['show', 'create', 'edit', 'update']);
+//     Route::get('/pay-salary/history', [PaySalaryController::class, 'payHistory'])->name('pay-salary.payHistory');
+//     Route::get('/pay-salary/history/{id}', [PaySalaryController::class, 'payHistoryDetail'])->name('pay-salary.payHistoryDetail');
+//     Route::get('/pay-salary/{id}', [PaySalaryController::class, 'paySalary'])->name('pay-salary.paySalary');
 
-    // Advance Salary
-    Route::resource('/advance-salary', AdvanceSalaryController::class)->except(['show']);
-});
+//     // Advance Salary
+//     Route::resource('/advance-salary', AdvanceSalaryController::class)->except(['show']);
+// });
 
 // ====== PRODUCTS ======
 Route::middleware(['permission:product.menu'])->group(function () {
