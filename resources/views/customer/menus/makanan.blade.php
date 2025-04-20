@@ -2,7 +2,6 @@
 
 @section('container')
 <div x-data="menuData()" class="relative">
-  <!-- HEADER + SEARCH (FIXED) -->
   <div class="fixed top-0 left-0 right-0 max-w-xl mx-auto bg-white shadow z-50">
     <!-- Header -->
     <nav class="flex items-center justify-center relative p-3">

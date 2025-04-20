@@ -46,6 +46,7 @@ Route::get('/menu/{jenis}', function($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 })->where('jenis', 'makanan|minuman|snack|paket');
 
+Route::view('/keranjang', 'customer.menus.form')->name('order.form'); //masih blm fix
 
 
 
