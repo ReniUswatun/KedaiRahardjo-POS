@@ -46,7 +46,7 @@
   <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white px-4 pb-4 pt-2">
     <div class="flex justify-between">
         <button type="button" onclick="window.history.back()" class="w-1/2 border border-red-500 text-red-500 font-semibold py-2 rounded-lg mr-2">Batal</button>
-        <button type="submit" class="w-1/2 bg-red-500 text-white font-semibold py-2 rounded-lg ml-2">Lanjut</button>
+        <a href="/bill" type="submit" class="w-1/2 bg-red-500 text-white font-semibold py-2 rounded-lg ml-2 text-center">Lanjut</a>
     </div>
   </div>
 </div>
