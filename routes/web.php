@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\{
 };
 use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
-    MenuController as CustomerMenuController
+    MenuController as CustomerMenuController,
+    CartController as CustomerCartController,
 };
 
 
@@ -42,7 +43,12 @@ Route::get(
     [CustomerDashboardController::class, "index"]
 )->name("customer.index");
 
-Route::get('/menu/{jenis}', function($jenis) {
+Route::get(
+    "/cart",
+    [CustomerCartController::class, "index"]
+)->name("customer.cart.index");
+
+Route::get('/menu/{jenis}', function ($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 })->where('jenis', 'makanan|minuman|snack');
 
