@@ -44,7 +44,7 @@ Route::get(
 
 Route::get('/menu/{jenis}', function($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
-})->where('jenis', 'makanan|minuman|snack');
+})->where('jenis', 'makanan|minuman|snack|paket');
 
 
 

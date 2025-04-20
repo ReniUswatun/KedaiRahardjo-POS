@@ -26,7 +26,7 @@
   </div>
 
   <!-- MENU LIST -->
-  <div class="overflow-y-auto px-4 pt-16 pb-28 max-h-[calc(100vh-160px)]">
+  <div class="overflow-y-auto px-4 pt-16 pb-16 max-h-[calc(100vh-160px)]">
     <div class="grid grid-cols-2 gap-4">
       <template x-for="item in menu" :key="item.id">
         <div class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col">
