@@ -53,9 +53,10 @@ Route::get('/menu/{jenis}', function($jenis) {
 
 // ====== CASHIER ======
 Route::get(
-    "/dashboard/cashier",
+    "/cashier/dashboard",
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
+
 
 
 // DEFAULT DASHBOARD & PROFILE
