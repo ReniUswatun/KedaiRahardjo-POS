@@ -1,7 +1,7 @@
 @extends('customer.dashboard.body.main')
 
 @section('container')
-    <div class="h-screeno mx-4 pb-32">
+    <div class="mx-4 pb-32">
         <h1 class="text-2xl font-bold mb-4">Welcome to Kedai Rahardjo!</h1>
     <!-- Sliding Carousel -->
     <div x-data="{ 
