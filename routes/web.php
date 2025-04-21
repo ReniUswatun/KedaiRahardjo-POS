@@ -44,11 +44,11 @@ Route::get(
 
 Route::get('/menu/{jenis}', function($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
-})->where('jenis', 'makanan|minuman|snack|paket');
+})->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
 
 Route::view('/keranjang', 'customer.menus.keranjang')->name('order.cart'); //masih blm fix
 
-Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.cart'); //masih blm fix
+Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.payment'); //masih blm fix
 
 Route::view('/data', 'customer.menus.form')->name('order.data'); //masih blm fix
 
