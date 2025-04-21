@@ -8,7 +8,7 @@
         </svg>
             Dashboard
         </a>
-        <a href="" class="text-gray-700 hover:text-gray-900 text-center">
+        <a href="{{ route('customer.menu.index') }}"  class="text-center block {{ request()->routeIs('customer.menu.index') ? 'text-red-500' : 'text-gray-700 hover:text-gray-900 text-center' }}">
             <svg class="w-6 h-6 mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" 
                  viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18"></path>

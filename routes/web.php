@@ -38,6 +38,7 @@ Route::get('/', function () {
 //route baru//
 // Layout baru untuk customer dalam membuat pesanan
 // ====== CUSTOMER ======
+//Todo: Route untuk bottom navigation pada customer
 Route::get(
     "/dashboard",
     [CustomerDashboardController::class, "index"]
@@ -47,6 +48,11 @@ Route::get(
     "/cart",
     [CustomerCartController::class, "index"]
 )->name("customer.cart.index");
+
+Route::get(
+    "/menu",
+    [CustomerMenuController::class, "index"]
+)->name("customer.menu.index");
 
 Route::get('/menu/{jenis}', function ($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);

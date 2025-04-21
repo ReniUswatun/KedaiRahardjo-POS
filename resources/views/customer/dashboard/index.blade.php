@@ -7,9 +7,9 @@
     <div x-data="{ 
         activeSlide: 0, 
         slides: [
-          '{{ asset('assets/images/carousel1.jpg') }}',
-          '{{ asset('assets/images/carousel2.jpg') }}',
-          '{{ asset('assets/images/carousel3.jpg') }}'
+          '{{ asset('assets/images/image_page_customer/dashboard/carousel1.jpg') }}',
+          '{{ asset('assets/images/image_page_customer/dashboard/carousel2.jpg') }}',
+          '{{ asset('assets/images/image_page_customer/dashboard/carousel3.jpg') }}'
         ],
         interval: null,
         init() {
