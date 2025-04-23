@@ -1,24 +1,22 @@
-
 <div class="min-w-[250px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2 flex flex-col">
   <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
   
   {{-- Judul Kategori (Opsional) --}}
-  @if(!empty($menu['category']))
-  <h3 class="text-sm font-bold">{{ $menu['category'] }}</h3>
-@endif
-  
-<div class="flex-1">
-  {{-- Harga Menu --}}
-  <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
+  @if (!empty($menu['category']))
+    <h3 class="text-sm font-bold">{{ $menu['category'] }}</h3>
+  @endif
 
-  {{-- Judul Menu --}}
-  <h3 class="text-xl font-semibold">{{ $menu['name'] }}</h3>
-  
-  {{-- Deskripsi Menu --}}
-  <p class="text-sm text-gray-500">{{ \Illuminate\Support\Str::words($menu['description'], 7, ' ...') }}</p>
-  
-</div>
-  
+  <div class="flex-1">
+    {{-- Harga Menu --}}
+    <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
+
+    {{-- Judul Menu --}}
+    <h3 class="text-xl font-semibold">{{ $menu['name'] }}</h3>
+
+    {{-- Deskripsi Menu --}}
+    <p class="text-sm text-gray-500">{{ \Illuminate\Support\Str::words($menu['description'], 7, ' ...') }}</p>
+  </div>
+
   {{-- Button Ambil Menu --}}
   <div class="flex items-center justify-center gap-4 pb-2 mx-3">
     <!-- Tombol minus -->
@@ -37,4 +35,3 @@
     </button>
   </div>
 </div>
-
