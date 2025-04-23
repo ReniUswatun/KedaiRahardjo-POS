@@ -73,35 +73,39 @@
 
 
 {{-- Kategori --}}
-<div class="mt-4" x-data="{ kategoriAktif: '{{ $categories[0] ?? '' }}' }">
+<div class="mt-4" x-data="{ kategoriAktif: 'makanan' }">
     <h2 class="text-lg font-bold">Menu Kategori</h2>
 
     <!-- Tombol Kategori -->
-    <div class="flex flex-wrap justify-evenly mt-2">
-        @foreach ($categories as $category)
-            <button 
-                @click="kategoriAktif = '{{ $category }}'"
-                :class="kategoriAktif === '{{ $category }}' 
-                         ? 'bg-red-100 border-red-500 text-red-500' 
-                         : 'bg-white border-gray-300 text-gray-500'" 
-                class="border px-6 py-1 rounded-full shadow-sm font-semibold transition mb-2">
-                {{ ucfirst($category) }}
-            </button>
-        @endforeach
-    </div>
+   <div class="flex flex-wrap justify-evenly mt-2">
+    @foreach ($categories as $category)
+        <button 
+            @click="kategoriAktif = '{{ $category }}'"
+            :class="[
+                'border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500',
+                kategoriAktif === '{{ $category }}' 
+                    ? 'bg-red-500 text-white' 
+                    : 'text-red-500 hover:bg-red-100'
+            ]">
+            {{ $category}}
+        </button>
+    @endforeach
+  </div>
+  
 
-    <!-- Daftar Menu -->
-    <div class="mt-6">
-        @foreach ($menus as $kategori => $items)
-          <h2 class="text-xl font-bold capitalize my-4">{{ $kategori }}</h2>
-          <div class="grid grid-cols-2 gap-4">
-              @foreach ($items as $item)
-                  @include('customer.menus.components.menu-card', ['menu' => $item])
-              @endforeach
-          </div>
-      @endforeach
-    </div>
-</div>
+  <!-- Daftar Menu -->
+  <div class="mt-6">
+    @foreach ($menus as $kategori => $items)
+        <div x-show="kategoriAktif === '' || kategoriAktif === '{{ $kategori }}'" x-cloak>
+            <h2 class="text-xl font-bold capitalize my-4">{{ $kategori }}</h2>
+            <div class="grid grid-cols-2 gap-4">
+                @foreach ($items as $item)
+                    @include('customer.menus.components.menu-card', ['menu' => $item])
+                @endforeach
+            </div>
+        </div>
+    @endforeach
+  </div>
 
 
 
