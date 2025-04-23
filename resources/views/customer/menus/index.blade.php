@@ -41,13 +41,14 @@
       <div class="flex gap-6 overflow-x-scroll pb-3 pt-3 ps-7 -mx-8" style="scrollbar-width: none; -ms-overflow-style: none; ::-webkit-scrollbar { display: none; }">
     @foreach ($bestSellers as $menu)
       <div class="min-w-[250px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2">
-        <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2">
+        <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
         <h3 class="text-sm font-semibold">{{ $menu['category'] }}</h3>
+        <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
         <h3 class="text-xl font-semibold">{{ $menu['name'] }}</h3>
         <p class="text-sm text-gray-500 mb-2">Rp {{ \Illuminate\Support\Str::words($menu['description'], 7, ' ...') }}</p>
-        <p class="text-red-600 font-bold mb-2 text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
+        
         {{-- Button Ambil menu --}}
-        <div class="flex items-center justify-center gap-4 pb-2">
+        <div class="flex items-center justify-center gap-4 pb-2 mx-3">
           <!-- Tombol minus -->
           <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600">
             &minus;
@@ -72,19 +73,34 @@
 
 
 {{-- Kategori --}}
-<div class="mt-4">
+<div class="mt-4" x-data="{ kategoriAktif: '{{ $categories[0] ?? '' }}' }">
     <h2 class="text-lg font-bold">Menu Kategori</h2>
+
+    <!-- Tombol Kategori -->
     <div class="flex flex-wrap justify-evenly mt-2">
         @foreach ($categories as $category)
-           <div class="border border-red-500 px-10 py-1 rounded-full shadow-sm hover:bg-red-100 transition mb-2">
-                <a href="">
-                    <button>
-                       <p class="font-semibold text-red-500"> {{ $category }}</p>
-                    </button>
-                </a>
-           </div>
+            <button 
+                @click="kategoriAktif = '{{ $category }}'"
+                :class="kategoriAktif === '{{ $category }}' 
+                         ? 'bg-red-100 border-red-500 text-red-500' 
+                         : 'bg-white border-gray-300 text-gray-500'" 
+                class="border px-6 py-1 rounded-full shadow-sm font-semibold transition mb-2">
+                {{ ucfirst($category) }}
+            </button>
         @endforeach
-    </div> 
+    </div>
+
+    <!-- Daftar Menu -->
+    <div class="mt-6">
+        @foreach ($menus as $kategori => $items)
+          <h2 class="text-xl font-bold capitalize my-4">{{ $kategori }}</h2>
+          <div class="grid grid-cols-2 gap-4">
+              @foreach ($items as $item)
+                  @include('customer.menus.components.menu-card', ['menu' => $item])
+              @endforeach
+          </div>
+      @endforeach
+    </div>
 </div>
 
 
