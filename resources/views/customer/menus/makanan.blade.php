@@ -1,3 +1,8 @@
+{{-- 
+  DEPRECATED: This entire Blade template is deprecated and will be removed in a future release. 
+  Please use the updated version of the template for all new development.
+--}}
+
 @extends('customer.menus.body.main')
 
 @section('container')

@@ -18,7 +18,7 @@
   </div>
 
   {{-- Button Ambil Menu --}}
-  <div class="flex items-center justify-center gap-4 pb-2 mx-3">
+  <div class="flex items-center justify-center gap-4 pb-2 mx-3 mt-2">
     <!-- Tombol minus -->
     <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
       &minus;
