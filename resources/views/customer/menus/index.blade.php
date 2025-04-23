@@ -40,31 +40,7 @@
   <h2 class="text-lg font-bold">Paling Laris</h2>
       <div class="flex gap-6 overflow-x-scroll pb-3 pt-3 ps-7 -mx-8" style="scrollbar-width: none; -ms-overflow-style: none; ::-webkit-scrollbar { display: none; }">
     @foreach ($bestSellers as $menu)
-      <div class="min-w-[250px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2">
-        <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
-        <h3 class="text-sm font-semibold">{{ $menu['category'] }}</h3>
-        <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
-        <h3 class="text-xl font-semibold">{{ $menu['name'] }}</h3>
-        <p class="text-sm text-gray-500 mb-2">Rp {{ \Illuminate\Support\Str::words($menu['description'], 7, ' ...') }}</p>
-        
-        {{-- Button Ambil menu --}}
-        <div class="flex items-center justify-center gap-4 pb-2 mx-3">
-          <!-- Tombol minus -->
-          <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600">
-            &minus;
-          </button>
-
-          <!-- Angka tengah -->
-          <div class="bg-gray-100 text-black text-xl font-medium px-6 py-3 rounded-xl w-14 text-center">
-            0
-          </div>
-
-          <!-- Tombol plus -->
-          <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600">
-            &#43;
-          </button>
-        </div>
-      </div>
+      @include('customer.menus.components.menu-card', ['menu' => $menu])
     @endforeach
   </div>
 </div>
