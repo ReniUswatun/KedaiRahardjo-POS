@@ -19,9 +19,8 @@ use App\Http\Controllers\Customer\{
 };
 use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
-    MenuController as CashierMenuController
+    OrdersController as CashierOrdersController
 };
-
 
 
 /*
@@ -57,7 +56,10 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-
+Route::get(
+    "/cashier/orders", 
+    [CashierOrdersController::class, 'index']
+)->name('cashier.orders.index');
 
 // DEFAULT DASHBOARD & PROFILE
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
@@ -83,6 +85,8 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 Route::middleware(['permission:cashier.menu'])->group(function () {
     Route::resource('/cashier', CashierController::class);
 });
+
+
 
 // ====== SUPPLIERS ======
 // Route::middleware(['permission:supplier.menu'])->group(function () {
@@ -125,42 +129,44 @@ Route::middleware(['permission:category.menu'])->group(function () {
 });
 
 // ====== POS ======
-Route::middleware(['permission:pos.menu'])->group(function () {
-    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
-    Route::post('/pos/add', [PosController::class, 'addCart'])->name('pos.addCart');
-    Route::post('/pos/update/{rowId}', [PosController::class, 'updateCart'])->name('pos.updateCart');
-    Route::get('/pos/delete/{rowId}', [PosController::class, 'deleteCart'])->name('pos.deleteCart');
-    Route::post('/pos/invoice/create', [PosController::class, 'createInvoice'])->name('pos.createInvoice');
-    Route::post('/pos/invoice/print', [PosController::class, 'printInvoice'])->name('pos.printInvoice');
+//Route::middleware(['permission:pos.menu'])->group(function () {
+//    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+//    Route::post('/pos/add', [PosController::class, 'addCart'])->name('pos.addCart');
+//    Route::post('/pos/update/{rowId}', [PosController::class, 'updateCart'])->name('pos.updateCart');
+//    Route::get('/pos/delete/{rowId}', [PosController::class, 'deleteCart'])->name('pos.deleteCart');
+//    Route::post('/pos/invoice/create', [PosController::class, 'createInvoice'])->name('pos.createInvoice');
+//    Route::post('/pos/invoice/print', [PosController::class, 'printInvoice'])->name('pos.printInvoice');
 
     // Create Order
-    Route::post('/pos/order', [OrderController::class, 'storeOrder'])->name('pos.storeOrder');
-});
+//    Route::post('/pos/order', [OrderController::class, 'storeOrder'])->name('pos.storeOrder');
+//});
 
-// ====== ORDERS ======
-Route::middleware(['permission:orders.menu'])->group(function () {
-    Route::get('/orders/pending', [OrderController::class, 'pendingOrders'])->name('order.pendingOrders');
-    Route::get('/orders/complete', [OrderController::class, 'completeOrders'])->name('order.completeOrders');
-    Route::get('/orders/details/{order_id}', [OrderController::class, 'orderDetails'])->name('order.orderDetails');
-    Route::put('/orders/update/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
-    Route::get('/orders/invoice/download/{order_id}', [OrderController::class, 'invoiceDownload'])->name('order.invoiceDownload');
 
-    // Pending Due
-    Route::get('/pending/due', [OrderController::class, 'pendingDue'])->name('order.pendingDue');
-    Route::get('/order/due/{id}', [OrderController::class, 'orderDueAjax'])->name('order.orderDueAjax');
-    Route::post('/update/due', [OrderController::class, 'updateDue'])->name('order.updateDue');
+// // ====== ORDERS ======
+// Route::middleware(['permission:orders.menu'])->group(function () {
+//     Route::get('/orders/pending', [OrderController::class, 'pendingOrders'])->name('order.pendingOrders');
+//     Route::get('/orders/complete', [OrderController::class, 'completeOrders'])->name('order.completeOrders');
+//     Route::get('/orders/details/{order_id}', [OrderController::class, 'orderDetails'])->name('order.orderDetails');
+//     Route::put('/orders/update/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
+//     Route::get('/orders/invoice/download/{order_id}', [OrderController::class, 'invoiceDownload'])->name('order.invoiceDownload');
 
-    // Stock Management
-    Route::get('/stock', [OrderController::class, 'stockManage'])->name('order.stockManage');
-});
+//     // Pending Due
+//     Route::get('/pending/due', [OrderController::class, 'pendingDue'])->name('order.pendingDue');
+//     Route::get('/order/due/{id}', [OrderController::class, 'orderDueAjax'])->name('order.orderDueAjax');
+//     Route::post('/update/due', [OrderController::class, 'updateDue'])->name('order.updateDue');
 
-// ====== DATABASE BACKUP ======
-Route::middleware(['permission:database.menu'])->group(function () {
-    Route::get('/database/backup', [DatabaseBackupController::class, 'index'])->name('backup.index');
-    Route::get('/database/backup/now', [DatabaseBackupController::class, 'create'])->name('backup.create');
-    Route::get('/database/backup/download/{getFileName}', [DatabaseBackupController::class, 'download'])->name('backup.download');
-    Route::get('/database/backup/delete/{getFileName}', [DatabaseBackupController::class, 'delete'])->name('backup.delete');
-});
+//     // Stock Management
+//     Route::get('/stock', [OrderController::class, 'stockManage'])->name('order.stockManage');
+// });
+
+// // ====== DATABASE BACKUP ======
+// Route::middleware(['permission:database.menu'])->group(function () {
+//     Route::get('/database/backup', [DatabaseBackupController::class, 'index'])->name('backup.index');
+//     Route::get('/database/backup/now', [DatabaseBackupController::class, 'create'])->name('backup.create');
+//     Route::get('/database/backup/download/{getFileName}', [DatabaseBackupController::class, 'download'])->name('backup.download');
+//     Route::get('/database/backup/delete/{getFileName}', [DatabaseBackupController::class, 'delete'])->name('backup.delete');
+// });
+
 
 // ====== ROLE CONTROLLER ======
 Route::middleware(['permission:roles.menu'])->group(function () {
