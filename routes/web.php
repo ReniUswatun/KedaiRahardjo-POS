@@ -19,7 +19,8 @@ use App\Http\Controllers\Customer\{
 };
 use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
-    OrdersController as CashierOrdersController
+    OrdersController as CashierOrdersController,
+    HistoryController as CashierHistoryController
 };
 
 
@@ -60,6 +61,11 @@ Route::get(
     "/cashier/orders", 
     [CashierOrdersController::class, 'index']
 )->name('cashier.orders.index');
+
+Route::get(
+    "/cashier/history", 
+    [CashierHistoryController::class, 'index']
+)->name('cashier.history.index');
 
 // DEFAULT DASHBOARD & PROFILE
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {

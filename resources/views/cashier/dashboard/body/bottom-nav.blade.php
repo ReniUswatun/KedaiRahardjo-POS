@@ -1,7 +1,7 @@
-<!-- resources/views/components/cashier/bottom-nav.blade.php -->
 <div class="fixed bottom-0 left-0 right-0 max-w-xl mx-auto bg-white shadow p-3">
     <div class="max-w-7xl mx-auto flex justify-around">
-        <a href="{{ route('cashier.index') }}"  class="text-center block {{ request()->routeIs('cashier.index') ? 'text-red-500' : 'text-gray-700 hover:text-gray-900' }}">
+        <!-- Dashboard -->
+        <a href="{{ route('cashier.index') }}" class="text-center block {{ request()->routeIs('cashier.index') ? 'text-red-500' : 'text-gray-700 hover:text-red-500' }}">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" 
@@ -9,7 +9,9 @@
             </svg>
             Dashboard
         </a>
-        <a href="" class="text-gray-700 hover:text-gray-900 text-center">
+
+        <!-- Orders -->
+        <a href="" class="text-gray-700 hover:text-red-500 text-center">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +19,9 @@
             </svg>
             Orders
         </a>
-        <a href="" class="text-gray-700 hover:text-gray-900 text-center">
+
+        <!-- History -->
+        <a href="" class="text-gray-700 hover:text-red-500 text-center">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
