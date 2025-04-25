@@ -60,10 +60,13 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-Route::get(
-    "/cashier/orders", 
-    [CashierOrdersController::class, 'index']
-)->name('cashier.orders.index');
+
+Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+    Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+    Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+});
 
 Route::get(
     "/cashier/history",
