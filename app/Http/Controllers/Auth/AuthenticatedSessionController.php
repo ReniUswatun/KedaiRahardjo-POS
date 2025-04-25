@@ -23,13 +23,25 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
+
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = auth()->user();
+
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->intended(RouteServiceProvider::HOME_ADMIN);
+            case 'cashier':
+                return redirect()->intended(RouteServiceProvider::HOME_CASHIER);
+            case 'customer':
+                return redirect()->intended(RouteServiceProvider::HOME_CUSTOMER);
+            default:
+                return redirect()->intended('/');
+        }
     }
 
     /**

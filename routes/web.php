@@ -13,6 +13,9 @@ use App\Http\Controllers\Admin\{
     DatabaseBackupController,
     RoleController
 };
+
+use App\Http\Controllers\Admin\CashierController;
+
 use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
     MenuController as CustomerMenuController
@@ -47,7 +50,7 @@ Route::get(
     [CustomerDashboardController::class, "index"]
 )->name("customer.index");
 
-Route::get('/menu/{jenis}', function($jenis) {
+Route::get('/menu/{jenis}', function ($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 })->where('jenis', 'makanan|minuman|snack');
 
@@ -58,12 +61,12 @@ Route::get(
 )->name("cashier.index");
 
 Route::get(
-    "/cashier/orders", 
+    "/cashier/orders",
     [CashierOrdersController::class, 'index']
 )->name('cashier.orders.index');
 
 Route::get(
-    "/cashier/history", 
+    "/cashier/history",
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
 
@@ -88,8 +91,14 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 });
 
 // ====== CASHIER ======
-Route::middleware(['permission:cashier.menu'])->group(function () {
-    Route::resource('/cashier', CashierController::class);
+Route::middleware(['auth'])->prefix('cashier')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('cashier.index'); // ini akan aktif saat user buka /cashier
+    });
+
+    Route::get('/dashboard', [CashierDashboardController::class, 'index'])->name('cashier.index');
+    Route::get('/orders', [CashierOrdersController::class, 'index'])->name('cashier.orders.index');
+    Route::get('/history', [CashierHistoryController::class, 'index'])->name('cashier.history.index');
 });
 
 
@@ -143,7 +152,7 @@ Route::middleware(['permission:category.menu'])->group(function () {
 //    Route::post('/pos/invoice/create', [PosController::class, 'createInvoice'])->name('pos.createInvoice');
 //    Route::post('/pos/invoice/print', [PosController::class, 'printInvoice'])->name('pos.printInvoice');
 
-    // Create Order
+// Create Order
 //    Route::post('/pos/order', [OrderController::class, 'storeOrder'])->name('pos.storeOrder');
 //});
 
