@@ -1,4 +1,4 @@
-@extends('cashier.orders.body.main')
+@extends('cashier.dashboard.body.main')
 
 @section('container')
 <div class="p-4 pb-32 min-h-screen">

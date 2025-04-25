@@ -102,7 +102,6 @@ Route::middleware(['auth'])->prefix('cashier')->group(function () {
 });
 
 
-
 // ====== SUPPLIERS ======
 // Route::middleware(['permission:supplier.menu'])->group(function () {
 //     Route::resource('/suppliers', SupplierController::class);

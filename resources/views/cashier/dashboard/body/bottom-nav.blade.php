@@ -11,7 +11,7 @@
         </a>
 
         <!-- Orders -->
-        <a href="" class="text-gray-700 hover:text-red-500 text-center">
+        <a href="/cashier/orders" class="text-gray-700 hover:text-red-500 text-center">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -21,7 +21,7 @@
         </a>
 
         <!-- History -->
-        <a href="" class="text-gray-700 hover:text-red-500 text-center">
+        <a href="/cashier/history" class="text-gray-700 hover:text-red-500 text-center">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
