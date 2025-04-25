@@ -1,0 +1,41 @@
+@extends('customer.dashboard.body.main')
+
+@section('container')
+<div class="max-w-xl mx-auto px-4 py-6">
+
+  <h2 class="text-xl font-bold mb-4">Detail Pemesanan</h2>
+
+  <form action="{{ route('data.store') }}" method="POST">
+    @csrf
+    <!-- Data Pembeli -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-1">Nama</label>
+      <input type="text" name="nama" class="w-full border px-4 py-2 rounded-lg" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-semibold mb-1">Nomor Meja</label>
+      <input type="number" name="nomor_meja" class="w-full border px-4 py-2 rounded-lg" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="block font-semibold mb-1">Catatan</label>
+      <textarea name="catatan" rows="3" class="w-full border px-4 py-2 rounded-lg" placeholder="Opsional"></textarea>
+    </div>
+
+    <!-- Data Pesanan -->
+    <input type="hidden" name="keranjang" id="keranjang-input">
+
+    <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
+      Konfirmasi
+    </button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const keranjang = localStorage.getItem('keranjang');
+    document.getElementById('keranjang-input').value = keranjang ?? '[]';
+  });
+</script>
+@endsection

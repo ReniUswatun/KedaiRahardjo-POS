@@ -45,8 +45,9 @@
       },
 
       checkout() {
-        //nnti redirect ke cart
-      }
+        localStorage.setItem('keranjang', JSON.stringify(this.items));
+        window.location.href = '{{ route("data.create") }}';
+      },
     }));
   });
 </script>
@@ -178,9 +179,9 @@
 
         <!-- Tombol Checkout -->
         <div class="sticky bottom-0 bg-white pt-3 mt-3">
-          <button class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
-            Bayar
-          </button>
+          <a href="{{ route('data.create') }}" class="block w-full bg-red-500 text-white py-2 rounded-xl font-semibold text-center hover:bg-red-600 transition">
+          Bayar
+          </a>
         </div>
       </div>
     </div>

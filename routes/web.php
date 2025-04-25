@@ -17,6 +17,7 @@ use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
     MenuController as CustomerMenuController,
     CartController as CustomerCartController,
+    PaymentController as CustomerPaymentController,
 };
 
 
@@ -65,6 +66,9 @@ Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.payment'); 
 Route::view('/data', 'customer.menus.form')->name('order.data'); //masih blm fix
 
 Route::view('/bill', 'customer.menus.detail')->name('order.bill'); //masih blm fix
+
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+Route::post('/data', [CustomerPaymentController::class, 'store'])->name('data.store');
 
 
 
