@@ -1,8 +1,48 @@
 @extends('customer.dashboard.body.main')
 
+<script>
+  function keranjangBelanja() {
+    return {
+      items: [],
+
+      tambah(menu) {
+        const index = this.items.findIndex(i => i.id === menu.id);
+        if (index > -1) {
+          this.items[index].quantity++;
+        } else {
+          this.items.push({ ...menu, quantity: 1 });
+        }
+      },
+
+      kurangi(menu) {
+        const index = this.items.findIndex(i => i.id === menu.id);
+        if (index > -1) {
+          if (this.items[index].quantity > 1) {
+            this.items[index].quantity--;
+          } else {
+            this.items.splice(index, 1);
+          }
+        }
+      },
+
+      daftar() {
+        return this.items;
+      },
+
+      totalItem() {
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+      },
+
+      totalHarga() {
+        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      }
+    }
+  }
+</script>
+
 @section('container')
 
-<div class="mx-4 pb-32">
+<div class="mx-4 pb-32" x-data="keranjangBelanja()">
   {{-- Card untuk search --}}
   <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
     <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
@@ -77,6 +117,37 @@
       @endforeach
     </div>
   </div>
+
+  <!-- KERANJANG BELANJA -->
+  <div 
+    x-show="daftar().length > 0"
+    x-transition
+    class="fixed bottom-16 inset-x-0 z-40 px-4">
+    
+    <div class="bg-white rounded-2xl p-4 max-w-xl mx-auto mb-2 border">
+      <h3 class="text-lg font-bold mb-2">Keranjang Belanja</h3>
+
+      <!-- Kontainer scrollable untuk list item -->
+      <div class="max-h-44 overflow-y-auto pr-1">
+        <template x-for="item in daftar()" :key="item.id">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <p class="font-semibold text-sm" x-text="item.name"></p>
+              <p class="text-sm text-gray-500">x<span x-text="item.quantity"></span></p>
+            </div>
+            <div class="text-sm font-bold text-red-600" x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Bagian total tetap di bawah -->
+      <div class="flex justify-between font-semibold pt-2 border-t mt-2">
+        <span>Total:</span>
+        <span class="text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 @endsection

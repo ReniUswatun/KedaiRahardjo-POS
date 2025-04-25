@@ -20,17 +20,26 @@
   {{-- Button Ambil Menu --}}
   <div class="flex items-center justify-center gap-4 pb-2 mx-3 mt-2">
     <!-- Tombol minus -->
-    <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
+    <button 
+      @click="kurangi({ id: {{ $menu['id'] }}, name: '{{ $menu['name'] }}', price: {{ $menu['price'] }} })"
+      class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
       &minus;
     </button>
 
     <!-- Angka tengah -->
     <div class="bg-gray-100 text-black text-xl font-medium px-6 py-3 rounded-xl w-14 text-center">
-      0
+      <template x-if="daftar().find(i => i.id === {{ $menu['id'] }})">
+        <span x-text="daftar().find(i => i.id === {{ $menu['id'] }}).quantity"></span>
+      </template>
+      <template x-if="!daftar().find(i => i.id === {{ $menu['id'] }})">
+        <span>0</span>
+      </template>
     </div>
 
     <!-- Tombol plus -->
-    <button class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
+    <button 
+      @click="tambah({ id: {{ $menu['id'] }}, name: '{{ $menu['name'] }}', price: {{ $menu['price'] }} })"
+      class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
       &#43;
     </button>
   </div>
