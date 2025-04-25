@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\{
 };
 use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
-    MenuController as CustomerMenuController
+    MenuController as CustomerMenuController,
+    CartController as CustomerCartController,
+    PaymentController as CustomerPaymentController,
 };
 
 
@@ -37,15 +39,36 @@ Route::get('/', function () {
 //route baru//
 // Layout baru untuk customer dalam membuat pesanan
 // ====== CUSTOMER ======
+//Todo: Route untuk bottom navigation pada customer
 Route::get(
     "/dashboard",
     [CustomerDashboardController::class, "index"]
 )->name("customer.index");
 
-Route::get('/menu/{jenis}', function($jenis) {
-    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
-})->where('jenis', 'makanan|minuman|snack');
+Route::get(
+    "/cart",
+    [CustomerCartController::class, "index"]
+)->name("customer.cart.index");
 
+Route::get(
+    "/menu",
+    [CustomerMenuController::class, "index"]
+)->name("customer.menu.index");
+
+Route::get('/menu/{jenis}', function ($jenis) {
+    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
+})->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
+
+Route::view('/keranjang', 'customer.menus.keranjang')->name('order.cart'); //masih blm fix
+
+Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.payment'); //masih blm fix
+
+Route::view('/data', 'customer.menus.form')->name('order.data'); //masih blm fix
+
+Route::view('/bill', 'customer.menus.detail')->name('order.bill'); //masih blm fix
+
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+Route::post('/data', [CustomerPaymentController::class, 'store'])->name('data.store');
 
 
 
