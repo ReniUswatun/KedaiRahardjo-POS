@@ -45,8 +45,7 @@
       },
 
       checkout() {
-        alert('Checkout berhasil!\nTotal: Rp ' + this.totalHarga().toLocaleString('id-ID'));
-        // Kirim ke backend atau redirect ke halaman pembayaran
+        //nnti redirect ke cart
       }
     }));
   });
