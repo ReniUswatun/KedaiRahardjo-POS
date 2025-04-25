@@ -20,7 +20,7 @@
             </div>
         </header>
         <main>
-            <div class="mt-16 pt-2">
+            <div class="mt-14 pt-3">
                 {{ $content }}
             </div>
         </main>
