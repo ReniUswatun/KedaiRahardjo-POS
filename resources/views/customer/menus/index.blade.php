@@ -1,24 +1,30 @@
 @extends('customer.dashboard.body.main')
 
 <script>
-  function keranjangBelanja() {
-    return {
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('keranjangBelanja', () => ({
       items: [],
+      showDetail: false, // toggle detail keranjang
 
       tambah(menu) {
-        const index = this.items.findIndex(i => i.id === menu.id);
-        if (index > -1) {
-          this.items[index].quantity++;
+        const index = this.items.findIndex(item => item.id === menu.id);
+        if (index !== -1) {
+          this.items[index].quantity += 1;
         } else {
-          this.items.push({ ...menu, quantity: 1 });
+          this.items.push({
+            id: menu.id,
+            name: menu.name,
+            price: menu.price,
+            quantity: 1
+          });
         }
       },
 
-      kurangi(menu) {
-        const index = this.items.findIndex(i => i.id === menu.id);
-        if (index > -1) {
+      kurang(menu) {
+        const index = this.items.findIndex(item => item.id === menu.id);
+        if (index !== -1) {
           if (this.items[index].quantity > 1) {
-            this.items[index].quantity--;
+            this.items[index].quantity -= 1;
           } else {
             this.items.splice(index, 1);
           }
@@ -29,15 +35,21 @@
         return this.items;
       },
 
-      totalItem() {
-        return this.items.reduce((total, item) => total + item.quantity, 0);
+      jumlahMenu(menuId) {
+        const found = this.items.find(item => item.id === menuId);
+        return found ? found.quantity : 0;
       },
 
       totalHarga() {
-        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
+      },
+
+      checkout() {
+        alert('Checkout berhasil!\nTotal: Rp ' + this.totalHarga().toLocaleString('id-ID'));
+        // Kirim ke backend atau redirect ke halaman pembayaran
       }
-    }
-  }
+    }));
+  });
 </script>
 
 @section('container')
@@ -120,15 +132,35 @@
 
   <!-- KERANJANG BELANJA -->
   <div 
-    x-show="daftar().length > 0"
-    x-transition
-    class="fixed bottom-16 inset-x-0 z-40 px-4">
+    x-data="{ showDetail: false }"
+    class="fixed bottom-0 inset-x-0 z-40 px-4 mb-[70px]">
     
-    <div class="bg-white rounded-2xl p-4 max-w-xl mx-auto mb-2 border">
-      <h3 class="text-lg font-bold mb-2">Keranjang Belanja</h3>
+    <div class="bg-white rounded-t-2xl max-w-xl mx-auto overflow-hidden">
 
-      <!-- Kontainer scrollable untuk list item -->
-      <div class="max-h-44 overflow-y-auto pr-1">
+      <!-- Bar Ringkasan -->
+      <div 
+        class="flex items-center justify-between px-4 py-3 cursor-pointer"
+        @click="showDetail = !showDetail">
+        <div>
+          <p class="text-sm text-gray-600" x-text="'Total item: ' + daftar().reduce((sum, i) => sum + i.quantity, 0)"></p>
+          <p class="font-semibold text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></p>
+        </div>
+        <div class="text-gray-600 text-xl">
+          <template x-if="showDetail">
+            <span>&#x25BC;</span> <!-- Panah bawah -->
+          </template>
+          <template x-if="!showDetail">
+            <span>&#x25B2;</span> <!-- Panah atas -->
+          </template>
+        </div>
+      </div>
+
+      <!-- Rincian Item (hanya saat showDetail dan ada item) -->
+      <div 
+        x-show="showDetail && daftar().length > 0"
+        x-transition
+        class="border-t px-4 pb-4 max-h-[200px] overflow-y-auto">
+        
         <template x-for="item in daftar()" :key="item.id">
           <div class="flex justify-between items-center mb-2">
             <div>
@@ -138,12 +170,19 @@
             <div class="text-sm font-bold text-red-600" x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></div>
           </div>
         </template>
-      </div>
 
-      <!-- Bagian total tetap di bawah -->
-      <div class="flex justify-between font-semibold pt-2 border-t mt-2">
-        <span>Total:</span>
-        <span class="text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span>
+        <!-- Total & Checkout -->
+        <div class="flex justify-between items-center pt-2 border-t mt-2">
+          <span class="font-semibold">Total:</span>
+          <span class="text-red-600 font-bold" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span>
+        </div>
+
+        <!-- Tombol Checkout Sticky -->
+        <div class="sticky bottom-0 bg-white pt-3 mt-3">
+          <button class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   </div>

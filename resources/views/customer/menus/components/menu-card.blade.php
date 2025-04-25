@@ -21,7 +21,7 @@
   <div class="flex items-center justify-center gap-4 pb-2 mx-3 mt-2">
     <!-- Tombol minus -->
     <button 
-      @click="kurangi({ id: {{ $menu['id'] }}, name: '{{ $menu['name'] }}', price: {{ $menu['price'] }} })"
+      @click="kurang({ id: {{ $menu['id'] }}, name: '{{ $menu['name'] }}', price: {{ $menu['price'] }} })"
       class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
       &minus;
     </button>
