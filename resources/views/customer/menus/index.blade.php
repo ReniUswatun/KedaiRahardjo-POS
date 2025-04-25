@@ -68,7 +68,7 @@
           x-transition:enter-start="opacity-0 translate-y-2"
           x-transition:enter-end="opacity-100 translate-y-0"
         >
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             @foreach ($items as $item)
               @include('customer.menus.components.menu-card', ['menu' => $item])
             @endforeach
