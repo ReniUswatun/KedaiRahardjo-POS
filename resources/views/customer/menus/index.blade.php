@@ -4,7 +4,7 @@
   document.addEventListener('alpine:init', () => {
     Alpine.data('keranjangBelanja', () => ({
       items: [],
-      showDetail: false, // toggle detail keranjang
+      showDetail: false,
 
       tambah(menu) {
         const index = this.items.findIndex(item => item.id === menu.id);
@@ -110,7 +110,7 @@
     </div>
 
     <!-- Daftar Menu -->
-    <div class="mt-4">
+    <div class="mt-4 mb-12">
       @foreach ($menus as $kategori => $items)
         <div 
           x-show="kategoriAktif === '{{ $kategori }}'"
@@ -132,9 +132,9 @@
   <!-- KERANJANG BELANJA -->
   <div 
     x-data="{ showDetail: false }"
-    class="fixed bottom-0 inset-x-0 z-40 px-4 mb-[70px]">
+    class="fixed bottom-0 inset-x-0 z-40 px-4 mb-[75px]">
     
-    <div class="bg-white rounded-t-2xl max-w-xl mx-auto overflow-hidden">
+    <div class="bg-white rounded-t-2xl max-w-xl mx-auto border overflow-hidden">
 
       <!-- Bar Ringkasan -->
       <div 
@@ -144,17 +144,23 @@
           <p class="text-sm text-gray-600" x-text="'Total item: ' + daftar().reduce((sum, i) => sum + i.quantity, 0)"></p>
           <p class="font-semibold text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></p>
         </div>
-        <div class="text-gray-600 text-xl">
+        <div class="text-red-500 text-xl transition-transform duration-300">
           <template x-if="showDetail">
-            <span>&#x25BC;</span> <!-- Panah bawah -->
+            <!-- Panah ke bawah -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </template>
           <template x-if="!showDetail">
-            <span>&#x25B2;</span> <!-- Panah atas -->
+            <!-- Panah ke atas -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
           </template>
         </div>
       </div>
 
-      <!-- Rincian Item (hanya saat showDetail dan ada item) -->
+      <!-- Rincian Item -->
       <div 
         x-show="showDetail && daftar().length > 0"
         x-transition
@@ -170,16 +176,10 @@
           </div>
         </template>
 
-        <!-- Total & Checkout -->
-        <div class="flex justify-between items-center pt-2 border-t mt-2">
-          <span class="font-semibold">Total:</span>
-          <span class="text-red-600 font-bold" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span>
-        </div>
-
-        <!-- Tombol Checkout Sticky -->
+        <!-- Tombol Checkout -->
         <div class="sticky bottom-0 bg-white pt-3 mt-3">
           <button class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
-            Checkout
+            Bayar
           </button>
         </div>
       </div>
