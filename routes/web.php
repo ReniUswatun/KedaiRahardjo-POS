@@ -60,10 +60,13 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-Route::get(
-    "/cashier/orders",
-    [CashierOrdersController::class, 'index']
-)->name('cashier.orders.index');
+
+Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+    Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+    Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+});
 
 Route::get(
     "/cashier/history",
@@ -91,7 +94,7 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 });
 
 // ====== CASHIER ======
-Route::middleware(['auth'])->prefix('cashier')->group(function () {
+Route::prefix('cashier')->group(function () {
     Route::get('/', function () {
         return redirect()->route('cashier.index'); // ini akan aktif saat user buka /cashier
     });

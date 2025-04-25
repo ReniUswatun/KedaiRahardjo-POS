@@ -6,7 +6,18 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         </button>
-        <h1 class="mx-auto text-lg font-semibold">Orders</h1>
-    </div>
+        <h1 class="mx-auto text-lg font-semibold">
+            @if(request()->routeIs('cashier.orders.index'))
+                Orders
+            @elseif(request()->routeIs('cashier.orders.processing'))
+                Processing Orders
+            @elseif(request()->routeIs('cashier.orders.completed'))
+                Completed Orders
+            @elseif(request()->routeIs('cashier.history.index'))
+                History
+            @else
+                Orders
+            @endif  
+        </div>
 </nav>
 

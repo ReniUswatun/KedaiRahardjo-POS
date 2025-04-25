@@ -1,4 +1,4 @@
-@extends('cashier.dashboard.body.main')
+@extends('cashier.orders.body.main')
 
 @section('container')
 <div class="p-4 pb-32 min-h-screen">
@@ -27,32 +27,29 @@
                     <th class="px-4 py-3">Order ID</th>
                     <th class="px-4 py-3">Customer</th>
                     <th class="px-4 py-3">Waktu Pesan</th>
-                    <th class="px-4 py-3">Waktu Pesan</th>
+                    <th class="px-4 py-3">Waktu Selesai</th>
                     <th class="px-4 py-3">Total</th>
                     <th class="px-4 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700">
-                <tr class="border-t">
-                    <td class="px-4 py-2">#ORD2345</td>
-                    <td class="px-4 py-2">Rudi</td>
-                    <td class="px-4 py-2">10:02 AM</td>
-                    <td class="px-4 py-2">10:02 AM</td>
-                    <td class="px-4 py-2">Rp25.000</td>
-                    <td class="px-4 py-2">
-                        <button class="bg-white border border-green-600 text-green-600 px-3 py-1 rounded text-xs hover:bg-green-600 hover:text-white transition">Konfirmasi Pesanan</button>
-                    </td>
-                </tr>
-                <tr class="border-t">
-                    <td class="px-4 py-2">#ORD2346</td>
-                    <td class="px-4 py-2">Tini</td>
-                    <td class="px-4 py-2">10:05 AM</td>
-                    <td class="px-4 py-2">10:02 AM</td>
-                    <td class="px-4 py-2">Rp40.000</td>
-                    <td class="px-4 py-2">
-                        <button class="bg-white border border-green-600 text-green-600 px-3 py-1 rounded text-xs hover:bg-green-600 hover:text-white transition">Konfirmasi Pesanan</button>
-                    </td>
-                </tr>
+                @foreach ($orders as $order)
+                    @if ($order['status'] === 'completed')
+                        <tr class="border-t">
+                            <td class="px-4 py-2">#ORD2345</td>
+                            <td class="px-4 py-2">Rudi</td>
+                            <td class="px-4 py-2">10:02 AM</td>
+                            <td class="px-4 py-2">10:15 AM</td>
+                            <td class="px-4 py-2">Rp25.000</td>
+                            <td class="px-4 py-2 text-center">
+                                <a href="{{ route('cashier.orders.invoice', $order['order_id']) }}"
+                                class="inline-flex items-center justify-center gap-1 px-3 py-1.5 border border-gray-400 text-gray-700 rounded-md text-xs hover:bg-gray-700 hover:text-white transition">
+                                    Lihat Detail
+                                </a>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
             </tbody>
         </table>
     </div>
