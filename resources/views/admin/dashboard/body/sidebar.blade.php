@@ -97,35 +97,35 @@
 
                 {{-- <hr> --}}
 
-                @if (auth()->user()->can('employee.menu'))
-                {{-- <li class="{{ Request::is('employees*') ? 'active' : '' }}">
+                {{-- @if (auth()->user()->can('employee.menu'))
+                <li class="{{ Request::is('employees*') ? 'active' : '' }}">
                     <a href="{{ route('employees.index') }}" class="svg-icon">
                         <i class="fa-solid fa-users"></i>
                         <span class="ml-3">Employees</span>
                     </a>
-                </li> --}}
-                @endif
+                </li>
+                @endif --}}
 
-                @if (auth()->user()->can('customer.menu'))
+                {{-- @if (auth()->user()->can('customer.menu'))
                 <li class="{{ Request::is('customers*') ? 'active' : '' }}">
                     <a href="{{ route('customers.index') }}" class="svg-icon">
                         <i class="fa-solid fa-users"></i>
                         <span class="ml-3">Customers</span>
                     </a>
                 </li>
-                @endif
+                @endif --}}
 
-                @if (auth()->user()->can('supplier.menu'))
-                {{-- <li class="{{ Request::is('suppliers*') ? 'active' : '' }}">
+                {{-- @if (auth()->user()->can('supplier.menu'))
+                <li class="{{ Request::is('suppliers*') ? 'active' : '' }}">
                     <a href="{{ route('suppliers.index') }}" class="svg-icon">
                         <i class="fa-solid fa-users"></i>
                         <span class="ml-3">Suppliers</span>
                     </a>
-                </li> --}}
-                @endif
-
+                </li>
+                @endif --}}
+{{-- 
                 @if (auth()->user()->can('salary.menu'))
-                {{-- <li>
+                <li>
                     <a href="#advance-salary" class="collapsed" data-toggle="collapse" aria-expanded="false">
                     <i class="fa-solid fa-cash-register"></i>
                         <span class="ml-3">Salary</span>
@@ -156,8 +156,8 @@
                             </a>
                         </li>
                     </ul>
-                </li> --}}
-                @endif
+                </li>
+                @endif --}}
 
                 {{-- @if (auth()->user()->can('attendence.menu'))
                 <li>

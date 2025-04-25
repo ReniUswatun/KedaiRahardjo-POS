@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                {{-- <div class="col-lg-4 col-md-4">
                     <div class="card card-block card-stretch card-height">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-4 card-total-sale">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-lg-4 col-md-4">
                     <div class="card card-block card-stretch card-height">
                         <div class="card-body">
@@ -135,7 +135,7 @@
             </div>
         </div>
 
-        <div class="col-lg-8">
+        <div class="col-lg">
             <div class="card card-block card-stretch card-height">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="header-title">
@@ -160,7 +160,7 @@
                     <ul class="list-unstyled row top-product mb-0">
                     @foreach ($products as $product)
                         <li class="col-lg-3">
-                            <div class="card card-block card-stretch card-height mb-0">
+                            <div class="card card-block card-stretch card-height mb-0 col-span-4">
                                 <div class="card-body">
                                     <div class="bg-warning-light rounded">
                                         <img src="{{ $product->product_image ? asset('storage/products/'.$product->product_image) : asset('assets/images/product/default.webp') }}" class="style-img img-fluid m-auto p-3" alt="image">
@@ -177,7 +177,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        {{-- <div class="col-lg-4">
             <div class="card card-transparent card-block card-stretch mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between p-0">
                     <div class="header-title">
@@ -204,7 +204,7 @@
                 </div>
             </div>
             @endforeach
-        </div>
+        </div> --}}
     </div>
     <!-- Page end  -->
 </div>
