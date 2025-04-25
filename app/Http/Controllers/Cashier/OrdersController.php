@@ -25,10 +25,10 @@ class OrdersController extends Controller
         return view('cashier.orders.processing', compact('orders'));
     }
 
-    public function completed()
+    public function pending()
     {
-        $orders = array_filter($this->orders, fn($order) => $order['status'] === 'completed');
-        return view('cashier.orders.completed', compact('orders'));
+        $orders = array_filter($this->orders, fn($order) => $order['status'] === 'pending');
+        return view('cashier.orders.index', compact('orders'));
     }
 
     public function invoice($orderId)
@@ -41,4 +41,22 @@ class OrdersController extends Controller
 
         return view('cashier.orders.invoice', compact('order'));
     }
+
+    public function completed()
+    {
+        $orders = array_filter($this->orders, fn($order) => $order['status'] === 'completed');
+        return view('cashier.orders.completed', compact('orders'));
+    }
+
+    public function detail($orderId)
+    {
+        $order = collect($this->orders)->firstWhere('order_id', $orderId);
+
+        if (!$order) {
+            abort(404);
+        }
+
+        return view('cashier.orders.detail', compact('order'));
+    }
+
 }

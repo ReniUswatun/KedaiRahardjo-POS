@@ -27,7 +27,6 @@
                     <th class="px-4 py-3">Order ID</th>
                     <th class="px-4 py-3">Customer</th>
                     <th class="px-4 py-3">Waktu Pesan</th>
-                    <th class="px-4 py-3">Waktu Proses</th>
                     <th class="px-4 py-3">Total</th>
                     <th class="px-4 py-3">Aksi</th>
                 </tr>
@@ -37,7 +36,6 @@
                     <td class="px-4 py-2">#ORD2345</td>
                     <td class="px-4 py-2">Rudi</td>
                     <td class="px-4 py-2">10:02 AM</td>
-                    <td class="px-4 py-2">10:06 AM</td>
                     <td class="px-4 py-2">Rp25.000</td>
                     <td class="px-4 py-2">
                         <button class="bg-white border border-blue-600 text-blue-600 px-3 py-1 rounded text-xs hover:bg-blue-600 hover:text-white transition">Selesai</button>
