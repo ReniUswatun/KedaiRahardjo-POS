@@ -1,4 +1,4 @@
-@extends('cashier.dashboard.body.main')
+@extends('cashier.orders.body.main')
 
 @section('container')
     <!-- Main content -->
