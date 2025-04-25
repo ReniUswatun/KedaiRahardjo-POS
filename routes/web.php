@@ -94,7 +94,7 @@ Route::middleware(['permission:customer.menu'])->group(function () {
 });
 
 // ====== CASHIER ======
-Route::middleware(['auth'])->prefix('cashier')->group(function () {
+Route::prefix('cashier')->group(function () {
     Route::get('/', function () {
         return redirect()->route('cashier.index'); // ini akan aktif saat user buka /cashier
     });
