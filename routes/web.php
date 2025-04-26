@@ -109,10 +109,10 @@ Route::middleware(['permission:user.menu'])->group(function () {
     Route::resource('/users', UserController::class)->except(['show']);
 });
 
-// ====== CUSTOMERS ======
-Route::middleware(['permission:customer.menu'])->group(function () {
-    Route::resource('/customers', CustomerController::class);
-});
+// // ====== CUSTOMERS ======
+// Route::middleware(['permission:customer.menu'])->group(function () {
+//     Route::resource('/customers', CustomerController::class);
+// });
 
 // ====== CASHIER ======
 Route::prefix('cashier')->group(function () {
