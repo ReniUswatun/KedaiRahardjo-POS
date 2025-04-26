@@ -66,6 +66,10 @@ Route::get(
 )->name("customer.menu.index");
 
 
+// Route::get('/menu/{jenis}', function ($jenis) {
+//     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
+// })->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
+
 Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
 Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
 Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
