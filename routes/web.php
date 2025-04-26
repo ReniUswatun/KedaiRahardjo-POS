@@ -66,8 +66,8 @@ Route::get(
 )->name("customer.menu.index");
 
 
-// Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-// Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
