@@ -1,9 +1,9 @@
 @extends('customer.dashboard.body.main')
 
 @section('container')
-<div class="max-w-xl mx-auto px-4 py-6">
+<div class="mx-4 pb-32">
 
-  <h2 class="text-xl font-bold mb-4">Detail Pemesanan</h2>
+  <h2 class="text-2xl font-bold mb-4">Detail Pemesanan</h2>
 
   <form action="{{ route('data.store') }}" method="POST">
     @csrf
@@ -15,7 +15,7 @@
 
     <div class="mb-4">
       <label class="block font-semibold mb-1">Nomor Meja</label>
-      <input type="number" name="nomor_meja" class="w-full border px-4 py-2 rounded-lg" required>
+      <input type="number" name="nomor_meja" class="w-full border px-4 py-2 rounded-lg" min="1" required>
     </div>
 
     <div class="mb-4">
