@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         Employee::factory(5)->create();
         // AdvanceSalary::factory(25)->create();
 
-        Customer::factory(25)->create();
+        // Customer::factory(25)->create();
         Supplier::factory(10)->create();
 
         $this->call(ProductSeeder::class);
