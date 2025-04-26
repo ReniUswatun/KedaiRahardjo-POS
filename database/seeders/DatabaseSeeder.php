@@ -42,17 +42,10 @@ class DatabaseSeeder extends Seeder
         Customer::factory(25)->create();
         Supplier::factory(10)->create();
 
-        for ($i=0; $i < 10; $i++) {
-            Product::factory()->create([
-                'product_code' => IdGenerator::generate([
-                    'table' => 'products',
-                    'field' => 'product_code',
-                    'length' => 4,
-                    'prefix' => 'PC'
-                ])
-            ]);
-        }
-        Category::factory(5)->create();
+        $this->call(ProductSeeder::class);
+
+
+        Category::factory(3)->create();
 
         Permission::create(['name' => 'pos.menu', 'group_name' => 'pos']);
         Permission::create(['name' => 'employee.menu', 'group_name' => 'employee']);
