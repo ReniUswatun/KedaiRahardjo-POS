@@ -13,13 +13,10 @@ class Product extends Model
     protected $fillable = [
         'product_name',
         'category_id',
-        'supplier_id',
         'product_code',
-        'product_garage',
         'product_image',
-        'product_store',
-        'buying_date',
-        'expire_date',
+        'product_description',
+        'product_stock',
         'buying_price',
         'selling_price',
     ];
@@ -29,21 +26,11 @@ class Product extends Model
         'selling_price',
     ];
 
-    protected $guarded = [
-        'id',
-    ];
+    protected $with = ['category'];
 
-    protected $with = [
-        'category',
-        'supplier'
-    ];
-
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class, 'category_id');
-    }
-
-    public function supplier(){
-        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     public function scopeFilter($query, array $filters)

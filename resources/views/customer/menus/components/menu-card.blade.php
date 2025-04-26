@@ -1,4 +1,4 @@
-<div class="min-w-[250px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2 flex flex-col">
+<div class="min-w-[235px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2 flex flex-col">
   <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
   
   {{-- Judul Kategori (Opsional) --}}
