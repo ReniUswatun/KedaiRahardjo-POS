@@ -95,7 +95,6 @@ Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
-
 });
 
 Route::get(
@@ -104,7 +103,7 @@ Route::get(
 )->name('cashier.history.index');
 
 // DEFAULT DASHBOARD & PROFILE
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
+Route::middleware('auth')->name('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -112,6 +111,7 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 });
+
 
 // ====== USERS ======
 Route::middleware(['permission:user.menu'])->group(function () {
