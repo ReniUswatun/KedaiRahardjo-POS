@@ -5,10 +5,10 @@
     <h2 class="text-xl font-bold mb-4">Detail Pesanan</h2>
 
     <div class="mb-4">
-        <p><strong>Nama:</strong> {{ $order->nama }}</p>
-        <p><strong>Nomor Meja:</strong> {{ $order->nomor_meja }}</p>
+        <p><strong>Nama:</strong> {{ $bill->nama }}</p>
+        <p><strong>Nomor Meja:</strong> {{ $bill->nomor_meja }}</p>
         @if ($order->catatan)
-            <p><strong>Catatan:</strong> {{ $order->catatan }}</p>
+            <p><strong>Catatan:</strong> {{ $bill->catatan }}</p>
         @endif
     </div>
 
