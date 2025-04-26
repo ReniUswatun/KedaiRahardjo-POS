@@ -14,7 +14,21 @@ class MenuController extends Controller
         $categories = Category::select('id', 'name', 'slug')->get();
 
         // Ambil produk dengan relasi kategori
-        $products = Product::with('category')->get()->makeHidden('is_best_seller');;
+        $products = Product::select(
+            'id',
+            'product_name',
+            'category_id',
+            'product_code',
+            'product_image',
+            'product_description',
+            'product_stock',
+            'buying_price',
+            'selling_price',
+            'created_at',
+            'updated_at'
+        )
+            ->with('category')
+            ->get();
 
         // Kelompokkan produk berdasarkan kategori slug
         $groupedProducts = $products->groupBy(function ($product) {
