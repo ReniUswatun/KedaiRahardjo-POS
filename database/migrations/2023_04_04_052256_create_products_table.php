@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('product_stock')->nullable();
             $table->integer('buying_price')->nullable();
             $table->integer('selling_price')->nullable();
+            $table->boolean('is_best_seller')->default(false);
             $table->timestamps();
         });
     }

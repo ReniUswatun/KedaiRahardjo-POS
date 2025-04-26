@@ -1,20 +1,20 @@
-<div class="min-w-[230px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2 flex flex-col">
-  <img src="{{ $menu['image'] }}" alt="{{ $menu['name'] }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
+<div class="min-w-[235px] bg-white rounded-2xl shadow-md border px-4 pt-4 pb-2 flex flex-col">
+  <img src="{{ asset($menu->product_image) }}" alt="{{ $menu->product_name }}" class="w-full h-40 rounded-2xl object-cover mb-2 transition-transform duration-300 ease-in-out hover:scale-105">
   
   {{-- Judul Kategori (Opsional) --}}
-  @if (!empty($menu['category']))
-    <h3 class="text-sm font-bold">{{ $menu['category'] }}</h3>
+  @if (isset($menu->is_best_seller) && $menu->is_best_seller == 1)
+    <h3 class="text-sm font-bold">{{ $menu->category->name }}</h3>
   @endif
 
   <div class="flex-1">
     {{-- Harga Menu --}}
-    <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu['price'], 0, ',', '.') }}</p>
+    <p class="text-red-600 font-bold text-lg">Rp {{ number_format($menu->selling_price, 0, ',', '.') }}</p>
 
     {{-- Judul Menu --}}
-    <h3 class="text-xl font-semibold">{{ $menu['name'] }}</h3>
+    <h3 class="text-xl font-semibold">{{ $menu->product_name }}</h3>
 
     {{-- Deskripsi Menu --}}
-    <p class="text-sm text-gray-500">{{ \Illuminate\Support\Str::words($menu['description'], 7, ' ...') }}</p>
+    <p class="text-sm text-gray-500">{{ \Illuminate\Support\Str::words($menu->product_description, 7, ' ...') }}</p>
   </div>
 
   {{-- Button Ambil Menu --}}

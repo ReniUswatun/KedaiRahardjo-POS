@@ -85,34 +85,34 @@
   <div class="mt-2">
     <h2 class="text-lg font-bold">Paling Laris</h2>
     <div class="flex gap-6 overflow-x-scroll pb-3 pt-3 ps-7 -mx-8" style="scrollbar-width: none; -ms-overflow-style: none; ::-webkit-scrollbar { display: none; }">
-      @foreach ($bestSellers as $menu)
-        @include('customer.menus.components.menu-card', ['menu' => $menu])
+      @foreach ($bestSellers as $item)
+        @include('customer.menus.components.menu-card', ['menu' => $item])
       @endforeach
     </div>
   </div>
 
   {{-- Kategori --}}
-  <div class="mt-4" x-data="{ kategoriAktif: 'makanan' }">
+  <div class="mt-4" x-data="{ kategoriAktif: '{{ e($categories->first()->slug) }}' }">
     <h2 class="text-lg font-bold">Menu Kategori</h2>
 
     <!-- Tombol Kategori -->
     <div class="flex flex-wrap justify-evenly mt-2">
-      @foreach (array_keys($menus) as $category)
+    @foreach ($categories as $category)
         <button 
-          @click="kategoriAktif = '{{ $category }}'"
-          :class="kategoriAktif === '{{ $category }}' 
-            ? 'bg-red-500 text-white' 
-            : 'text-red-500 border hover:bg-red-100'"
-          class="border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500"
+            @click="kategoriAktif = '{{ $category->slug }}'"
+            :class="kategoriAktif === '{{ $category->slug }}'
+                ? 'bg-red-500 text-white' 
+                : 'text-red-500 border hover:bg-red-100'"
+            class="border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500"
         >
-          {{ ucfirst($category) }}
-        </button>
+            {{ ucfirst($category->name) }}
+          </button>
       @endforeach
     </div>
 
     <!-- Daftar Menu -->
     <div class="mt-4 mb-12">
-      @foreach ($menus as $kategori => $items)
+      @foreach ($groupedProducts as $kategori => $items)
         <div 
           x-show="kategoriAktif === '{{ $kategori }}'"
           x-cloak

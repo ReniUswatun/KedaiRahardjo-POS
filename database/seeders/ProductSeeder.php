@@ -340,7 +340,8 @@ class ProductSeeder extends Seeder
                 'product_description' => $product['product_description'],
                 'product_stock' => $product['stock'],
                 'buying_price' => $product['buying_price'],
-                'selling_price' => $product['selling_price']
+                'selling_price' => $product['selling_price'],
+                'is_best_seller' =>  $product['stock'] < 60
             ]);
         }
     }
