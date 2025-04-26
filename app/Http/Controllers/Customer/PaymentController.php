@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Customer;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Bill;
+use App\Models\BillItem;
 
 class PaymentController extends Controller
 {
     public function create()
     {
         $keranjang = session('keranjang', []); // Kalau kosong, default []
-    
+
         return view('customer.menus.form-order', [
             'keranjang' => $keranjang
         ]);
@@ -61,5 +63,4 @@ class PaymentController extends Controller
 
         return response()->json(['message' => 'Keranjang berhasil disimpan']);
     }
-
 }
