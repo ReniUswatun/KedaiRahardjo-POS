@@ -68,6 +68,7 @@ Route::get(
 
 Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
 Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======

@@ -45,9 +45,26 @@
       },
 
       checkout() {
-        localStorage.setItem('keranjang', JSON.stringify(this.items));
-        window.location.href = '{{ route("data.create") }}';
+        if (this.items.length === 0) {
+          return;
+        }
+
+        fetch('{{ route("save.cart") }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({
+            keranjang: this.items
+          })
+        })
+        .then(response => response.json())
+        .then(() => {
+          window.location.href = '{{ route("data.create") }}';
+        });
       },
+      
     }));
   });
 </script>

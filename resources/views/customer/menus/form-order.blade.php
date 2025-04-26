@@ -24,18 +24,11 @@
     </div>
 
     <!-- Data Pesanan -->
-    <input type="hidden" name="keranjang" id="keranjang-input">
+    <input type="hidden" name="keranjang" value='@json($keranjang)'>
 
     <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
       Konfirmasi
     </button>
   </form>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const keranjang = localStorage.getItem('keranjang');
-    document.getElementById('keranjang-input').value = keranjang ?? '[]';
-  });
-</script>
 @endsection
