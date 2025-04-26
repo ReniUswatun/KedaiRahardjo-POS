@@ -21,11 +21,12 @@ use App\Http\Controllers\Customer\{
     MenuController as CustomerMenuController,
     CartController as CustomerCartController,
     PaymentController as CustomerPaymentController,
+    CheckoutController as CustomerCheckoutController,
 };
 use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
-    HistoryController as CashierHistoryController
+    HistoryController as CashierHistoryController,
 };
 
 
@@ -69,25 +70,15 @@ Route::get('/menu/{jenis}', function ($jenis) {
     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 })->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
 
-Route::view('/keranjang', 'customer.menus.keranjang')->name('order.cart'); //masih blm fix
-
-Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.payment'); //masih blm fix
-
-Route::view('/data', 'customer.menus.form')->name('order.data'); //masih blm fix
-
-Route::view('/bill', 'customer.menus.detail')->name('order.bill'); //masih blm fix
-
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
 Route::get(
     "/cashier/dashboard",
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
-
-
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-Route::post('/data', [CustomerPaymentController::class, 'store'])->name('data.store');
-
 
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
