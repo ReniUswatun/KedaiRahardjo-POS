@@ -66,13 +66,9 @@ Route::get(
 )->name("customer.menu.index");
 
 
-Route::get('/menu/{jenis}', function ($jenis) {
-    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
-})->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
-
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
-Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
+// Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+// Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+// Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
 Route::get(
@@ -86,7 +82,6 @@ Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
-
 });
 
 Route::get(
