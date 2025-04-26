@@ -196,11 +196,29 @@
 
         <!-- Tombol Checkout -->
         <div class="sticky bottom-0 bg-white pt-3 mt-3">
-          <button 
-            @click="checkout()" 
-            class="block w-full bg-red-500 text-white py-2 rounded-xl font-semibold text-center hover:bg-red-600 transition">
-            Bayar
-          </button>
+          <div class="flex gap-4">
+            <!-- Masukkan Keranjang -->
+            <button 
+              {{-- @click="addToCart()"  --}}
+              class="flex-1 flex items-center justify-center gap-2 border border-red-500 text-red-500 font-semibold py-3 rounded-xl text-sm hover:bg-red-100 transition-all duration-200">
+              <!-- Icon Shopping Cart -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4a1 1 0 00.95 1.6h11.8a1 1 0 00.95-1.6L17 13M9 21h6" />
+              </svg>
+              Masukkan Keranjang
+            </button>
+
+            <!-- Bayar -->
+            <button 
+              @click="checkout()" 
+              class="flex-1 flex items-center justify-center gap-2 bg-red-500 text-white font-semibold py-3 rounded-xl text-sm hover:bg-red-600 transition-all duration-200">
+              <!-- Icon Credit Card -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2m-2 0h12a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2v-8a2 2 0 012-2z" />
+              </svg>
+              Bayar
+            </button>
+          </div>
         </div>
       </div>
     </div>
