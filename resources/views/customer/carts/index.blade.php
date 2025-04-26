@@ -1,31 +1,57 @@
 @extends('customer.dashboard.body.main')
 
 @section('container')
-<div>
-    <h1 class="text-2xl font-bold mb-4">Daftar Keranjang Pesanan</h1>
+<div class="mx-4 pb-32">
+    <h1 class="text-2xl font-bold mb-4 mt-2">Daftar Keranjang Pesanan</h1>
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-            <thead>
-                <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                    <th class="py-3 px-6 text-left">No</th>
-                    <th class="py-3 px-6 text-left">Nama Produk</th>
-                    <th class="py-3 px-6 text-left">Jumlah</th>
-                    <th class="py-3 px-6 text-left">Total Harga</th>
-                    <th class="py-3 px-6 text-left">Status</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-600 text-sm font-light">
-                {{-- @foreach($orders as $order)
-                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="py-3 px-6">{{ $loop->iteration }}</td>
-                    <td class="py-3 px-6">{{ $order->product_name }}</td>
-                    <td class="py-3 px-6">{{ $order->quantity }}</td>
-                    <td class="py-3 px-6">{{ number_format($order->total_price, 2) }}</td>
-                    <td class="py-3 px-6">{{ $order->status }}</td>
-                </tr>
-                @endforeach --}}
-            </tbody>
-        </table>
-    </div>
+        @if(isset($message))
+            <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M3 19h18M3 12h18" />
+                </svg>
+                <span><strong>{{ $message }}</strong></span>
+            </div>
+        @endif
+
+
+    <!-- Tampilkan cart jika ada -->
+    @if (!empty($carts))
+        @foreach ($carts as $cartId => $cart)
+            <div class="bg-white shadow-md rounded-2xl p-4 mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800">Cart ID: {{ $cartId }}</h3>
+                    <span class="text-sm text-gray-500">Total Items: {{ $cart['total_quantity'] }}</span>
+                </div>
+
+                @foreach ($cart['items'] as $item)
+                    <div class="flex items-center border-t border-gray-200 py-3">
+                        <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
+                            {{-- Kalau mau tambah gambar, bisa taruh --}}
+                            <img src="{{  asset('assets/images/product/nasi-goreng.jpg')}}" class="w-16 h-16 rounded-xl object-cover"> 
+                        </div> 
+                         
+                        
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-md font-semibold text-gray-800">{{ $item['name'] }}</h4>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-sm text-gray-600">Qty: {{ $item['quantity'] }}</span>
+                                <span class="text-sm font-semibold text-red-500">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+                <div class="flex justify-between items-center mt-4 border-t pt-2">
+                    <span class="text-gray-600">Total Harga</span>
+                    <span class="text-lg font-bold text-red-500">Rp {{ number_format($cart['total_price'], 0, ',', '.') }}</span>
+                </div>
+
+                <button class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
+                    Checkout
+                </button>
+            </div>
+        @endforeach
+    @endif
+
 </div>
 @endsection

@@ -2,11 +2,11 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('keranjangBelanja', () => ({
+    Alpine.data('shoppingCart', () => ({
       items: [],
       showDetail: false,
 
-      tambah(menu) {
+      add(menu) {
         const index = this.items.findIndex(item => item.id === menu.id);
         if (index !== -1) {
           this.items[index].quantity += 1;
@@ -20,7 +20,7 @@
         }
       },
 
-      kurang(menu) {
+      subtract(menu) {
         const index = this.items.findIndex(item => item.id === menu.id);
         if (index !== -1) {
           if (this.items[index].quantity > 1) {
@@ -31,19 +31,41 @@
         }
       },
 
-      daftar() {
+      getMenu() {
         return this.items;
       },
 
-      jumlahMenu(menuId) {
+      getMenuQuantity(menuId) {
         const found = this.items.find(item => item.id === menuId);
         return found ? found.quantity : 0;
       },
 
-      totalHarga() {
+      getTotalPrice() {
         return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
       },
+      addToCart() {
+          if (this.items.length === 0) {
+              return; // Tidak ada item yang dapat ditambahkan
+          }
 
+          fetch('{{ route("customer.cart.create") }}', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+              },
+              body: JSON.stringify({
+                  items: this.items // Kirim data items ke server
+              })
+          })
+          .then(response => response.json())
+          .then(() => {
+              window.location.href = '{{ route("customer.cart.index") }}';
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      },
       checkout() {
         if (this.items.length === 0) {
           return;
@@ -71,7 +93,7 @@
 
 @section('container')
 
-<div class="mx-4 pb-32" x-data="keranjangBelanja()">
+<div class="mx-4 pb-32" x-data="shoppingCart()">
   {{-- Card untuk search --}}
   <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
     <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
@@ -99,8 +121,8 @@
   </div>
 
   {{-- Paling Laris --}}
-  <div class="mt-2">
-    <h2 class="text-lg font-bold">Paling Laris</h2>
+  <div class="mt-4 mb-4">
+    <h2 class="text-2xl font-bold text-red-900">Paling Laris</h2>
     <div class="flex gap-6 overflow-x-scroll pb-3 pt-3 ps-7 -mx-8" style="scrollbar-width: none; -ms-overflow-style: none; ::-webkit-scrollbar { display: none; }">
       @foreach ($bestSellers as $item)
         @include('customer.menus.components.menu-card', ['menu' => $item])
@@ -109,8 +131,8 @@
   </div>
 
   {{-- Kategori --}}
-  <div class="mt-4" x-data="{ kategoriAktif: '{{ e($categories->first()->slug) }}' }">
-    <h2 class="text-lg font-bold">Menu Kategori</h2>
+  <div class="mt-5" x-data="{ kategoriAktif: '{{ e($categories->first()->slug) }}' }">
+    <h2 class="text-2xl text-red-900 mb-4 font-bold">Menu Kategori</h2>
 
     <!-- Tombol Kategori -->
     <div class="flex flex-wrap justify-evenly mt-2">
@@ -159,8 +181,8 @@
         class="flex items-center justify-between px-4 py-3 cursor-pointer"
         @click="showDetail = !showDetail">
         <div>
-          <p class="text-sm text-gray-600" x-text="'Total item: ' + daftar().reduce((sum, i) => sum + i.quantity, 0)"></p>
-          <p class="font-semibold text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></p>
+          <p class="text-sm text-gray-600" x-text="'Total item: ' + getMenu().reduce((sum, i) => sum + i.quantity, 0)"></p>
+          <p class="font-semibold text-red-600" x-text="'Rp ' + getTotalPrice().toLocaleString('id-ID')"></p>
         </div>
         <div class="text-red-500 text-xl transition-transform duration-300">
           <template x-if="showDetail">
@@ -180,11 +202,11 @@
 
       <!-- Rincian Item -->
       <div 
-        x-show="showDetail && daftar().length > 0"
+        x-show="showDetail && getMenu().length > 0"
         x-transition
-        class="border-t px-4 pb-4 max-h-[200px] overflow-y-auto">
+        class="border-t px-4 max-h-[230px] overflow-y-auto">
         
-        <template x-for="item in daftar()" :key="item.id">
+        <template x-for="item in getMenu()" :key="item.id">
           <div class="flex justify-between items-center mb-2">
             <div>
               <p class="font-semibold text-sm" x-text="item.name"></p>
@@ -195,11 +217,11 @@
         </template>
 
         <!-- Tombol Checkout -->
-        <div class="sticky bottom-0 bg-white pt-3 mt-3">
+        <div class="sticky bottom-0 bg-white pt-3 mt-3 pb-2">
           <div class="flex gap-4">
             <!-- Masukkan Keranjang -->
             <button 
-              {{-- @click="addToCart()"  --}}
+              @click="addToCart()" 
               class="flex-1 flex items-center justify-center gap-2 border border-red-500 text-red-500 font-semibold py-3 rounded-xl text-sm hover:bg-red-100 transition-all duration-200">
               <!-- Icon Shopping Cart -->
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -28,7 +28,7 @@ use App\Http\Controllers\Cashier\{
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
 };
-
+use Illuminate\Contracts\Session\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,21 +49,39 @@ Route::get('/', function () {
 // Layout baru untuk customer dalam membuat pesanan
 // ====== CUSTOMER ======
 //Todo: Route untuk bottom navigation pada customer
-Route::get(
-    "/dashboard",
-    [CustomerDashboardController::class, "index"]
-)->name("customer.index");
+Route::prefix('')->name('customer.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [CustomerDashboardController::class, 'index'])
+        ->name('index');
 
+    // Cart
+    Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // GET /cart
+        Route::post('/create', 'create')->name('create'); // GET /cart/create
+        Route::get('/{cartId}', 'show')->name('show'); // GET /cart/{cartId}
+        Route::post('/{cartId}/items', 'addItem')->name('items.add'); // POST /cart/{cartId}/items
+        Route::patch('/{cartId}/items/{itemId}', 'updateItem')->name('items.update'); // PATCH /cart/{cartId}/items/{itemId}
+        Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete'); // DELETE /cart/{cartId}/items/{itemId}
+        Route::delete('/{cartId}', 'deleteCart')->name('delete'); // DELETE /cart/{cartId}
+    });
 
-Route::get(
-    "/cart",
-    [CustomerCartController::class, "index"]
-)->name("customer.cart.index");
+    // Menu
+    Route::get('/menu', [CustomerMenuController::class, 'index'])
+        ->name('menu.index');
+});
 
-Route::get(
-    "/menu",
-    [CustomerMenuController::class, "index"]
-)->name("customer.menu.index");
+//buat liat session
+Route::get('/debug/session', function () {
+    return session()->all();
+});
+
+// Route untuk hapus semua session
+// ! Buat apus session, gunakan hati hati
+Route::get('/session/clear', function () {
+    \Illuminate\Support\Facades\Session::flush(); // Hapus semua isi session
+
+    return redirect('/')->with('success', 'Semua session berhasil dihapus!');
+})->name('session.clear');
 
 
 // Route::get('/menu/{jenis}', function ($jenis) {
