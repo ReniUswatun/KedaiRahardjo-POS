@@ -2,19 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
-    DashboardController,
-    ProfileController,
-    UserController,
-    CustomerController,
-    ProductController,
-    CategoryController,
-    PosController,
-    OrderController,
-    DatabaseBackupController,
-    RoleController
+    DashboardController as AdminDashboardController,
+    ProfileController as AdminProfileController,
+    UserController as AdminUserController,
+    CustomerController as AdminCustomerController,
+    ProductController as AdminProductController,
+    CategoryController as AdminCategoryController,
+    PosController as AdminPosController,
+    OrderController as AdminOrderController,
+    DatabaseBackupController as AdminBackupController,
+    RoleController as AdminRoleController
 };
-
-use App\Http\Controllers\Admin\CashierController;
 
 use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
@@ -102,25 +100,25 @@ Route::get(
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
 
-// DEFAULT DASHBOARD & PROFILE
-Route::middleware('auth')->name('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::middleware('auth')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+    Route::redirect('/admin', '/dashboard'); // Tambahkan baris ini
 
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+    Route::get('/profile', [AdminProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [AdminProfileController::class, 'changePassword'])->name('profile.change-password');
 });
 
 
 // ====== USERS ======
 Route::middleware(['permission:user.menu'])->group(function () {
-    Route::resource('/users', UserController::class)->except(['show']);
+    Route::resource('/users', AdminUserController::class)->except(['show']);
 });
 
 // ====== CUSTOMERS ======
 Route::middleware(['permission:customer.menu'])->group(function () {
-    Route::resource('/customers', CustomerController::class);
+    Route::resource('/customers', AdminCustomerController::class);
 });
 
 // ====== CASHIER ======
@@ -164,17 +162,16 @@ Route::prefix('cashier')->group(function () {
 
 // ====== PRODUCTS ======
 Route::middleware(['permission:product.menu'])->group(function () {
-    Route::get('/products/import', [ProductController::class, 'importView'])->name('products.importView');
-    Route::post('/products/import', [ProductController::class, 'importStore'])->name('products.importStore');
-    Route::get('/products/export', [ProductController::class, 'exportData'])->name('products.exportData');
-    Route::resource('/products', ProductController::class);
+    Route::get('/products/import', [AdminProductController::class, 'importView'])->name('products.importView');
+    Route::post('/products/import', [AdminProductController::class, 'importStore'])->name('products.importStore');
+    Route::get('/products/export', [AdminProductController::class, 'exportData'])->name('products.exportData');
+    Route::resource('/products', AdminProductController::class);
 });
 
 // ====== CATEGORY PRODUCTS ======
 Route::middleware(['permission:category.menu'])->group(function () {
-    Route::resource('/categories', CategoryController::class);
+    Route::resource('/categories', AdminCategoryController::class);
 });
-
 // ====== POS ======
 //Route::middleware(['permission:pos.menu'])->group(function () {
 //    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
@@ -218,30 +215,29 @@ Route::middleware(['permission:category.menu'])->group(function () {
 // ====== ROLE CONTROLLER ======
 Route::middleware(['permission:roles.menu'])->group(function () {
     // Permissions
-    Route::get('/permission', [RoleController::class, 'permissionIndex'])->name('permission.index');
-    Route::get('/permission/create', [RoleController::class, 'permissionCreate'])->name('permission.create');
-    Route::post('/permission', [RoleController::class, 'permissionStore'])->name('permission.store');
-    Route::get('/permission/edit/{id}', [RoleController::class, 'permissionEdit'])->name('permission.edit');
-    Route::put('/permission/{id}', [RoleController::class, 'permissionUpdate'])->name('permission.update');
-    Route::delete('/permission/{id}', [RoleController::class, 'permissionDestroy'])->name('permission.destroy');
+    Route::get('/permission', [AdminRoleController::class, 'permissionIndex'])->name('permission.index');
+    Route::get('/permission/create', [AdminRoleController::class, 'permissionCreate'])->name('permission.create');
+    Route::post('/permission', [AdminRoleController::class, 'permissionStore'])->name('permission.store');
+    Route::get('/permission/edit/{id}', [AdminRoleController::class, 'permissionEdit'])->name('permission.edit');
+    Route::put('/permission/{id}', [AdminRoleController::class, 'permissionUpdate'])->name('permission.update');
+    Route::delete('/permission/{id}', [AdminRoleController::class, 'permissionDestroy'])->name('permission.destroy');
 
     // Roles
-    Route::get('/role', [RoleController::class, 'roleIndex'])->name('role.index');
-    Route::get('/role/create', [RoleController::class, 'roleCreate'])->name('role.create');
-    Route::post('/role', [RoleController::class, 'roleStore'])->name('role.store');
-    Route::get('/role/edit/{id}', [RoleController::class, 'roleEdit'])->name('role.edit');
-    Route::put('/role/{id}', [RoleController::class, 'roleUpdate'])->name('role.update');
-    Route::delete('/role/{id}', [RoleController::class, 'roleDestroy'])->name('role.destroy');
+    Route::get('/role', [AdminRoleController::class, 'roleIndex'])->name('role.index');
+    Route::get('/role/create', [AdminRoleController::class, 'roleCreate'])->name('role.create');
+    Route::post('/role', [AdminRoleController::class, 'roleStore'])->name('role.store');
+    Route::get('/role/edit/{id}', [AdminRoleController::class, 'roleEdit'])->name('role.edit');
+    Route::put('/role/{id}', [AdminRoleController::class, 'roleUpdate'])->name('role.update');
+    Route::delete('/role/{id}', [AdminRoleController::class, 'roleDestroy'])->name('role.destroy');
 
     // Role Permissions
-    Route::get('/role/permission', [RoleController::class, 'rolePermissionIndex'])->name('rolePermission.index');
-    Route::get('/role/permission/create', [RoleController::class, 'rolePermissionCreate'])->name('rolePermission.create');
-    Route::post('/role/permission', [RoleController::class, 'rolePermissionStore'])->name('rolePermission.store');
-    Route::get('/role/permission/{id}', [RoleController::class, 'rolePermissionEdit'])->name('rolePermission.edit');
-    Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
-    Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
+    Route::get('/role/permission', [AdminRoleController::class, 'rolePermissionIndex'])->name('rolePermission.index');
+    Route::get('/role/permission/create', [AdminRoleController::class, 'rolePermissionCreate'])->name('rolePermission.create');
+    Route::post('/role/permission', [AdminRoleController::class, 'rolePermissionStore'])->name('rolePermission.store');
+    Route::get('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionEdit'])->name('rolePermission.edit');
+    Route::put('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
+    Route::delete('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
-
 
 
 require __DIR__ . '/auth.php';
