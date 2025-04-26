@@ -100,15 +100,15 @@ Route::get(
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
 
-Route::middleware('auth')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-    Route::redirect('/admin', '/dashboard'); // Tambahkan baris ini
+// Route::middleware('auth')->name('admin.')->group(function () {
+//     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+//     Route::redirect('/admin', '/dashboard'); // Tambahkan baris ini
 
-    Route::get('/profile', [AdminProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [AdminProfileController::class, 'changePassword'])->name('profile.change-password');
-});
+//     Route::get('/profile', [AdminProfileController::class, 'show'])->name('profile');
+//     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+//     Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+//     Route::get('/profile/change-password', [AdminProfileController::class, 'changePassword'])->name('profile.change-password');
+// });
 
 
 // ====== USERS ======
