@@ -24,29 +24,29 @@ class PaymentController extends Controller
             'keranjang' => 'required|json',
             'catatan' => 'nullable|string',
         ]);
-    
+
         $items = json_decode($validated['keranjang'], true);
-    
+
         // Simpan ke database
-        $order = Order::create([
+        $bill = Bill::create([
             'nama' => $validated['nama'],
             'nomor_meja' => $validated['nomor_meja'],
             'catatan' => $validated['catatan'] ?? null,
         ]);
-    
+
         foreach ($items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
+            BillItem::create([
+                'bill_id' => $bill->id,
                 'nama_produk' => $item['nama_produk'] ?? '',
                 'jumlah' => $item['jumlah'] ?? 0,
                 'harga' => $item['harga'] ?? 0,
             ]);
         }
-    
+
         // Tampilkan halaman bill + data
         return view('customer.menus.bill', [
-            'order' => $order,
-            'items' => $order->items,
+            'bill' => $bill,
+            'items' => $bill->items,
         ]);
     }
 
