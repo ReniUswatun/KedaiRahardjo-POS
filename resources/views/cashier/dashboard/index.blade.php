@@ -3,8 +3,7 @@
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('shoppingCart', () => ({
-      items: @json($cartItems ?? []),
-      cartId: @json($cartId ?? null),
+      items: [],
       showDetail: false,
 
       add(menu) {
@@ -57,17 +56,12 @@
               },
               body: JSON.stringify({
                   items: this.items // Kirim data items ke server
-                  cartId: this.cartId // kirim cartId kalau ada, null kalau nggak ada
               })
           })
           .then(response => response.json())
           .then(() => {
-              if (!this.cartId && data.cartId) {
-                  // Kalau tadi belum ada cartId, dan server ngasih cartId baru
-                  this.cartId = data.cartId;
-              }
               window.location.href = '{{ route("customer.cart.index") }}';
-                })
+          })
           .catch(error => {
               console.error('Error:', error);
           });
@@ -84,7 +78,7 @@
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
           },
           body: JSON.stringify({
-            items: this.items
+            keranjang : this.items
           })
         })
         .then(response => response.json())
