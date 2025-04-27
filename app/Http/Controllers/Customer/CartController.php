@@ -20,6 +20,13 @@ class CartController extends Controller
             return view('customer.carts.index', compact('message', 'carts'));
         }
 
+        foreach ($carts as $cartId => $cart) {
+            if ($cart['total_price'] === 0) {
+                // Hapus cart yang kosong
+                unset($carts[$cartId]);
+            }
+        }
+
         // Jika ada cart, tampilkan semua cart
         return view('customer.carts.index', compact('carts'));
     }
@@ -73,22 +80,38 @@ class CartController extends Controller
     {
         $carts = session()->get('carts', []);
         if (!isset($carts[$cartId])) {
-            return redirect()->back()->with('error', 'Cart tidak ditemukan.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart tidak ditemukan.'
+            ]);
         }
 
         $cart = $carts[$cartId];
 
+        // Filter item yang akan dihapus
         $cart['items'] = collect($cart['items'])->filter(fn($item) => $item['id'] != $itemId)->values()->toArray();
+
+        if (count($cart['items']) == count($carts[$cartId]['items'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item tidak ditemukan dalam cart.'
+            ]);
+        }
 
         $cart['total_quantity'] = collect($cart['items'])->sum('quantity');
         $cart['total_price'] = collect($cart['items'])->reduce(function ($carry, $item) {
             return $carry + ($item['price'] * $item['quantity']);
         }, 0);
 
+        // Update the session with the modified cart
         $carts[$cartId] = $cart;
         session()->put('carts', $carts);
 
-        return redirect()->back()->with('success', 'Item berhasil dihapus.');
+        // Return a JSON response
+        return response()->json([
+            'success' => true,
+            'message' => 'Item berhasil dihapus.'
+        ]);
     }
 
     // Hapus seluruh cart

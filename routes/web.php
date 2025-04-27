@@ -58,9 +58,9 @@ Route::prefix('')->name('customer.')->group(function () {
     Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
         Route::get('/', 'index')->name('index'); // GET /cart
         Route::post('/create', 'create')->name('create'); // GET /cart/create
-        Route::get('/{cartId}', 'show')->name('show'); // GET /cart/{cartId}
-        Route::post('/{cartId}/items', 'addItem')->name('items.add'); // POST /cart/{cartId}/items
-        Route::patch('/{cartId}/items/{itemId}', 'updateItem')->name('items.update'); // PATCH /cart/{cartId}/items/{itemId}
+        // Route::get('/{cartId}', 'show')->name('show'); // GET /cart/{cartId}
+        // Route::post('/{cartId}/items', 'addItem')->name('items.add'); // POST /cart/{cartId}/items
+        // Route::patch('/{cartId}/items/{itemId}', 'updateItem')->name('items.update'); // PATCH /cart/{cartId}/items/{itemId}
         Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete'); // DELETE /cart/{cartId}/items/{itemId}
         Route::delete('/{cartId}', 'deleteCart')->name('delete'); // DELETE /cart/{cartId}
     });

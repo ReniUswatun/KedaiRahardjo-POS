@@ -20,12 +20,95 @@
             }
         });
     }
+    function deleteItem(cartId, itemId) {
+        // Menampilkan dialog konfirmasi
+        const dialog = document.getElementById('confirmDialog');
+        dialog.classList.remove('hidden');  // Menampilkan dialog
+
+        // Menangani tombol Yes
+        document.getElementById('confirmYes').onclick = function() {
+            // Jika pengguna memilih "Yes", lanjutkan dengan penghapusan item
+            const url = '{{ route("customer.cart.items.delete", ["cartId" => "__cartId__", "itemId" => "__itemId__"]) }}'
+                        .replace('__cartId__', cartId)
+                        .replace('__itemId__', itemId);
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    cartId: cartId,  
+                    itemId: itemId   
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const alertNotification = document.getElementById('alertNotification');
+                const alertMessage = document.getElementById('alertMessage');
+
+                // Mengatur pesan alert
+                alertMessage.textContent = data.message;
+
+                // Menampilkan alert dengan animasi fade-in
+                alertNotification.classList.remove('hidden');
+                alertNotification.classList.add('transition-opacity', 'opacity-0', 'duration-500');
+                setTimeout(() => {
+                    alertNotification.classList.remove('opacity-0');
+                    alertNotification.classList.add('opacity-100');
+                }, 10); // Delay sedikit untuk animasi fade-in
+
+                // Menyembunyikan alert setelah beberapa detik
+                setTimeout(() => {
+                    alertNotification.classList.remove('opacity-100');
+                    alertNotification.classList.add('opacity-0');
+                    setTimeout(() => {
+                        alertNotification.classList.add('hidden');
+                    }, 500); // Waktu transisi untuk fade-out
+                }, 5000); // Alert muncul selama 5 detik
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus item.');
+            })
+            .then(() => {
+                // Menutup dialog dan mengarahkan kembali ke halaman cart
+                dialog.classList.add('hidden');
+                window.location.href = '{{ route("customer.cart.index") }}';
+            });
+        }
+
+        // Menangani tombol No
+        document.getElementById('confirmNo').onclick = function() {
+            // Menutup dialog jika pengguna memilih "No"
+            dialog.classList.add('hidden');
+        }
+    }
+
 </script>
 
 @section('container')
+<!-- Dialog Konfirmasi -->
+<div id="confirmDialog" class="hidden">
+    <div class="fixed inset-0 z-50 flex justify-center items-center bg-gray-900 bg-opacity-50">
+        <div class="bg-white p-8 rounded-xl shadow-xl max-w-sm w-full">
+            <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Apakah Anda yakin ingin menghapus item ini?</h3>
+            <div class="flex justify-evenly gap-2">
+                <button id="confirmYes" class="w-full px-8 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-200">Ya, Hapus</button>
+                <button id="confirmNo" class="w-full px-8 py-2 bg-gray-300 text-gray-800 rounded-xl hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-200">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Notification -->
+<div id="alertNotification" class="fixed bottom-5 rounded-xl left-1/2 transform -translate-x-1/2 z-50 hidden max-w-xs mt-5 px-8 py-2 w-full border border-red-600 bg-red-100 text-red-600 text-center shadow-xl">
+    <p id="alertMessage" class="text-lg">Pesan akan muncul di sini.</p>
+</div>
+
 <div class="mx-4 pb-32">
     <h1 class="text-2xl font-bold mb-4 mt-2 text-red-900">Keranjang Pesanan</h1>
-
     <div>
         @if(isset($message))
             <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
@@ -82,7 +165,7 @@
                                 </div>
                             </div>
 
-                              <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 rounded-lg translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 hover:bg-red-200 hover:text-red-500 hover:scale-105 hover: border hover:border-red-500">
+                              <button onclick="deleteItem('{{ $cartId }}', '{{ $item['id'] }}')" class="delete-button hidden opacity-0 rounded-lg translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 hover:bg-red-200 hover:text-red-500 hover:scale-105 hover: border hover:border-red-500">
                                 Hapus
                             </button>
 
