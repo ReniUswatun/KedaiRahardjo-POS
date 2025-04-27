@@ -99,6 +99,11 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+
+Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store');
+
+
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
@@ -112,7 +117,7 @@ Route::get(
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
 
-Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // Route::middleware('auth')->name('admin.')->group(function () {
@@ -133,7 +138,7 @@ Route::middleware(['permission:user.menu'])->group(function () {
 
 // ====== CUSTOMERS ======
 Route::middleware(['permission:customer.menu'])->group(function () {
-    Route::resource('/customers', CustomerController::class);
+    Route::resource('/customers', AdminCustomerController::class);
 });
 
 // ====== CASHIER ======

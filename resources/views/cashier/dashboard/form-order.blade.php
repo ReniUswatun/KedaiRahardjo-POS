@@ -24,11 +24,12 @@
     </div>
 
     <!-- Data Pesanan -->
-    <input type="hidden" name="keranjang" value='@json($keranjang)'>
+    <input type="hidden" name="keranjang" value="{{ json_encode($keranjang) }}">
 
     <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
       Konfirmasi
     </button>
   </form>
+
 </div>
 @endsection

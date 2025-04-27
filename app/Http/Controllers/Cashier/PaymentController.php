@@ -2,65 +2,70 @@
 
 namespace App\Http\Controllers\Cashier;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Bill;
-use App\Models\BillItem;
+use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\OrderDetails;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
-        $keranjang = session('keranjang', []); // Kalau kosong, default []
-
-        return view('cashier.dashboard.form-order', [
-            'keranjang' => $keranjang
-        ]);
+        $keranjang = []; // default kosong
+        return view('cashier.dashboard.form-order', compact('keranjang'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validasi data dari form
+        $request->validate([
             'nama' => 'required|string',
-            'nomor_meja' => 'required|integer',
-            'keranjang' => 'required|json',
+            'nomor_meja' => 'required|integer|min:1',
+            'keranjang' => 'required|json',  // Pastikan keranjang diterima dalam format JSON
             'catatan' => 'nullable|string',
         ]);
 
-        $items = json_decode($validated['keranjang'], true);
+        $keranjang = json_decode($request->keranjang, true);  // Mengubah JSON ke array PHP
 
-        // Simpan ke database
-        $bill = Bill::create([
-            'nama' => $validated['nama'],
-            'nomor_meja' => $validated['nomor_meja'],
-            'catatan' => $validated['catatan'] ?? null,
-        ]);
+        DB::beginTransaction();  // Mulai transaksi untuk keamanannya
 
-        foreach ($items as $item) {
-            BillItem::create([
-                'bill_id' => $bill->id,
-                'nama_produk' => $item['nama_produk'] ?? '',
-                'jumlah' => $item['jumlah'] ?? 0,
-                'harga' => $item['harga'] ?? 0,
+        try {
+            // 1. Simpan ke tabel orders
+            $order = Order::create([
+                'customer_name' => $request->nama,
+                'table_number' => $request->nomor_meja,
+                'order_note' => $request->catatan,
+                'order_date' => Carbon::now(),
+                'order_status' => 'pending',
+                'total_products' => collect($keranjang)->sum('quantity'),
+                'invoice_no' => 'INV-' . strtoupper(Str::random(8)),
+                'total_amount' => collect($keranjang)->reduce(function ($total, $item) {
+                    return $total + ($item['price'] * $item['quantity']);
+                }, 0),
+                'payment_method' => 'kasir',
+                'payment_status' => 'unpaid',
             ]);
+
+            // 2. Simpan setiap item ke tabel order_details
+            foreach ($keranjang as $item) {
+                OrderDetails::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['id'],  // pastikan item ini sesuai dengan field di database
+                    'quantity' => $item['quantity'],
+                    'unitcost' => $item['price'],
+                    'total' => $item['price'] * $item['quantity'],
+                ]);
+            }
+
+            DB::commit();  // Commit transaksi
+
+            return redirect()->route('cashier.index')->with('success', 'Order berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();  // Rollback jika ada error
+            return back()->with('error', 'Gagal menyimpan order: ' . $e->getMessage());
         }
-
-        // // Tampilkan halaman bill + data
-        // return view('customer.menus.bill', [
-        //     'bill' => $bill,
-        //     'items' => $bill->items,
-        // ]);
-    }
-
-    public function saveCart(Request $request)
-    {
-        $validated = $request->validate([
-            'keranjang' => 'required|array',
-        ]);
-
-        // Simpan keranjang ke session sementara
-        session(['keranjang' => $validated['keranjang']]);
-
-        return response()->json(['message' => 'Keranjang berhasil disimpan']);
     }
 }
