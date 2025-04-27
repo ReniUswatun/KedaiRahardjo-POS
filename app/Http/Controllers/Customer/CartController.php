@@ -96,7 +96,7 @@ class CartController extends Controller
     {
         $carts = session()->get('carts', []);
 
-        if (isset($carts[$cartId])) {
+        if (isset($carts[$caSrtId])) {
             unset($carts[$cartId]);
             session()->put('carts', $carts);
             return redirect()->route('carts.index')->with('success', 'Cart berhasil dihapus.');
