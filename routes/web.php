@@ -73,6 +73,7 @@ Route::prefix('')->name('customer.')->group(function () {
 });
 
 //buat liat session
+// ! Buat liat session
 Route::get('/debug/session', function () {
     return session()->all();
 });
