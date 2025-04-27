@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\Cashier;
 
 use App\Http\Controllers\Controller;
 
@@ -433,7 +433,6 @@ class MenuController extends Controller
         ];
 
 
-        return view('customer.menus.index', compact('categories', 'menus', 'bestSellers'));
-        return view('cashier.index', compact('categories', 'menus', 'bestSellers'));
+        return view('cashier.dashboard.index', compact('categories', 'menus', 'bestSellers'));
     }
 }
