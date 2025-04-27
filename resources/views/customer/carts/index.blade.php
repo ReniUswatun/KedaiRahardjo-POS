@@ -23,7 +23,7 @@
     }
 
     function deleteItem(cartId, itemId) {
-        window.location.href = `/cart/${cartId}/delete-item/${itemId}`;
+        window.location.href = /cart/${cartId}/delete-item/${itemId};
     }
 </script>
 
@@ -46,12 +46,12 @@
                 <div class="bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200" x-data="{ showMore: false }">
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex flex-col">
-                            <div class="text-lg font-semibold text-gray-800">Cart ID: {{ $cartId }}</div>
+                            <div class="text-lg font-semibold text-gray-800">Pesanan {{ $loop->iteration }}</div>
                             <span class="text-sm text-gray-500">Total Items: {{ $cart['total_quantity'] }}</span>
                         </div>
 
                         <div class="flex space-x-2">
-                            <a href="{{ route('customer.menu.show', ['cartId' => $cartId]) }}" class="w-16 py-2 text-green-500 font-medium flex items-center justify-center">
+                             <a href="{{ route('customer.menu.show', ['cartId' => $cartId,'pesanan' => $loop->iteration]) }}" class="w-16 py-2 text-green-500 font-medium flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
 
-                            <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 rounded-lg translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 hover:bg-red-500 hover:text-white hover:scale-105">
+                            <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4">
                                 Hapus
                             </button>
                         </div>
