@@ -1,31 +1,38 @@
 @extends('customer.dashboard.body.main')
 
+@php
+    $orders_status = ['pending', 'processing', 'completed', 'cancelled'];
+
+    $dummy_orders = [
+        ['id' => 1, 'name' => 'Order #1', 'status' => 'pending'],
+        ['id' => 2, 'name' => 'Order #2', 'status' => 'processing'],
+        ['id' => 3, 'name' => 'Order #3', 'status' => 'completed'],
+        ['id' => 4, 'name' => 'Order #4', 'status' => 'cancelled'],
+        ['id' => 5, 'name' => 'Order #5', 'status' => 'pending'],
+    ];
+@endphp
+
 @section('container')
-<div>
-    <h1 class="text-2xl font-bold mb-4">Daftar Pesanan</h1>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-            <thead>
-                <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                    <th class="py-3 px-6 text-left">No</th>
-                    <th class="py-3 px-6 text-left">Nama Produk</th>
-                    <th class="py-3 px-6 text-left">Jumlah</th>
-                    <th class="py-3 px-6 text-left">Total Harga</th>
-                    <th class="py-3 px-6 text-left">Status</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-600 text-sm font-light">
-                @foreach($orders as $order)
-                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="py-3 px-6">{{ $loop->iteration }}</td>
-                    <td class="py-3 px-6">{{ $order->product_name }}</td>
-                    <td class="py-3 px-6">{{ $order->quantity }}</td>
-                    <td class="py-3 px-6">{{ number_format($order->total_price, 2) }}</td>
-                    <td class="py-3 px-6">{{ $order->status }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+<div class="mx-4 pb-32" x-data="{ kategoriAktif: '', orders: @json($dummy_orders) }">
+    <!-- Dropdown Kategori -->
+    <div class="mt-4">
+        <select x-model="kategoriAktif" class="border border-red-500 text-red-500 focus:ring-red-500 focus:border-red-500 rounded-xl px-4 py-2 w-full">
+
+            <option value="">All Status</option>
+            @foreach ($orders_status as $order_status)
+                <option value="{{ $order_status }}">{{ ucfirst($order_status) }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- List Order -->
+    <div class="mt-6">
+        <template x-for="order in orders" :key="order.id">
+            <div x-show="kategoriAktif === '' || order.status === kategoriAktif" class="border p-4 rounded-xl shadow">
+                <h3 class="font-semibold" x-text="order.name"></h3>
+                <p class="text-gray-600" x-text="order.status.charAt(0).toUpperCase() + order.status.slice(1)"></p>
+            </div>
+        </template>
     </div>
 </div>
 @endsection

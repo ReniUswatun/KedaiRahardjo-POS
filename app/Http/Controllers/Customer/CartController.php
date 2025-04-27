@@ -113,18 +113,4 @@ class CartController extends Controller
             'message' => 'Item berhasil dihapus.'
         ]);
     }
-
-    // Hapus seluruh cart
-    public function deleteCart($cartId)
-    {
-        $carts = session()->get('carts', []);
-
-        if (isset($carts[$cartId])) {
-            unset($carts[$cartId]);
-            session()->put('carts', $carts);
-            return redirect()->route('carts.index')->with('success', 'Cart berhasil dihapus.');
-        }
-
-        return redirect()->back()->with('error', 'Cart tidak ditemukan.');
-    }
 }
