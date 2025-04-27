@@ -1,4 +1,4 @@
-@extends('admin.dashboard.body.main')
+{{-- @extends('admin.dashboard.body.main')
 
 @section('container')
 <div class="container-fluid">
@@ -154,4 +154,4 @@
 </div>
 
 @include('components.preview-img-form')
-@endsection
+@endsection --}}

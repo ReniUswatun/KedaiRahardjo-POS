@@ -21,13 +21,14 @@ use App\Http\Controllers\Customer\{
     MenuController as CustomerMenuController,
     CartController as CustomerCartController,
     PaymentController as CustomerPaymentController,
+    CheckoutController as CustomerCheckoutController,
 };
 use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
-    HistoryController as CashierHistoryController
+    HistoryController as CashierHistoryController,
 };
-
+use Illuminate\Contracts\Session\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,35 +49,51 @@ Route::get('/', function () {
 // Layout baru untuk customer dalam membuat pesanan
 // ====== CUSTOMER ======
 //Todo: Route untuk bottom navigation pada customer
-Route::get(
-    "/dashboard",
-    [CustomerDashboardController::class, "index"]
-)->name("customer.index");
+Route::prefix('')->name('customer.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [CustomerDashboardController::class, 'index'])
+        ->name('index');
+
+    // Cart
+    Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // GET /cart
+        Route::post('/create', 'create')->name('create'); // GET /cart/create
+        Route::get('/{cartId}', 'show')->name('show'); // GET /cart/{cartId}
+        Route::post('/{cartId}/items', 'addItem')->name('items.add'); // POST /cart/{cartId}/items
+        Route::patch('/{cartId}/items/{itemId}', 'updateItem')->name('items.update'); // PATCH /cart/{cartId}/items/{itemId}
+        Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete'); // DELETE /cart/{cartId}/items/{itemId}
+        Route::delete('/{cartId}', 'deleteCart')->name('delete'); // DELETE /cart/{cartId}
+    });
+
+    // Menu
+    Route::prefix('menu')->name('menu.')->controller(CustomerMenuController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // GET /menu
+        Route::get('/{cartId}', 'show')->name('show'); // GET /menu/{cartId}
+    });
+});
+
+//buat liat session
+Route::get('/debug/session', function () {
+    return session()->all();
+});
+
+// Route untuk hapus semua session
+// ! Buat apus session, gunakan hati hati
+Route::get('/session/clear', function () {
+    \Illuminate\Support\Facades\Session::flush(); // Hapus semua isi session
+
+    return redirect('/')->with('success', 'Semua session berhasil dihapus!');
+})->name('session.clear');
 
 
-Route::get(
-    "/cart",
-    [CustomerCartController::class, "index"]
-)->name("customer.cart.index");
+// Route::get('/menu/{jenis}', function ($jenis) {
+//     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
+// })->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
 
-Route::get(
-    "/menu",
-    [CustomerMenuController::class, "index"]
-)->name("customer.menu.index");
-
-
-Route::get('/menu/{jenis}', function ($jenis) {
-    return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
-})->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
-
-Route::view('/keranjang', 'customer.menus.keranjang')->name('order.cart'); //masih blm fix
-
-Route::view('/pembayaran', 'customer.menus.pembayaran')->name('order.payment'); //masih blm fix
-
-Route::view('/data', 'customer.menus.form')->name('order.data'); //masih blm fix
-
-Route::view('/bill', 'customer.menus.detail')->name('order.bill'); //masih blm fix
-
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
+// Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
 Route::get(
@@ -84,18 +101,12 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-Route::post('/data', [CustomerPaymentController::class, 'store'])->name('data.store');
-
-
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
-
 });
 
 Route::get(
@@ -118,10 +129,10 @@ Route::middleware(['permission:user.menu'])->group(function () {
     Route::resource('/users', UserController::class)->except(['show']);
 });
 
-// ====== CUSTOMERS ======
-Route::middleware(['permission:customer.menu'])->group(function () {
-    Route::resource('/customers', CustomerController::class);
-});
+// // ====== CUSTOMERS ======
+// Route::middleware(['permission:customer.menu'])->group(function () {
+//     Route::resource('/customers', CustomerController::class);
+// });
 
 // ====== CASHIER ======
 Route::prefix('cashier')->group(function () {

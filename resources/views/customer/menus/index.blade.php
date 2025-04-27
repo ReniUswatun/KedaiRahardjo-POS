@@ -2,11 +2,12 @@
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('keranjangBelanja', () => ({
-      items: [],
+    Alpine.data('shoppingCart', () => ({
+      items: @json($cartItems ?? []),
+      cartId: @json($cartId ?? null),
       showDetail: false,
 
-      tambah(menu) {
+      add(menu) {
         const index = this.items.findIndex(item => item.id === menu.id);
         if (index !== -1) {
           this.items[index].quantity += 1;
@@ -20,7 +21,7 @@
         }
       },
 
-      kurang(menu) {
+      subtract(menu) {
         const index = this.items.findIndex(item => item.id === menu.id);
         if (index !== -1) {
           if (this.items[index].quantity > 1) {
@@ -31,30 +32,70 @@
         }
       },
 
-      daftar() {
+      getMenu() {
         return this.items;
       },
 
-      jumlahMenu(menuId) {
+      getMenuQuantity(menuId) {
         const found = this.items.find(item => item.id === menuId);
         return found ? found.quantity : 0;
       },
 
-      totalHarga() {
+      getTotalPrice() {
         return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
       },
+      addToCart() {
+          if (this.items.length === 0) {
+              return; // Tidak ada item yang dapat ditambahkan
+          }
 
-      checkout() {
-        localStorage.setItem('keranjang', JSON.stringify(this.items));
-        window.location.href = '{{ route("data.create") }}';
+          fetch('{{ route("customer.cart.create") }}', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
+              },
+              body: JSON.stringify({
+                items: this.items, // Kirim data items ke server
+                cartId: this.cartId // Kirim cartId
+              })
+          })
+          .then(response => response.json())
+          .then(() => {
+              window.location.href = '{{ route("customer.cart.index") }}';
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
       },
+      checkout() {
+        if (this.items.length === 0) {
+          return;
+        }
+
+        fetch('{{ route("save.cart") }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({
+            items: this.items
+          })
+        })
+        .then(response => response.json())
+        .then(() => {
+          window.location.href = '{{ route("data.create") }}';
+        });
+      },
+      
     }));
   });
 </script>
 
 @section('container')
 
-<div class="mx-4 pb-32" x-data="keranjangBelanja()">
+<div class="mx-4 pb-32" x-data="shoppingCart">
   {{-- Card untuk search --}}
   <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
     <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
@@ -82,37 +123,37 @@
   </div>
 
   {{-- Paling Laris --}}
-  <div class="mt-2">
-    <h2 class="text-lg font-bold">Paling Laris</h2>
+  <div class="mt-4 mb-4">
+    <h2 class="text-2xl font-bold text-red-900">Paling Laris</h2>
     <div class="flex gap-6 overflow-x-scroll pb-3 pt-3 ps-7 -mx-8" style="scrollbar-width: none; -ms-overflow-style: none; ::-webkit-scrollbar { display: none; }">
-      @foreach ($bestSellers as $menu)
-        @include('customer.menus.components.menu-card', ['menu' => $menu])
+      @foreach ($bestSellers as $item)
+        @include('customer.menus.components.menu-card', ['menu' => $item])
       @endforeach
     </div>
   </div>
 
   {{-- Kategori --}}
-  <div class="mt-4" x-data="{ kategoriAktif: 'makanan' }">
-    <h2 class="text-lg font-bold">Menu Kategori</h2>
+  <div class="mt-5" x-data="{ kategoriAktif: '{{ e($categories->first()->slug) }}' }">
+    <h2 class="text-2xl text-red-900 mb-4 font-bold">Menu Kategori</h2>
 
     <!-- Tombol Kategori -->
     <div class="flex flex-wrap justify-evenly mt-2">
-      @foreach (array_keys($menus) as $category)
+    @foreach ($categories as $category)
         <button 
-          @click="kategoriAktif = '{{ $category }}'"
-          :class="kategoriAktif === '{{ $category }}' 
-            ? 'bg-red-500 text-white' 
-            : 'text-red-500 border hover:bg-red-100'"
-          class="border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500"
+            @click="kategoriAktif = '{{ $category->slug }}'"
+            :class="kategoriAktif === '{{ $category->slug }}'
+                ? 'bg-red-500 text-white' 
+                : 'text-red-500 border hover:bg-red-100'"
+            class="border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500"
         >
-          {{ ucfirst($category) }}
-        </button>
+            {{ ucfirst($category->name) }}
+          </button>
       @endforeach
     </div>
 
     <!-- Daftar Menu -->
     <div class="mt-4 mb-12">
-      @foreach ($menus as $kategori => $items)
+      @foreach ($groupedProducts as $kategori => $items)
         <div 
           x-show="kategoriAktif === '{{ $kategori }}'"
           x-cloak
@@ -142,8 +183,8 @@
         class="flex items-center justify-between px-4 py-3 cursor-pointer"
         @click="showDetail = !showDetail">
         <div>
-          <p class="text-sm text-gray-600" x-text="'Total item: ' + daftar().reduce((sum, i) => sum + i.quantity, 0)"></p>
-          <p class="font-semibold text-red-600" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></p>
+          <p class="text-sm text-gray-600" x-text="'Total item: ' + getMenu().reduce((sum, i) => sum + i.quantity, 0)"></p>
+          <p class="font-semibold text-red-600" x-text="'Rp ' + getTotalPrice().toLocaleString('id-ID')"></p>
         </div>
         <div class="text-red-500 text-xl transition-transform duration-300">
           <template x-if="showDetail">
@@ -163,11 +204,11 @@
 
       <!-- Rincian Item -->
       <div 
-        x-show="showDetail && daftar().length > 0"
+        x-show="showDetail && getMenu().length > 0"
         x-transition
-        class="border-t px-4 pb-4 max-h-[200px] overflow-y-auto">
+        class="border-t px-4 max-h-[230px] overflow-y-auto">
         
-        <template x-for="item in daftar()" :key="item.id">
+        <template x-for="item in getMenu()" :key="item.id">
           <div class="flex justify-between items-center mb-2">
             <div>
               <p class="font-semibold text-sm" x-text="item.name"></p>
@@ -178,10 +219,30 @@
         </template>
 
         <!-- Tombol Checkout -->
-        <div class="sticky bottom-0 bg-white pt-3 mt-3">
-          <a href="{{ route('data.create') }}" class="block w-full bg-red-500 text-white py-2 rounded-xl font-semibold text-center hover:bg-red-600 transition">
-          Bayar
-          </a>
+        <div class="sticky bottom-0 bg-white pt-3 mt-3 pb-2">
+          <div class="flex gap-4">
+            <!-- Masukkan Keranjang -->
+            <button 
+              @click="addToCart()" 
+              class="flex-1 flex items-center justify-center gap-2 border border-red-500 text-red-500 font-semibold py-3 rounded-xl text-sm hover:bg-red-100 transition-all duration-200">
+              <!-- Icon Shopping Cart -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4a1 1 0 00.95 1.6h11.8a1 1 0 00.95-1.6L17 13M9 21h6" />
+              </svg>
+              Add to Cart
+            </button>
+
+            <!-- Bayar -->
+            <button 
+              @click="checkout()" 
+              class="flex-1 flex items-center justify-center gap-2 bg-red-500 text-white font-semibold py-3 rounded-xl text-sm hover:bg-red-600 transition-all duration-200">
+              <!-- Icon Credit Card -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2m-2 0h12a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2v-8a2 2 0 012-2z" />
+              </svg>
+              Checkout
+            </button>
+          </div>
         </div>
       </div>
     </div>

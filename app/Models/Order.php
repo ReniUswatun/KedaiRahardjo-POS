@@ -11,33 +11,30 @@ class Order extends Model
     use HasFactory, Sortable;
 
     protected $fillable = [
-        'customer_id',
+        'customer_name',
+        'table_number',
+        'order_note',
         'order_date',
         'order_status',
         'total_products',
-        'sub_total',
-        'vat',
         'invoice_no',
-        'total',
+        'total_amount',
+        'payment_method',
         'payment_status',
-        'pay',
-        'due',
+        'qris_url',
+        'qris_expiration',
+        'qris_transaction_id',
     ];
 
     public $sortable = [
-        'customer_id',
+        'customer_name',
+        'table_number',
         'order_date',
-        'pay',
-        'due',
-        'total',
+        'total_amount',
+        'payment_status',
     ];
 
     protected $guarded = [
         'id',
     ];
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
-    }
 }

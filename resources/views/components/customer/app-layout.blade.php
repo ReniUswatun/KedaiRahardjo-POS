@@ -10,6 +10,7 @@
 
 
 </head>
+
 <body class="bg-gray-100">
 
     <!-- Container utama untuk membatasi lebar dan center -->
