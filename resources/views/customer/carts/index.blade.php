@@ -1,5 +1,32 @@
 @extends('customer.dashboard.body.main')
 
+<script>
+    let deleteMode = false;
+
+    function toggleDeleteMode() {
+        deleteMode = !deleteMode;
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        deleteButtons.forEach(button => {
+            if (deleteMode) {
+                button.classList.remove('hidden');
+                setTimeout(() => {
+                    button.classList.remove('opacity-0', 'translate-x-5');
+                }, 10); // kasih delay sedikit supaya transisi jalan
+            } else {
+                button.classList.add('opacity-0', 'translate-x-5');
+                setTimeout(() => {
+                    button.classList.add('hidden');
+                }, 300); // tunggu transisi selesai baru hidden
+            }
+        });
+    }
+
+    function deleteItem(cartId, itemId) {
+    window.location.href = '';
+    }
+</script>
+
 @section('container')
 <div class="mx-4 pb-32">
     <h1 class="text-2xl font-bold mb-4 mt-2 text-red-900">Keranjang Pesanan</h1>
@@ -33,17 +60,17 @@
                             Edit
                         </a>
 
-                        <button class="w-16 py-2 text-red-500 font-medium flex items-center justify-center">
+                        <button onclick="toggleDeleteMode()" class="w-16 py-2 text-red-500 font-medium flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
-                            Hapus   
+                            Hapus
                         </button>
                     </div>
                 </div>
 
 
-                @foreach ($cart['items'] as $item)
+                @foreach ($cart['items'] as $itemId => $item)
                     <div class="flex items-center border-t border-gray-200 py-3">
                         <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
                             <!-- Kalau mau tambah gambar, bisa taruh -->
@@ -59,6 +86,11 @@
                                 <span class="text-sm font-semibold text-red-500">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
                             </div>
                         </div>
+
+                        <!-- Tombol hapus per item, awalnya hidden -->
+                        <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4">
+                            Hapus
+                        </button>
                     </div>
                 @endforeach
 
