@@ -25,7 +25,7 @@
                     </div>
 
                     <button class="text-black px-4 py-4 font-semibold">
-                        Ubah
+                        Edit
                     </button>
                 </div>
 
