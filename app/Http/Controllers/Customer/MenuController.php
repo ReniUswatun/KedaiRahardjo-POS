@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
@@ -43,7 +44,7 @@ class MenuController extends Controller
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers'));
     }
 
-    public function show($cartId)
+    public function show($cartId, Request $request)
     {
         $carts = session()->get('carts', []);
         // Cek apakah cart dengan cartId yang diberikan ada
@@ -53,6 +54,7 @@ class MenuController extends Controller
                 'message' => 'Cart tidak ditemukan.'
             ]);
         }
+        $pesanan = $request->query('pesanan');
         // Ambil cart berdasarkan cartId
         $cart = $carts[$cartId];
         $cartItems = $cart['items'];
