@@ -11,7 +11,7 @@
     </svg>
         </a>
         <div class="ml-3">
-        <p class="text-2xl font-bold text-grey-800">Pesanan {{ request('pesanan') }}</p>
+        <p class="text-xl font-bold text-grey-800">Pesanan {{ request('pesanan') }}</p>
         </div>
       </div>
     @else

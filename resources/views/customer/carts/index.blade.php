@@ -88,7 +88,7 @@
                         </div>
 
                         <!-- Tombol hapus per item, awalnya hidden -->
-                        <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4">
+                        <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 rounded-lg translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 hover:bg-red-500 hover:text-white hover:scale-105">
                             Hapus
                         </button>
                     </div>
