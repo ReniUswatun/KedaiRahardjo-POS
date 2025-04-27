@@ -27,6 +27,7 @@ use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
+    PaymentController as CashierPaymentController
 };
 use Illuminate\Contracts\Session\Session;
 
@@ -102,7 +103,11 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create.cashier');
+// route/web.php
+Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.customer');
+
+
+Route::get('/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
 
 // Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
 //     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending

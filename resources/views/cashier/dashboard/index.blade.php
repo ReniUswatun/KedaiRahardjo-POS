@@ -43,29 +43,29 @@
       getTotalPrice() {
         return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
       },
-      addToCart() {
-          if (this.items.length === 0) {
-              return; // Tidak ada item yang dapat ditambahkan
-          }
+      // addToCart() {
+      //     if (this.items.length === 0) {
+      //         return; // Tidak ada item yang dapat ditambahkan
+      //     }
 
-          fetch('{{ route("customer.cart.create") }}', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-              },
-              body: JSON.stringify({
-                  items: this.items // Kirim data items ke server
-              })
-          })
-          .then(response => response.json())
-          .then(() => {
-              window.location.href = '{{ route("customer.cart.index") }}';
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-      },
+      //     fetch('{{ route("customer.cart.create") }}', {
+      //         method: 'POST',
+      //         headers: {
+      //             'Content-Type': 'application/json',
+      //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+      //         },
+      //         body: JSON.stringify({
+      //             items: this.items // Kirim data items ke server
+      //         })
+      //     })
+      //     .then(response => response.json())
+      //     .then(() => {
+      //         window.location.href = '{{ route("customer.cart.index") }}';
+      //     })
+      //     .catch(error => {
+      //         console.error('Error:', error);
+      //     });
+      // },
       checkout() {
         if (this.items.length === 0) {
           return;
