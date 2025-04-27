@@ -24,9 +24,10 @@
                         <span class="text-sm text-gray-500">Total Items: {{ $cart['total_quantity'] }}</span>
                     </div>
 
-                    <button class="text-black px-4 py-4 font-semibold">
-                        Edit
-                    </button>
+                    <!-- Tombol Edit mengarahkan ke halaman edit cart -->
+                    <a href="{{ route('customer.menu.show', ['cartId' => $cartId]) }}" class="text-black px-4 py-4 font-semibold">
+                            Edit
+                    </a>
                 </div>
 
 

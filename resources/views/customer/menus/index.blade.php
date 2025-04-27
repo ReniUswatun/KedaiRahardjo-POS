@@ -3,7 +3,8 @@
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('shoppingCart', () => ({
-      items: [],
+      items: @json($cartItems ?? []),
+    cartId: @json($cartId ?? null),
       showDetail: false,
 
       add(menu) {
@@ -55,7 +56,8 @@
                   'X-CSRF-TOKEN': '{{ csrf_token() }}'
               },
               body: JSON.stringify({
-                  items: this.items // Kirim data items ke server
+                items: this.items, // Kirim data items ke server
+                cartId: this.cartId // Kirim cartId
               })
           })
           .then(response => response.json())
@@ -78,7 +80,7 @@
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
           },
           body: JSON.stringify({
-            keranjang: this.items
+            items: this.items
           })
         })
         .then(response => response.json())
@@ -93,7 +95,7 @@
 
 @section('container')
 
-<div class="mx-4 pb-32" x-data="shoppingCart()">
+<div class="mx-4 pb-32" x-data="shoppingCart">
   {{-- Card untuk search --}}
   <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
     <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
@@ -227,7 +229,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4a1 1 0 00.95 1.6h11.8a1 1 0 00.95-1.6L17 13M9 21h6" />
               </svg>
-              Masukkan Keranjang
+              Add to Cart
             </button>
 
             <!-- Bayar -->
@@ -238,7 +240,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2m-2 0h12a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2v-8a2 2 0 012-2z" />
               </svg>
-              Bayar
+              Checkout
             </button>
           </div>
         </div>
