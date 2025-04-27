@@ -39,7 +39,7 @@ class MenuController extends Controller
         // Dummy untuk menampilkan menu yang paling laris
         $bestSellers = Product::where('is_best_seller', true)->get();
 
-        // return view('customer.menus.index', compact('categories', 'menus', 'bestSellers'));
+        // Kirim data ke view
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers'));
     }
 }
