@@ -26,31 +26,38 @@
                 <tr>
                     <th class="px-4 py-3">Order ID</th>
                     <th class="px-4 py-3">Customer</th>
-                    <th class="px-4 py-3">Waktu Pesan</th>
+                    <th class="px-4 py-3">Table No</th>
+                    <th class="px-4 py-3">Order Time</th>
                     <th class="px-4 py-3">Total</th>
                     <th class="px-4 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700">
-                <tr class="border-t">
                 @foreach ($orders as $order)
-                    @if ($order['status'] === 'pending')
-                        <tr class="border-t">
-                            <td class="px-4 py-2">#ORD2345</td>
-                            <td class="px-4 py-2">Rudi</td>
-                            <td class="px-4 py-2">10:02 AM</td>
-                            <td class="px-4 py-2">Rp25.000</td>
-                            <td class="px-4 py-2 text-center">
-                                <a href="{{ route('cashier.orders.invoice', $order['order_id']) }}"
-                                class="inline-flex items-center justify-center gap-1 px-3 py-1.5 border border-green-600 text-green-600 px-3 py-1 rounded text-xs hover:bg-green-600 hover:text-white transition">
-                                Konfirmasi & Cetak Struk
-                                </a>
-                            </td>
-                        </tr>
-                    @endif
+                    <tr class="border-t">
+                    <td class="px-4 py-2">#{{ $order['order_id'] }}</td>
+                    <td class="px-4 py-2">{{ $order['customer'] }}</td>
+                    <td class="px-4 py-2">-</td> <!-- Karena table_number tidak ada di array -->
+                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($order['waktu_pesan'])->format('H:i') }}</td>
+                    <td class="px-4 py-2">Rp{{ number_format($order['total'], 0, ',', '.') }}</td>
+                    <td class="px-4 py-2 text-center">
+                        <div class="flex justify-center space-x-2">
+                            <a href="{{ route('cashier.orders.invoice', $order['order_id']) }}"
+                            class="inline-flex items-center justify-center gap-1 px-3 py-1.5 border border-green-600 text-green-600 rounded text-xs hover:bg-green-600 hover:text-white transition">
+                            Konfirmasi & Cetak Struk
+                            </a>
+                            <form action="{{ route('cashier.orders.delete', $order['order_id']) }}" method="POST" onsubmit="return confirm('Yakin mau hapus order ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="inline-flex items-center justify-center gap-1 px-3 py-1.5 border border-red-600 text-red-600 rounded text-xs hover:bg-red-600 hover:text-white transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                    </tr>
                 @endforeach
-
-                </tr>
             </tbody>
         </table>
     </div>
