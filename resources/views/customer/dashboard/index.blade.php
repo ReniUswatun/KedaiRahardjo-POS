@@ -2,7 +2,7 @@
 
 @section('container')
     <div class="mx-4 pb-32">
-        <h1 class="text-2xl font-bold mb-4">Welcome to Kedai Rahardjo!</h1>
+        <h1 class="text-2xl font-bold mb-4 text-red-900">Welcome to Kedai Rahardjo!</h1>
     <!-- Sliding Carousel -->
     <div x-data="{ 
         activeSlide: 0, 
@@ -89,7 +89,7 @@
 
      <!-- Menu Kategori -->
     <div class="mt-6 mb-4">
-      <h2 class="text-lg font-bold">Menu Kategori</h2>
+      <h2 class="text-lg font-bold text-red-900">Menu Kategori</h2>
       <div class="grid grid-cols-2 gap-4 mt-4">
 
         <!-- Makanan -->
