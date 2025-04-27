@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Supplier;
 use App\Models\AdvanceSalary;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -39,20 +40,35 @@ class DatabaseSeeder extends Seeder
         Employee::factory(5)->create();
         // AdvanceSalary::factory(25)->create();
 
-        Customer::factory(25)->create();
+        // Customer::factory(25)->create();
         Supplier::factory(10)->create();
 
-        for ($i=0; $i < 10; $i++) {
-            Product::factory()->create([
-                'product_code' => IdGenerator::generate([
-                    'table' => 'products',
-                    'field' => 'product_code',
-                    'length' => 4,
-                    'prefix' => 'PC'
-                ])
-            ]);
-        }
-        Category::factory(5)->create();
+        $this->call(ProductSeeder::class);
+
+
+        Category::insert([
+            [
+                'id' => 1,
+                'name' => 'Makanan',
+                'slug' => 'makanan',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id' => 2,
+                'name' => 'Minuman',
+                'slug' => 'minuman',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id' => 3,
+                'name' => 'Camilan',
+                'slug' => 'camilan',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ]);
 
         Permission::create(['name' => 'pos.menu', 'group_name' => 'pos']);
         Permission::create(['name' => 'employee.menu', 'group_name' => 'employee']);

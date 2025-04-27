@@ -1,4 +1,4 @@
-@extends('admin.dashboard.body.main')
+{{-- @extends('admin.dashboard.body.main')
 
 @section('container')
 <div class="container-fluid mb-3">
@@ -179,4 +179,4 @@
         <!-- end: Right Detail Employee -->
     </div>
 </div>
-@endsection
+@endsection --}}
