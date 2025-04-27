@@ -59,4 +59,19 @@ class OrdersController extends Controller
         return view('cashier.orders.detail', compact('order'));
     }
 
+    public function delete($orderId)
+{
+    // Simulasi cari order
+    $order = collect($this->orders)->firstWhere('order_id', $orderId);
+
+    if (!$order) {
+        abort(404);
+    }
+
+    // Simulasi penghapusan (karena ini array statis, tidak bisa benar-benar delete)
+    // Kalau nanti pakai database, bisa pakai Order::find($orderId)->delete();
+
+    return redirect()->back()->with('success', 'Order berhasil dihapus.');
+}
+
 }
