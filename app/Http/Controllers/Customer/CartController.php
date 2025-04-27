@@ -31,7 +31,7 @@ class CartController extends Controller
     {
         $carts = session()->get('carts', []);
         // Bikin cartId baru
-        $cartId = (string) \Illuminate\Support\Str::uuid();
+        $cartId = rtrim(strtr(base64_encode(random_bytes(9)), '+/', '-_'), '=');
 
         // Ambil items dari request
         $items = $request->input('items', []);
