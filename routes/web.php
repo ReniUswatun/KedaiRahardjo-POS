@@ -25,7 +25,8 @@ use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
-    MenuController as CashierMenuController
+    MenuController as CashierMenuController,
+    PaymentController as CashierPaymentController
 };
 use Illuminate\Contracts\Session\Session;
 
@@ -110,6 +111,9 @@ Route::get(
     "/cashier/history",
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
+
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+// Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // Route::middleware('auth')->name('admin.')->group(function () {
 //     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
