@@ -4,7 +4,7 @@
   document.addEventListener('alpine:init', () => {
     Alpine.data('shoppingCart', () => ({
       items: @json($cartItems ?? []),
-    cartId: @json($cartId ?? null),
+      cartId: @json($cartId ?? null),
       showDetail: false,
 
       add(menu) {
