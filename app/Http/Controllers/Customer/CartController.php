@@ -30,8 +30,15 @@ class CartController extends Controller
     public function create(Request $request)
     {
         $carts = session()->get('carts', []);
-        // Bikin cartId baru
-        $cartId = rtrim(strtr(base64_encode(random_bytes(9)), '+/', '-_'), '=');
+
+
+        if ($request->cartId && isset($carts[$request->cartId])) {
+            // Kalau ada cart lama, update saja
+            $cartId = $request->cartId;
+        } else {
+            // Bikin cartId baru
+            $cartId = rtrim(strtr(base64_encode(random_bytes(9)), '+/', '-_'), '=');
+        }
 
         // Ambil items dari request
         $items = $request->input('items', []);
@@ -46,9 +53,10 @@ class CartController extends Controller
 
         // Tambahkan cart baru ke carts
         $carts[$cartId] = [
-            'items' => $items,
+            'items' => $request->items,
             'total_quantity' => $totalQuantity,
             'total_price' => $totalPrice,
+            'created_at' => now(),
         ];
 
         // Simpan carts yang sudah diperbarui ke session
@@ -61,7 +69,8 @@ class CartController extends Controller
         ]);
     }
 
-    // Tampilkan cart
+
+    // Tampilkan cart untuk bisa di edit
     public function show($cartId)
     {
         $carts = session()->get('carts', []);
@@ -71,7 +80,9 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Cart tidak ditemukan.');
         }
 
-        return view('customer.carts.index', compact('cart', 'cartId'));
+        $cartItems = $cart['items'];
+
+        return view('customer.carts.index', compact('cartId', 'cartItems'));
     }
 
     // Tambahkan item ke cart
