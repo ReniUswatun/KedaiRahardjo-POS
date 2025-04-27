@@ -66,8 +66,10 @@ Route::prefix('')->name('customer.')->group(function () {
     });
 
     // Menu
-    Route::get('/menu', [CustomerMenuController::class, 'index'])
-        ->name('menu.index');
+    Route::prefix('menu')->name('menu.')->controller(CustomerMenuController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // GET /menu
+        Route::get('/{cartId}', 'show')->name('show'); // GET /menu/{cartId}
+    });
 });
 
 //buat liat session

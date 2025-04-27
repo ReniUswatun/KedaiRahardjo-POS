@@ -74,7 +74,7 @@ class CartController extends Controller
     public function show($cartId)
     {
         $carts = session()->get('carts', []);
-        $cart = $carts[$cartId] ?? null;
+        $cart = $carts[$cartId] ?? [];
 
         if (!$cart) {
             return redirect()->back()->with('error', 'Cart tidak ditemukan.');
@@ -82,7 +82,7 @@ class CartController extends Controller
 
         $cartItems = $cart['items'];
 
-        return view('customer.carts.index', compact('cartId', 'cartItems'));
+        return view('customer.menus.index', compact('cartId', 'cartItems'));
     }
 
     // Tambahkan item ke cart
