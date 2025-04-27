@@ -104,13 +104,21 @@ Route::get(
 
 Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create.cashier');
 
+// Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+//     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+//     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+//     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+//     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+//     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+//     });
+
+
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
-    Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
-    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
-    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
-    Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
-    Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
+    Route::post('/orders/{order}/checkout', [OrdersController::class, 'checkout'])->name('orders.checkout');
+    Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
 });
+
 
 Route::get(
     "/cashier/history",
