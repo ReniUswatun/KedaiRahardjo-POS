@@ -2,7 +2,7 @@
 
 @section('container')
 <div class="mx-4 pb-32">
-    <h1 class="text-2xl font-bold mb-4 mt-2">Daftar Keranjang Pesanan</h1>
+    <h1 class="text-2xl font-bold mb-4 mt-2 text-red-900">Keranjang Pesanan</h1>
     <div class="overflow-x-auto">
         @if(isset($message))
             <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
@@ -19,22 +19,30 @@
         @foreach ($carts as $cartId => $cart)
             <div class="bg-white shadow-md rounded-2xl p-4 mb-4">
                 <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-semibold text-gray-800">Cart ID: {{ $cartId }}</h3>
-                    <span class="text-sm text-gray-500">Total Items: {{ $cart['total_quantity'] }}</span>
+                    <div class="flex flex-col">
+                        <div class="text-lg font-semibold text-gray-800">Cart ID: {{ $cartId }}</div>
+                        <span class="text-sm text-gray-500">Total Items: {{ $cart['total_quantity'] }}</span>
+                    </div>
+
+                    <button class="text-black px-4 py-4 font-semibold">
+                        Edit
+                    </button>
                 </div>
+
 
                 @foreach ($cart['items'] as $item)
                     <div class="flex items-center border-t border-gray-200 py-3">
                         <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
-                            {{-- Kalau mau tambah gambar, bisa taruh --}}
+                            <!-- Kalau mau tambah gambar, bisa taruh -->
                             <img src="{{  asset('assets/images/product/nasi-goreng.jpg')}}" class="w-16 h-16 rounded-xl object-cover"> 
                         </div> 
-                         
                         
                         <div class="ml-4 flex-1">
                             <h4 class="text-md font-semibold text-gray-800">{{ $item['name'] }}</h4>
                             <div class="flex justify-between items-center mt-1">
                                 <span class="text-sm text-gray-600">Qty: {{ $item['quantity'] }}</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
                                 <span class="text-sm font-semibold text-red-500">Rp {{ number_format($item['price'], 0, ',', '.') }}</span>
                             </div>
                         </div>

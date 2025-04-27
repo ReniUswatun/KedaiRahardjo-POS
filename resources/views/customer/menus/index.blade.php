@@ -3,7 +3,8 @@
 <script>
   document.addEventListener('alpine:init', () => {
     Alpine.data('shoppingCart', () => ({
-      items: [],
+      items: @json($cartItems ?? []),
+      cartId: @json($cartId ?? null),
       showDetail: false,
 
       add(menu) {
@@ -56,12 +57,17 @@
               },
               body: JSON.stringify({
                   items: this.items // Kirim data items ke server
+                  cartId: this.cartId // kirim cartId kalau ada, null kalau nggak ada
               })
           })
           .then(response => response.json())
           .then(() => {
+              if (!this.cartId && data.cartId) {
+                  // Kalau tadi belum ada cartId, dan server ngasih cartId baru
+                  this.cartId = data.cartId;
+              }
               window.location.href = '{{ route("customer.cart.index") }}';
-          })
+                })
           .catch(error => {
               console.error('Error:', error);
           });
@@ -93,7 +99,7 @@
 
 @section('container')
 
-<div class="mx-4 pb-32" x-data="shoppingCart()">
+<div class="mx-4 pb-32" x-data="shoppingCart({{ json_encode($cartItems ?? []) }})">
   {{-- Card untuk search --}}
   <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
     <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
