@@ -1,83 +1,199 @@
 @extends('cashier.dashboard.body.main')
 
-@section('container')
-    <div class="h-screeno mx-4 pb-32">
-        <h1 class="text-2xl font-bold mb-4">Welcome Kasir!</h1>
-      <!-- Search -->
-      <div class="relative">
-        <input type="text" placeholder="Cari Menu" class="w-full border border-gray-300 rounded-md px-4 py-2 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-red-500" />
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 absolute top-3 left-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </div>
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('shoppingCart', () => ({
+      items: [],
+      showDetail: false,
 
-<div class="relative" x-data="menuData()" x-init="init()">
-  
-  <!-- Menu List -->
-  <div class="overflow-y-auto px-4 pt-4 pb-28 max-h-[calc(100vh-160px)]">
-    <div class="grid grid-cols-2 gap-4">
-      <template x-for="item in menu" :key="item.id">
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden flex flex-col">
-          <img :src="item.gambar" alt="" class="w-full h-24 object-cover">
-          <div class="p-2 flex-1">
-            <p class="text-xs text-gray-500">Makanan</p>
-            <h3 class="font-semibold text-sm leading-tight" x-text="item.nama"></h3>
-            <p class="text-sm font-semibold text-gray-700 mt-1" x-text="`Rp ${item.harga.toLocaleString()}`"></p>
-          </div>
-          <div class="flex items-center justify-center gap-3 pb-2">
-            <button @click="kurang(item.id)" class="bg-red-500 text-white px-2 rounded-md text-sm font-bold">-</button>
-            <span class="text-sm font-medium" x-text="cart[item.id] || 0"></span>
-            <button @click="tambah(item.id)" class="bg-red-500 text-white px-2 rounded-md text-sm font-bold">+</button>
-          </div>
-        </div>
-      </template>
+      add(menu) {
+        const index = this.items.findIndex(item => item.id === menu.id);
+        if (index !== -1) {
+          this.items[index].quantity += 1;
+        } else {
+          this.items.push({
+            id: menu.id,
+            name: menu.name,
+            price: menu.price,
+            quantity: 1
+          });
+        }
+      },
+
+      subtract(menu) {
+        const index = this.items.findIndex(item => item.id === menu.id);
+        if (index !== -1) {
+          if (this.items[index].quantity > 1) {
+            this.items[index].quantity -= 1;
+          } else {
+            this.items.splice(index, 1);
+          }
+        }
+      },
+
+      getMenu() {
+        return this.items;
+      },
+
+      getMenuQuantity(menuId) {
+        const found = this.items.find(item => item.id === menuId);
+        return found ? found.quantity : 0;
+      },
+
+      getTotalPrice() {
+        return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
+      },
+      
+    }));
+  });
+</script>
+
+@section('container')
+
+<div class="mx-4 pb-32" x-data="shoppingCart()">
+  {{-- Card untuk search --}}
+  <div class="group relative bg-gradient-to-br from-rose-500 to-red-400 rounded-3xl p-6 text-white max-w-xl w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+    <!-- Hiasan Lingkaran Blur di Tengah + Animasi Hover -->
+    <div class="absolute top-1/2 left-1/2 w-60 h-60 bg-red-200 bg-opacity-25 rounded-full blur-lg transform -translate-x-full -translate-y-1/2 transition-all duration-500 ease-in-out group-hover:-translate-x-px"></div>
+
+    <h2 class="text-2xl font-bold mb-1 relative z-10">Kedai Rahardjo</h2>
+    <p class="text-sm mb-5 relative z-10">Temukan comforting food mu!</p>
+
+    <div class="relative z-10">
+      <input 
+        type="text" 
+        placeholder="Cari Makanan" 
+        class="w-full pl-5 pr-12 py-3 rounded-full text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-rose-100 focus:ring-offset-2 focus:ring-offset-rose-500 transition-all duration-300 shadow-md"
+      />
+      <svg 
+        class="w-5 h-5 text-gray-400 absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none" 
+        xmlns="http://www.w3.org/2000/svg" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+      </svg>
     </div>
   </div>
 
-<!-- Alpine Script -->
-<script>
-  function menuData() {
-    return {
-      menu: [
-        { id: 1, nama: 'Acai Bowl', harga: 35000, gambar: 'https://source.unsplash.com/400x300/?fruit,bowl' },
-        { id: 2, nama: 'Burger', harga: 25000, gambar: 'https://source.unsplash.com/400x300/?burger' },
-        { id: 3, nama: 'Aglio e Olio', harga: 45000, gambar: 'https://source.unsplash.com/400x300/?pasta' },
-        { id: 4, nama: 'Dimsum Kuah', harga: 20000, gambar: 'https://source.unsplash.com/400x300/?dimsum' },
-        { id: 5, nama: 'Sate Ayam', harga: 30000, gambar: 'https://source.unsplash.com/400x300/?sate' },
-        { id: 6, nama: 'Nasi Goreng', harga: 28000, gambar: 'https://source.unsplash.com/400x300/?friedrice' }
-      ],
-      cart: {},
-      showCart: false,
 
-      init() {
-        // bisa ditambah load dari localStorage di sini
-      },
-      tambah(id) {
-        this.cart[id] = (this.cart[id] || 0) + 1;
-      },
-      kurang(id) {
-        if (this.cart[id]) this.cart[id] = Math.max(this.cart[id] - 1, 0);
-      },
-      totalQty() {
-        return Object.values(this.cart).reduce((a, b) => a + b, 0);
-      },
-      totalHarga() {
-        return this.menu.reduce((total, item) => {
-          return total + (this.cart[item.id] || 0) * item.harga;
-        }, 0);
-      },
-      checkout() {
-        alert('Checkout berhasil! Total: Rp ' + this.totalHarga().toLocaleString());
-        this.cart = {};
-        this.showCart = false;
-      }
-    }
-  }
-</script>
+  {{-- Kategori --}}
+  <div class="mt-5" x-data="{ kategoriAktif: '{{ e($categories->first()->slug) }}' }">
+    <h2 class="text-2xl text-red-900 mb-4 font-bold">Menu Kategori</h2>
 
-
-
-
-   
+    <!-- Tombol Kategori -->
+    <div class="flex flex-wrap justify-evenly mt-2">
+    @foreach ($categories as $category)
+        <button 
+            @click="kategoriAktif = '{{ $category->slug }}'"
+            :class="kategoriAktif === '{{ $category->slug }}'
+                ? 'bg-red-500 text-white' 
+                : 'text-red-500 border hover:bg-red-100'"
+            class="border px-10 py-1 rounded-full shadow-sm font-semibold transition mb-2 border-red-500"
+        >
+            {{ ucfirst($category->name) }}
+          </button>
+      @endforeach
     </div>
+
+    <!-- Daftar Menu -->
+    <div class="mt-4 mb-12">
+      @foreach ($groupedProducts as $kategori => $items)
+        <div 
+          x-show="kategoriAktif === '{{ $kategori }}'"
+          x-cloak
+          x-transition:enter="transition ease-out duration-400"
+          x-transition:enter-start="opacity-0 translate-y-2"
+          x-transition:enter-end="opacity-100 translate-y-0"
+        >
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            @foreach ($items as $item)
+              @include('cashier.dashboard.components.menu-card', ['menu' => $item])
+            @endforeach
+          </div>
+        </div>
+      @endforeach
+    </div>
+  </div>
+
+  <!-- KERANJANG BELANJA -->
+  <div 
+    x-data="{ showDetail: false }"
+    class="fixed bottom-0 inset-x-0 z-40 px-4 mb-[75px]">
+    
+    <div class="bg-white rounded-t-2xl max-w-xl mx-auto border overflow-hidden">
+
+      <!-- Bar Ringkasan -->
+      <div 
+        class="flex items-center justify-between px-4 py-3 cursor-pointer"
+        @click="showDetail = !showDetail">
+        <div>
+          <p class="text-sm text-gray-600" x-text="'Total item: ' + getMenu().reduce((sum, i) => sum + i.quantity, 0)"></p>
+          <p class="font-semibold text-red-600" x-text="'Rp ' + getTotalPrice().toLocaleString('id-ID')"></p>
+        </div>
+        <div class="text-red-500 text-xl transition-transform duration-300">
+          <template x-if="showDetail">
+            <!-- Panah ke bawah -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </template>
+          <template x-if="!showDetail">
+            <!-- Panah ke atas -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </template>
+        </div>
+      </div>
+
+      <!-- Rincian Item -->
+      <div 
+        x-show="showDetail && getMenu().length > 0"
+        x-transition
+        class="border-t px-4 max-h-[230px] overflow-y-auto">
+        
+        <template x-for="item in getMenu()" :key="item.id">
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <p class="font-semibold text-sm" x-text="item.name"></p>
+              <p class="text-sm text-gray-500">x<span x-text="item.quantity"></span></p>
+            </div>
+            <div class="text-sm font-bold text-red-600" x-text="'Rp ' + (item.price * item.quantity).toLocaleString('id-ID')"></div>
+          </div>
+        </template>
+
+        <!-- Tombol Checkout -->
+        <div class="sticky bottom-0 bg-white pt-3 mt-3 pb-2">
+          <div class="flex gap-4">
+            <!-- Masukkan Keranjang -->
+            <button 
+              @click="addToCart()" 
+              class="flex-1 flex items-center justify-center gap-2 border border-red-500 text-red-500 font-semibold py-3 rounded-xl text-sm hover:bg-red-100 transition-all duration-200">
+              <!-- Icon Shopping Cart -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4a1 1 0 00.95 1.6h11.8a1 1 0 00.95-1.6L17 13M9 21h6" />
+              </svg>
+              Masukkan Keranjang
+            </button>
+
+            <!-- Bayar -->
+            <button 
+              @click="checkout()" 
+              class="flex-1 flex items-center justify-center gap-2 bg-red-500 text-white font-semibold py-3 rounded-xl text-sm hover:bg-red-600 transition-all duration-200">
+              <!-- Icon Credit Card -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2m-2 0h12a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2v-8a2 2 0 012-2z" />
+              </svg>
+              Bayar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 @endsection

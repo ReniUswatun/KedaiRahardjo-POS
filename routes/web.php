@@ -25,6 +25,7 @@ use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
+    MenuController as CashierMenuController
 };
 use Illuminate\Contracts\Session\Session;
 
