@@ -17,7 +17,7 @@
     <!-- Tampilkan cart jika ada -->
     @if (!empty($carts))
         @foreach ($carts as $cartId => $cart)
-            <div class="bg-white shadow-md rounded-2xl p-4 mb-4">
+            <div class="bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200">
                 <div class="flex justify-between items-center mb-2">
                     <div class="flex flex-col">
                         <div class="text-lg font-semibold text-gray-800">Cart ID: {{ $cartId }}</div>
