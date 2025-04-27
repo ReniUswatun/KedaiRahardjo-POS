@@ -101,6 +101,8 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
+Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create.cashier');
+
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
@@ -252,7 +254,3 @@ Route::middleware(['permission:roles.menu'])->group(function () {
     Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
     Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
-
-
-
-require _DIR_ . '/auth.php';
