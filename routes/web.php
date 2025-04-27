@@ -115,7 +115,9 @@ Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.cr
 
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
-    Route::post('/orders/{order}/checkout', [OrdersController::class, 'checkout'])->name('orders.checkout');
+    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+    Route::post('/orders/{order}/confirm', [OrdersController::class, 'confirm'])->name('orders.confirm');
     Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
 });
 

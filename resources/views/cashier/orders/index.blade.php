@@ -1,4 +1,4 @@
-@extends('cashier.dashboard.body.main')
+@extends('cashier.orders.body.main')
 
 <script>
     let deleteMode = false;
@@ -31,8 +31,23 @@
 
 @section('container')
 <div class="mx-4 pb-32">
-    <h1 class="text-2xl font-bold mb-4 mt-2 text-red-900">Keranjang Pesanan</h1>
-
+<div class="p-4 pb-32 min-h-screen">
+    <div class="mb-6">
+        <div class="grid grid-cols-3 gap-2 w-full">
+            <a href="{{ route('cashier.orders.index') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center  
+                {{ request()->routeIs('cashier.orders.index') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+                Pending
+            </a>
+            <a href="{{ route('cashier.orders.processing') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.processing') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+                Processing
+            </a>
+            <a href="{{ route('cashier.orders.completed') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.completed') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+                Completed
+            </a>
+        </div>
+    </div>
     <div class="overflow-x-auto">
         @if(session('message'))
             <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
@@ -53,13 +68,6 @@
                             <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
                             <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
                         </div>
-
-                        <button onclick="toggleDeleteMode()" class="w-16 py-2 text-red-500 font-medium flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            Hapus
-                        </button>
                     </div>
 
                     <div class="mt-2">
@@ -74,21 +82,24 @@
                         <span class="text-lg font-bold text-red-500">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                     </div>
 
-                    <form action="" method="POST" class="w-full mt-4">
-                        @csrf
-                        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
-                            Checkout
-                        </button>
-                    </form>
+                    <!-- Tombol Konfirmasi dan Hapus berada di bawah total harga -->
+                    <div class="mt-2 grid grid-cols-2 gap-2 w-full">
+                        <form action="" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-xl">
+                                Konfirmasi
+                            </button>
+                        </form>
 
-                    <form action="" method="POST" id="delete-form-{{ $order->id }}">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-
-                    <button onclick="deleteItem('{{ $order->id }}')" class="delete-button hidden opacity-0 translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 mt-2">
-                        Hapus
-                    </button>
+                        <form action="" method="POST" id="delete-form-{{ $order->id }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" onclick="deleteItem('{{ $order->id }}')" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                    
                 </div>
             @endforeach
         @else
