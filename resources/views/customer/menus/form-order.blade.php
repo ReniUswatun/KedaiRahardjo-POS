@@ -1,9 +1,9 @@
 @extends('customer.dashboard.body.main')
 
 @section('container')
-<div class="max-w-xl mx-auto px-4 py-6">
+<div class="mx-4 pb-32">
 
-  <h2 class="text-xl font-bold mb-4">Detail Pemesanan</h2>
+  <h2 class="text-2xl font-bold mb-4">Detail Pemesanan</h2>
 
   <form action="{{ route('data.store') }}" method="POST">
     @csrf
@@ -15,7 +15,7 @@
 
     <div class="mb-4">
       <label class="block font-semibold mb-1">Nomor Meja</label>
-      <input type="number" name="nomor_meja" class="w-full border px-4 py-2 rounded-lg" required>
+      <input type="number" name="nomor_meja" class="w-full border px-4 py-2 rounded-lg" min="1" required>
     </div>
 
     <div class="mb-4">
@@ -24,18 +24,11 @@
     </div>
 
     <!-- Data Pesanan -->
-    <input type="hidden" name="keranjang" id="keranjang-input">
+    <input type="hidden" name="keranjang" value='@json($keranjang)'>
 
     <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
       Konfirmasi
     </button>
   </form>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const keranjang = localStorage.getItem('keranjang');
-    document.getElementById('keranjang-input').value = keranjang ?? '[]';
-  });
-</script>
 @endsection

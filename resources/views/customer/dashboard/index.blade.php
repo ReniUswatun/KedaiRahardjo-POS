@@ -93,25 +93,25 @@
       <div class="grid grid-cols-2 gap-4 mt-4">
 
         <!-- Makanan -->
-        <a href="{{ route('order.menus', ['jenis' => 'makanan']) }}" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
+        <a href="#" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/ios/50/FA5252/rice-bowl.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Makanan</p>
         </a>
 
         <!-- Minuman -->
-        <a href="{{ route('order.menus', ['jenis' => 'minuman']) }}" div class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
+        <a href="#" div class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/ios/50/FA5252/soda-cup.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Minuman</p>
         </a>
 
         <!-- Snack -->
-        <a href="{{ route('order.menus', ['jenis' => 'snack']) }}" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
+        <a href="#" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/ios/50/FA5252/french-fries.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Snack</p>
         </a>
 
         <!-- Paket -->
-        <a href="{{ route('order.menus', ['jenis' => 'paket']) }}" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
+        <a href="#" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/external-konkapp-detailed-outline-konkapp/64/FA5252/external-takeaway-cafe-konkapp-detailed-outline-konkapp.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Paket</p>
         </a>
