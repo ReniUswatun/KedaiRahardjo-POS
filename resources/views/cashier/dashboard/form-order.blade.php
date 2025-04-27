@@ -5,7 +5,7 @@
 
   <h2 class="text-2xl font-bold mb-4">Detail Pemesanan</h2>
 
-  <form action="{{ route('data.store') }}" method="POST">
+  <form action="{{ route('data.store.cashier') }}" method="POST">
     @csrf
     <!-- Data Pembeli -->
     <div class="mb-4">
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Data Pesanan -->
-    <input type="hidden" name="keranjang" value="{{ json_encode($keranjang) }}">
+    <input type="hidden" name="keranjang" value='@json($keranjang)'>
 
     <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-xl font-semibold hover:bg-red-600 transition">
       Konfirmasi

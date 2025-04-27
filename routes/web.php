@@ -104,10 +104,10 @@ Route::get(
 )->name("cashier.index");
 
 // route/web.php
-Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.customer');
+Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.cashier');
 
-
-Route::get('/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store.cashier');
 
 // Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
 //     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
