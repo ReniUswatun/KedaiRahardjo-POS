@@ -1,18 +1,17 @@
 @extends('customer.dashboard.body.main')
 
+
 <script>
     let deleteMode = false;
-
     function toggleDeleteMode() {
         deleteMode = !deleteMode;
         const deleteButtons = document.querySelectorAll('.delete-button');
-
         deleteButtons.forEach(button => {
             if (deleteMode) {
                 button.classList.remove('hidden');
                 setTimeout(() => {
                     button.classList.remove('opacity-0', 'translate-x-5');
-                }, 10);
+                }, 10); 
             } else {
                 button.classList.add('opacity-0', 'translate-x-5');
                 setTimeout(() => {
@@ -21,17 +20,13 @@
             }
         });
     }
-
-    function deleteItem(cartId, itemId) {
-        window.location.href = /cart/${cartId}/delete-item/${itemId};
-    }
 </script>
 
 @section('container')
 <div class="mx-4 pb-32">
     <h1 class="text-2xl font-bold mb-4 mt-2 text-red-900">Keranjang Pesanan</h1>
 
-    <div class="overflow-x-auto">
+    <div>
         @if(isset($message))
             <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
                 <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,9 +82,10 @@
                                 </div>
                             </div>
 
-                            <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4">
+                              <button onclick="deleteItem('{{ $cartId }}', '{{ $itemId }}')" class="delete-button hidden opacity-0 rounded-lg translate-x-5 transition-all duration-300 ease-in-out bg-gray-300 text-white text-sm font-bold px-4 py-4 hover:bg-red-200 hover:text-red-500 hover:scale-105 hover: border hover:border-red-500">
                                 Hapus
                             </button>
+
                         </div>
                     @endforeach
 
