@@ -91,7 +91,7 @@
 
                     @if (count($cart['items']) > 2)
                         <div class="flex justify-center mt-2">
-                            <button @click="showMore = !showMore" class="text-red-500 flex items-center">
+                            <button @click="showMore = !showMore" class="text-red-500 flex items-center transition-all duration-300 ease-in-out transform hover:scale-105">
                                 <span x-text="showMore ? 'Tampilkan Lebih Sedikit' : 'Tampilkan Lebih Banyak'"></span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform transition-transform duration-300" :class="{ 'rotate-180': showMore }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -99,6 +99,7 @@
                             </button>
                         </div>
                     @endif
+
 
                     <div class="flex justify-between items-center mt-4 border-t pt-2">
                         <span class="text-gray-600">Total Harga</span>
