@@ -76,7 +76,7 @@ class CartController extends Controller
         ]);
     }
     // Hapus item dari cart
-   public function deleteItem($cartId, $itemId)
+    public function deleteItem($cartId, $itemId)
     {
         $carts = session()->get('carts', []);
         if (!isset($carts[$cartId])) {
@@ -113,4 +113,39 @@ class CartController extends Controller
             'message' => 'Item berhasil dihapus.'
         ]);
     }
+
+    //Checkout dari Menus
+    // public function checkoutFromMenus(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'items' => 'required|array',
+    //         'cartId' => 'required|string'
+    //     ]);
+
+    //     $items = $validated['items'];
+    //     $cartId = $validated['cartId'];
+    //     $carts = session()->get('carts', []);
+
+    //     // Hitung total quantity dan total price
+    //     $totalQuantity = array_sum(array_column($items, 'quantity'));
+    //     $totalPrice = array_reduce($items, function ($carry, $item) {
+    //         return $carry + ($item['price'] * $item['quantity']);
+    //     }, 0);
+
+    //     // Tambahkan cart baru ke carts
+    //     $carts[$cartId] = [
+    //         'items' => $items,
+    //         'total_quantity' => $totalQuantity,
+    //         'total_price' => $totalPrice,
+    //         'created_at' => now(),
+    //     ];
+
+    //     // Simpan carts yang sudah diperbarui ke session
+    //     session()->put('carts', $carts);
+
+    //     return response()->json([
+    //         'message' => 'Checkout successful!',
+    //         'cartId' => $cartId
+    //     ]);
+    // }
 }

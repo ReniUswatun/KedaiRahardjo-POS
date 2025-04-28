@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cashier\OrdersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     DashboardController,
@@ -47,10 +48,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//route baru//
-// Layout baru untuk customer dalam membuat pesanan
+
 // ====== CUSTOMER ======
-//Todo: Route untuk bottom navigation pada customer
 Route::prefix('')->name('customer.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [CustomerDashboardController::class, 'index'])
@@ -58,34 +57,40 @@ Route::prefix('')->name('customer.')->group(function () {
 
     // Cart
     Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
-        Route::get('/', 'index')->name('index'); // GET /cart
-        Route::post('/create', 'create')->name('create'); // GET /cart/create
-        Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete'); // DELETE /cart/{cartId}/items/{itemId}
+        Route::get('/', 'index')->name('index');
+        Route::post('/create', 'create')->name('create');
+        // //! Nanti pikirin deh best casenya gimana (sementara gini dulu)
+        // Route::post('/payment', 'checkoutFromMenus')->name('checkout');
+        Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete');
     });
 
     // Menu
     Route::prefix('menu')->name('menu.')->controller(CustomerMenuController::class)->group(function () {
-        Route::get('/', 'index')->name('index'); // GET /menu
-        Route::get('/{cartId}', 'show')->name('show'); // GET /menu/{cartId}
+        Route::get('/', 'index')->name('index');
+        Route::get('/{cartId}', 'show')->name('show');
     });
 
     //Order
     Route::prefix('order')->name('order.')->controller(CustomerOrderController::class)->group(function () {
-        Route::get('/', 'index')->name('index'); // GET /menu
+        Route::get('/', 'index')->name('index');
+    });
+
+    //Payment
+    Route::prefix('payment')->name('payment.')->controller(CustomerPaymentController::class)->group(function () {
+        Route::get('/{cartId}', 'showCheckoutForm')->name('showCheckoutForm');
+        Route::post('/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
     });
 });
 
-//buat liat session
+
 // ! Buat liat session
 Route::get('/debug/session', function () {
     return session()->all();
 });
 
-// Route untuk hapus semua session
 // ! Buat apus session, gunakan hati hati
 Route::get('/session/clear', function () {
-    \Illuminate\Support\Facades\Session::flush(); // Hapus semua isi session
-
+    \Illuminate\Support\Facades\Session::flush();
     return redirect('/')->with('success', 'Semua session berhasil dihapus!');
 })->name('session.clear');
 
@@ -94,9 +99,9 @@ Route::get('/session/clear', function () {
 //     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 // })->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
 
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
-Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
+// Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+// Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+// Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
@@ -120,19 +125,23 @@ Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('d
 //     });
 
 
-Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
-    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
-    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
-    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
-    Route::post('/orders/{order}/confirm', [OrdersController::class, 'confirm'])->name('orders.confirm');
-    Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
+Route::prefix('cashier')->name('cashier.')->group(function () {
+    Route::get('/orders', [CashierOrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders/processing', [CashierOrdersController::class, 'processing'])->name('orders.processing');
+    Route::get('/orders/completed', [CashierOrdersController::class, 'completed'])->name('orders.completed');
+    Route::post('/orders/{order}/confirm', [CashierOrdersController::class, 'confirm'])->name('orders.confirm');
+    Route::delete('/orders/{order}', [CashierOrdersController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{order}/print', [CashierOrdersController::class, 'print'])->name('orders.print');
+    Route::post('/orders/{order}/finish', [CashierOrdersController::class, 'finish'])->name('orders.finish');
+    Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
 });
 
 
-Route::get(
-    "/cashier/history",
-    [CashierHistoryController::class, 'index']
-)->name('cashier.history.index');
+
+// Route::get(
+//     "/cashier/history",
+//     [CashierHistoryController::class, 'index']
+// )->name('cashier.history.index');
 
 // DEFAULT DASHBOARD & PROFILE
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
