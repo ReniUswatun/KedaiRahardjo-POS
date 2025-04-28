@@ -11,34 +11,36 @@ class MenuController extends Controller
 {
     public function index()
     {
-        // Dummy data kategori
-        $categories = Category::select('id', 'name', 'slug')->get();
-
-        // Ambil produk dengan relasi kategori
-        $products = Product::select(
-            'id',
-            'product_name',
-            'category_id',
-            'product_code',
-            'product_image',
-            'product_description',
-            'product_stock',
-            'buying_price',
-            'selling_price',
-            'created_at',
-            'updated_at'
-        )
-            ->with('category')
-            ->get();
-
-        // Kelompokkan produk berdasarkan kategori slug
-        $groupedProducts = $products->groupBy(function ($product) {
-            return $product->category->slug;
+        // Cache kategori 1 jam
+        $categories = cache()->remember('categories', 3600, function () {
+            return Category::select('id', 'name', 'slug')->get();
         });
 
+        // Ambil produk dengan relasi kategori
+        $products = cache()->remember('products', 3600, function () {
+            return Product::select(
+                'id',
+                'product_name',
+                'category_id',
+                'product_code',
+                'product_image',
+                'product_description',
+                'product_stock',
+                'buying_price',
+                'selling_price'
+            )
+                ->with('category')
+                ->get();
+        });
 
-        // Dummy untuk menampilkan menu yang paling laris
-        $bestSellers = Product::where('is_best_seller', true)->get();
+        // Kelompokkan produk berdasarkan slug kategori
+        $groupedProducts = $products->groupBy(fn($product) => $product->category->slug ?? 'uncategorized');
+
+        $bestSellers = cache()->remember('best_sellers', 3600, function () {
+            return Product::select('*')
+                ->where('is_best_seller', true)
+                ->get();
+        });
 
         // Kirim data ke view
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers'));
@@ -59,31 +61,37 @@ class MenuController extends Controller
         $cart = $carts[$cartId];
         $cartItems = $cart['items'];
 
-        $categories = Category::select('id', 'name', 'slug')->get();
+        // Pakai data yang sama seperti index()
+        $categories = cache()->remember('categories', 3600, function () {
+            return Category::select('id', 'name', 'slug')->get();
+        });
 
-        $products = Product::select(
-            'id',
-            'product_name',
-            'category_id',
-            'product_code',
-            'product_image',
-            'product_description',
-            'product_stock',
-            'buying_price',
-            'selling_price',
-            'created_at',
-            'updated_at'
-        )
-            ->with('category')
-            ->get();
+        $products = cache()->remember('products', 3600, function () {
+            return Product::select(
+                'id',
+                'product_name',
+                'category_id',
+                'product_code',
+                'product_image',
+                'product_description',
+                'product_stock',
+                'buying_price',
+                'selling_price'
+            )
+                ->with('category')
+                ->get();
+        });
 
         // Kelompokkan produk berdasarkan kategori slug
         $groupedProducts = $products->groupBy(function ($product) {
             return $product->category->slug;
         });
 
-        // Ambil produk paling laris
-        $bestSellers = Product::where('is_best_seller', true)->get();
+        $bestSellers = cache()->remember('best_sellers', 3600, function () {
+            return Product::select('*')
+                ->where('is_best_seller', true)
+                ->get();
+        });
 
         // Kirim data ke view
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers', 'cartId', 'cartItems'));
