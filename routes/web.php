@@ -59,6 +59,8 @@ Route::prefix('')->name('customer.')->group(function () {
     Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/create', 'create')->name('create');
+        // //! Nanti pikirin deh best casenya gimana (sementara gini dulu)
+        // Route::post('/payment', 'checkoutFromMenus')->name('checkout');
         Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete');
     });
 
@@ -74,7 +76,10 @@ Route::prefix('')->name('customer.')->group(function () {
     });
 
     //Payment
-
+    Route::prefix('payment')->name('payment.')->controller(CustomerPaymentController::class)->group(function () {
+        Route::get('/{cartId}', 'showCheckoutForm')->name('showCheckoutForm');
+        Route::post('/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
+    });
 });
 
 

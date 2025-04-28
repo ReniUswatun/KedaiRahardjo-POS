@@ -66,7 +66,7 @@
                         class="flex items-center border-t border-gray-200 py-3">
 
                         <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
-                            <img src="{{ asset('assets/images/product/nasi-goreng.jpg') }}" class="w-16 h-16 rounded-xl object-cover">
+                            <img src="{{ asset($item['image']) }}" class="w-16 h-16 rounded-xl object-cover">
                         </div>
 
                         <div class="ml-4 flex-1">
@@ -101,9 +101,11 @@
                     <span class="text-lg font-bold text-red-500">Rp {{ number_format($cart['total_price'], 0, ',', '.') }}</span>
                 </div>
 
-                <button class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
-                    Checkout
-                </button>
+                <form method="GET" action="{{ route('customer.payment.showCheckoutForm', ['cartId' => $cartId]) }}">
+                    <button type="submit" class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
+                        Checkout
+                    </button>
+                </form>
             </div>
         @endforeach
     @endif

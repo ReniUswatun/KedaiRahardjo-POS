@@ -16,6 +16,7 @@
             id: menu.id,
             name: menu.name,
             price: menu.price,
+            image: menu.image,
             quantity: 1
           });
         }
@@ -44,54 +45,37 @@
       getTotalPrice() {
         return this.items.reduce((total, item) => total + item.price * item.quantity, 0);
       },
+
       addToCart() {
-          if (this.items.length === 0) {
-              return; // Tidak ada item yang dapat ditambahkan
-          }
-
-          fetch('{{ route("customer.cart.create") }}', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRF-TOKEN': '{{ csrf_token() }}'
-              },
-              body: JSON.stringify({
-                items: this.items, // Kirim data items ke server
-                cartId: this.cartId // Kirim cartId
-              })
-          })
-          .then(response => response.json())
-          .then(() => {
-              window.location.href = '{{ route("customer.cart.index") }}';
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
-      },
-      checkout() {
         if (this.items.length === 0) {
-          return;
+          return; // Tidak ada item yang dapat ditambahkan
         }
-
-        fetch('{{ route("save.cart") }}', {
+        fetch('{{ route("customer.cart.create") }}', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
           },
           body: JSON.stringify({
-            items: this.items
+            items: this.items,
+            cartId: this.cartId
           })
         })
         .then(response => response.json())
         .then(() => {
-          window.location.href = '{{ route("data.create") }}';
+          window.location.href = '{{ route("customer.cart.index") }}';
+        })
+        .catch(error => {
+          console.error('Error:', error);
         });
       },
-      
+
+      checkout() {
+      }
     }));
   });
 </script>
+
 
 @section('container')
 
@@ -236,7 +220,6 @@
               @endif
             </button>
 
-            <!-- Bayar -->
             <button 
               @click="checkout()" 
               class="flex-1 flex items-center justify-center gap-2 bg-red-500 text-white font-semibold py-3 rounded-xl text-sm hover:bg-red-600 transition-all duration-200">

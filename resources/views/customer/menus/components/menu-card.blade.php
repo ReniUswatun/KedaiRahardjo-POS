@@ -40,7 +40,12 @@
 
     <!-- Tombol plus -->
     <button 
-      @click="add({ id: {{ $menu->id }}, name: '{{ $menu->product_name }}', price: {{ $menu->selling_price }} })"
+       @click="add({ 
+        id: {{ $menu->id }}, 
+        name: '{{ e($menu->product_name) }}', 
+        price: {{ $menu->selling_price }}, 
+        image: '{{ e($menu->product_image) }}' 
+      })"
       class="bg-red-400 text-white text-2xl rounded-xl w-10 h-10 flex items-center justify-center hover:bg-red-600 transition-colors">
       &#43;
     </button>
