@@ -93,7 +93,7 @@
                     
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex flex-col">
-                            <div class="text-lg font-semibold text-gray-800">Invoice {{ $order->invoice_no }}</div>
+                            <div class="text-lg font-semibold text-gray-800">Pesanan {{ $order->invoice_no }}</div>
                             <span class="text-sm text-gray-500">Customer: {{ $order->customer_name }}</span>
                             <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
                             <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
