@@ -128,14 +128,15 @@ Route::prefix('cashier')->name('cashier.')->group(function () {
     Route::delete('/orders/{order}', [CashierOrdersController::class, 'destroy'])->name('orders.destroy');
     Route::get('/orders/{order}/print', [CashierOrdersController::class, 'print'])->name('orders.print');
     Route::post('/orders/{order}/finish', [CashierOrdersController::class, 'finish'])->name('orders.finish');
+    Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
 });
 
 
 
-Route::get(
-    "/cashier/history",
-    [CashierHistoryController::class, 'index']
-)->name('cashier.history.index');
+// Route::get(
+//     "/cashier/history",
+//     [CashierHistoryController::class, 'index']
+// )->name('cashier.history.index');
 
 // DEFAULT DASHBOARD & PROFILE
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {

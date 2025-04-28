@@ -67,9 +67,7 @@ class OrdersController extends Controller
     {
         $orders = Order::where('order_status', 'completed')->get();
 
-        return view('cashier.orders.processing', compact('orders'));
-
-        return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan selesai.');
+        return view('cashier.orders.completed', compact('orders'));
     }
 
     public function print(Order $order)
@@ -90,5 +88,18 @@ class OrdersController extends Controller
         }
 
         return redirect()->back()->with('message', 'Pesanan tidak dapat diselesaikan.');
+    }
+
+    public function history()
+    {
+        $histories = Order::where('order_status', 'completed')
+                        ->orderBy('updated_at', 'desc')
+                        ->get();
+
+        // Hitung total pesanan dan pendapatan
+        $totalOrders = $histories->count();
+        $totalRevenue = $histories->sum('total_amount');
+
+        return view('cashier.orders.history', compact('histories', 'totalOrders', 'totalRevenue'));
     }
 }
