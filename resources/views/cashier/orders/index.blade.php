@@ -1,92 +1,142 @@
 @extends('cashier.orders.body.main')
 
+<script>
+    let deleteMode = false;
 
+    function toggleDeleteMode() {
+        deleteMode = !deleteMode;
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            if (deleteMode) {
+                button.classList.remove('hidden');
+                setTimeout(() => {
+                    button.classList.remove('opacity-0', 'translate-x-5');
+                }, 10);
+            } else {
+                button.classList.add('opacity-0', 'translate-x-5');
+                setTimeout(() => {
+                    button.classList.add('hidden');
+                }, 300);
+            }
+        });
+    }
+
+    function toggleDetails(orderId) {
+        const detailSection = document.getElementById('details-' + orderId);
+        const allDetails = document.querySelectorAll('[id^="details-"]');
+
+        allDetails.forEach(section => {
+            if (section !== detailSection) {
+                section.classList.add('hidden');
+            }
+        });
+
+        detailSection.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function(event) {
+        const isClickInside = event.target.closest('.order-card');
+        if (!isClickInside) {
+            const allDetails = document.querySelectorAll('[id^="details-"]');
+            allDetails.forEach(section => {
+                section.classList.add('hidden');
+            });
+        }
+    });
+
+    function deleteItem(orderId) {
+        if (confirm('Yakin mau hapus pesanan ini?')) {
+            document.getElementById('delete-form-' + orderId).submit();
+        }
+    }
+</script>
 
 @section('container')
-    <div class="mx-4 pb-32">
-    <div class="p-4 pb-32 min-h-screen">
-        <div class="mb-6">
-            <div class="grid grid-cols-3 gap-2 w-full">
-                <a href="{{ route('cashier.orders.index') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center  
-                    {{ request()->routeIs('cashier.orders.index') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
-                    Pending
-                </a>
-                <a href="{{ route('cashier.orders.processing') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center 
-                    {{ request()->routeIs('cashier.orders.processing') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
-                    Processing
-                </a>
-                <a href="{{ route('cashier.orders.completed') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center 
-                    {{ request()->routeIs('cashier.orders.completed') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
-                    Completed
-                </a>
-            </div>
+
+<div class="mx-4 pb-32">
+<div class="p-4 pb-32 min-h-screen">
+    <div class="mb-6">
+        <div class="grid grid-cols-3 gap-2 w-full">
+            <a href="{{ route('cashier.orders.index') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center  
+                {{ request()->routeIs('cashier.orders.index') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+                Pending
+            </a>
+            <a href="{{ route('cashier.orders.processing') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.processing') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
+                Processing
+            </a>
+            <a href="{{ route('cashier.orders.completed') }}" class="w-full px-4 py-2 rounded-full font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.completed') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
+                Completed
+            </a>
         </div>
-        <div class="overflow-x-auto">
-            @if(session('message'))
-                <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
-                    <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M3 19h18M3 12h18" />
-                    </svg>
-                    <span><strong>{{ session('message') }}</strong></span>
-                </div>
-            @endif
+    </div>
+    <div class="overflow-x-auto">
+        @if(session('message'))
+            <div class="mt-2 flex items-center p-4 mb-4 text-sm text-red-800 bg-red-100 rounded-lg" role="alert">
+                <svg class="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M3 19h18M3 12h18" />
+                </svg>
+                <span><strong>{{ session('message') }}</strong></span>
+            </div>
+        @endif
 
-            @php
-                $pendingOrders = $orders->where('order_status', 'pending');
-            @endphp
+        @php
+            $pendingOrders = $orders->where('order_status', 'pending');
+        @endphp
 
-            @if ($pendingOrders->count() > 0)
-                @foreach ($pendingOrders as $order)
-                    <!-- CARD PESANAN -->
-                    <div class="order-card bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200 relative">
-                        <!-- bagian isi pesanan -->
-
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex flex-col">
-                                <div class="text-lg font-semibold text-gray-800">Invoice {{ $order->invoice_no }}</div>
-                                <span class="text-sm text-gray-500">Customer: {{ $order->customer_name }}</span>
-                                <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
-                                <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
-                            </div>
-                            <button onclick="toggleDetails('{{ $order->id }}')" class="text-sm text-blue-500 hover:underline">
-                                Lihat Detail
-                            </button>
+        @if ($pendingOrders->count() > 0)
+            @foreach ($pendingOrders as $order)
+                <!-- CARD PESANAN -->
+                <div class="order-card bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200 relative">
+                    <!-- bagian isi pesanan -->
+                    
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex flex-col">
+                            <div class="text-lg font-semibold text-gray-800">Invoice {{ $order->invoice_no }}</div>
+                            <span class="text-sm text-gray-500">Customer: {{ $order->customer_name }}</span>
+                            <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
+                            <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
                         </div>
+                        <button onclick="toggleDetails('{{ $order->id }}')" class="text-sm text-blue-500 hover:underline">
+                            Lihat Detail
+                        </button>
+                    </div>
 
-                        <!-- Detail Dropdown -->
-                        <div id="details-{{ $order->id }}" class="hidden mt-2 mb-2">
-                            <div class="bg-gray-100 p-3 rounded-lg space-y-3">
-                                @foreach ($order->orderDetails as $detail)
-                                    @php
-                                        $product = $detail->product;
-                                        $productName = $product->name ?? 'Produk Tidak Ditemukan';
-                                        $productPrice = $product->price ?? 0;
-                                        $productImage = $product && $product->image ? asset('assets/images/product/' . $product->image) : asset('assets/images/product/default.jpg');
-                                    @endphp
-                                    <div class="flex items-center border-b border-gray-300 pb-2 last:border-b-0">
-                                        <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
-                                            <img src="{{ $productImage }}" alt="{{ $productName }}" class="w-16 h-16 rounded-xl object-cover">
+                    <!-- Detail Dropdown -->
+                    <div id="details-{{ $order->id }}" class="hidden mt-2 mb-2">
+                        <div class="bg-gray-100 p-3 rounded-lg space-y-3">
+                            @foreach ($order->orderDetails as $detail)
+                                @php
+                                    $product = $detail->product;
+                                    $productName = $product->name ?? 'Produk Tidak Ditemukan';
+                                    $productPrice = $product->price ?? 0;
+                                    $productImage = $product && $product->image ? asset('assets/images/product/' . $product->image) : asset('assets/images/product/default.jpg');
+                                @endphp
+                                <div class="flex items-center border-b border-gray-300 pb-2 last:border-b-0">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
+                                        <img  src="{{ asset('assets/images/product/nasi-goreng.jpg') }}" alt="{{ $productName }}" class="w-16 h-16 rounded-xl object-cover">
+                                    </div>
+                                    <div class="flex-1 ml-3">
+                                        <div class="font-semibold text-gray-800">{{ $productName }}</div>
+                                        <div class="text-sm text-gray-500">
+                                            Harga Satuan: Rp {{ number_format($productPrice, 0, ',', '.') }}
                                         </div>
-                                        <div class="flex-1 ml-3">
-                                            <div class="font-semibold text-gray-800">{{ $productName }}</div>
-                                            <div class="text-sm text-gray-500">
-                                                Harga Satuan: Rp {{ number_format($productPrice, 0, ',', '.') }}
-                                            </div>
-                                            <div class="text-sm text-gray-500">
-                                                Qty: {{ $detail->quantity }}
-                                            </div>
-                                            <div class="text-red-500 font-bold">
-                                                Subtotal: Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                                            </div>
+                                        <div class="text-sm text-gray-500">
+                                            Qty: {{ $detail->quantity }}
+                                        </div>
+                                        <div class="text-red-500 font-bold">
+                                            Subtotal: Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
-
-                            <button onclick="toggleDetails('{{ $order->id }}')" class="mt-3 text-center w-full text-blue-500 hover:underline text-sm">
-                                Tutup Detail
-                            </button>
+                                </div>
+                            @endforeach
                         </div>
+
+                        <button onclick="toggleDetails('{{ $order->id }}')" class="mt-3 text-center w-full text-blue-500 hover:underline text-sm">
+                            Tutup Detail
+                        </button>
+                    </div>
 
                         <div class="mt-2">
                             <div class="flex justify-between text-sm text-gray-600">
