@@ -37,4 +37,17 @@ class Order extends Model
     protected $guarded = [
         'id',
     ];
+
+    // Relasi dengan OrderDetails
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetails::class, 'order_id');
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            return $query->where('customer_name', 'like', '%' . $search . '%');
+        });
+    }
 }

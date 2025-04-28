@@ -76,7 +76,7 @@ class CartController extends Controller
         ]);
     }
     // Hapus item dari cart
-    public function deleteItem($cartId, $itemId)
+   public function deleteItem($cartId, $itemId)
     {
         $carts = session()->get('carts', []);
         if (!isset($carts[$cartId])) {

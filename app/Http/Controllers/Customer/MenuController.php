@@ -85,7 +85,7 @@ class MenuController extends Controller
         // Ambil produk paling laris
         $bestSellers = Product::where('is_best_seller', true)->get();
 
-        // Kirim data ke view
+        // Kirim data ke viewaS
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers', 'cartId', 'cartItems'));
     }
 }
