@@ -93,7 +93,7 @@ class MenuController extends Controller
                 ->get();
         });
 
-        // Kirim data ke view
+        // Kirim data ke viewaS
         return view('customer.menus.index', compact('groupedProducts', 'categories', 'bestSellers', 'cartId', 'cartItems'));
     }
 }

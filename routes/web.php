@@ -28,6 +28,7 @@ use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
+    PaymentController as CashierPaymentController
 };
 use Illuminate\Contracts\Session\Session;
 
@@ -104,13 +105,29 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
+// route/web.php
+Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.cashier');
+
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store.cashier');
+
+// Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+//     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+//     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+//     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+//     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+//     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+//     });
+
+
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
-    Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
-    Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
-    Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+    Route::post('/orders/{order}/confirm', [OrdersController::class, 'confirm'])->name('orders.confirm');
+    Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
 });
+
 
 Route::get(
     "/cashier/history",
@@ -255,7 +272,3 @@ Route::middleware(['permission:roles.menu'])->group(function () {
     Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
     Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
-
-
-
-require __DIR__ . '/auth.php';
