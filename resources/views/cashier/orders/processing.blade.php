@@ -143,7 +143,7 @@
                         </div>
 
                         <div class="mt-2 grid grid-cols-2 gap-2 w-full">
-                            <form action="{{ route('cashier.orders.completed', $order->id) }}" method="POST" class="w-full">
+                            <form action="{{ route('cashier.orders.confirm', $order->id) }}" method="POST" class="w-full">
                                 @csrf
                                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-xl">
                                     Selesai
