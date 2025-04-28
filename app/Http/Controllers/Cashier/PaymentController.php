@@ -14,9 +14,19 @@ class PaymentController extends Controller
 {
     public function create(Request $request)
     {
-        $keranjang = []; // default kosong
+        $keranjang = session('keranjang', []);  // Ambil dari session
+
         return view('cashier.dashboard.form-order', compact('keranjang'));
     }
+
+
+    public function saveCart(Request $request)
+    {
+        session(['keranjang' => $request->keranjang]);  // Simpan ke session
+
+        return response()->json(['status' => 'success']);
+    }
+
 
     public function store(Request $request)
     {

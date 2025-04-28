@@ -229,7 +229,11 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4a1 1 0 00.95 1.6h11.8a1 1 0 00.95-1.6L17 13M9 21h6" />
               </svg>
-              Add to Cart
+              @if (isset($cartId))
+                  Update Cart
+              @else
+                  Add to Cart
+              @endif
             </button>
 
             <!-- Bayar -->

@@ -2,30 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
-    DashboardController as AdminDashboardController,
-    ProfileController as AdminProfileController,
-    UserController as AdminUserController,
-    CustomerController as AdminCustomerController,
-    ProductController as AdminProductController,
-    CategoryController as AdminCategoryController,
-    PosController as AdminPosController,
-    OrderController as AdminOrderController,
-    DatabaseBackupController as AdminBackupController,
-    RoleController as AdminRoleController
+    DashboardController,
+    ProfileController,
+    UserController,
+    CustomerController,
+    ProductController,
+    CategoryController,
+    PosController,
+    OrderController,
+    DatabaseBackupController,
+    RoleController
 };
+
+use App\Http\Controllers\Admin\CashierController;
 
 use App\Http\Controllers\Customer\{
     DashboardController as CustomerDashboardController,
     MenuController as CustomerMenuController,
     CartController as CustomerCartController,
     PaymentController as CustomerPaymentController,
+    OrderController as CustomerOrderController,
     CheckoutController as CustomerCheckoutController,
 };
 use App\Http\Controllers\Cashier\{
     DashboardController as CashierDashboardController,
     OrdersController as CashierOrdersController,
     HistoryController as CashierHistoryController,
-    MenuController as CashierMenuController
+    PaymentController as CashierPaymentController
 };
 use Illuminate\Contracts\Session\Session;
 
@@ -57,11 +60,7 @@ Route::prefix('')->name('customer.')->group(function () {
     Route::prefix('cart')->name('cart.')->controller(CustomerCartController::class)->group(function () {
         Route::get('/', 'index')->name('index'); // GET /cart
         Route::post('/create', 'create')->name('create'); // GET /cart/create
-        Route::get('/{cartId}', 'show')->name('show'); // GET /cart/{cartId}
-        Route::post('/{cartId}/items', 'addItem')->name('items.add'); // POST /cart/{cartId}/items
-        Route::patch('/{cartId}/items/{itemId}', 'updateItem')->name('items.update'); // PATCH /cart/{cartId}/items/{itemId}
         Route::delete('/{cartId}/items/{itemId}', 'deleteItem')->name('items.delete'); // DELETE /cart/{cartId}/items/{itemId}
-        Route::delete('/{cartId}', 'deleteCart')->name('delete'); // DELETE /cart/{cartId}
     });
 
     // Menu
@@ -69,9 +68,15 @@ Route::prefix('')->name('customer.')->group(function () {
         Route::get('/', 'index')->name('index'); // GET /menu
         Route::get('/{cartId}', 'show')->name('show'); // GET /menu/{cartId}
     });
+
+    //Order
+    Route::prefix('order')->name('order.')->controller(CustomerOrderController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // GET /menu
+    });
 });
 
 //buat liat session
+// ! Buat liat session
 Route::get('/debug/session', function () {
     return session()->all();
 });
@@ -100,47 +105,54 @@ Route::get(
     [CashierDashboardController::class, "index"]
 )->name("cashier.index");
 
-Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+// route/web.php
+Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.cashier');
 
-Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store');
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store.cashier');
+
+// Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+//     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+//     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+//     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+//     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+//     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+//     });
 
 
 Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
-    Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
-    Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
-    Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+    Route::post('/orders/{order}/confirm', [OrdersController::class, 'confirm'])->name('orders.confirm');
+    Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
 });
+
 
 Route::get(
     "/cashier/history",
     [CashierHistoryController::class, 'index']
 )->name('cashier.history.index');
 
-Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
-// Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
+// DEFAULT DASHBOARD & PROFILE
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
-// Route::middleware('auth')->name('admin.')->group(function () {
-//     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-//     Route::redirect('/admin', '/dashboard'); // Tambahkan baris ini
-
-//     Route::get('/profile', [AdminProfileController::class, 'show'])->name('profile');
-//     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-//     Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
-//     Route::get('/profile/change-password', [AdminProfileController::class, 'changePassword'])->name('profile.change-password');
-// });
-
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+});
 
 // ====== USERS ======
 Route::middleware(['permission:user.menu'])->group(function () {
-    Route::resource('/users', AdminUserController::class)->except(['show']);
+    Route::resource('/users', UserController::class)->except(['show']);
 });
 
-// ====== CUSTOMERS ======
-Route::middleware(['permission:customer.menu'])->group(function () {
-    Route::resource('/customers', AdminCustomerController::class);
-});
+// // ====== CUSTOMERS ======
+// Route::middleware(['permission:customer.menu'])->group(function () {
+//     Route::resource('/customers', CustomerController::class);
+// });
 
 // ====== CASHIER ======
 Route::prefix('cashier')->group(function () {
@@ -183,16 +195,17 @@ Route::prefix('cashier')->group(function () {
 
 // ====== PRODUCTS ======
 Route::middleware(['permission:product.menu'])->group(function () {
-    Route::get('/products/import', [AdminProductController::class, 'importView'])->name('products.importView');
-    Route::post('/products/import', [AdminProductController::class, 'importStore'])->name('products.importStore');
-    Route::get('/products/export', [AdminProductController::class, 'exportData'])->name('products.exportData');
-    Route::resource('/products', AdminProductController::class);
+    Route::get('/products/import', [ProductController::class, 'importView'])->name('products.importView');
+    Route::post('/products/import', [ProductController::class, 'importStore'])->name('products.importStore');
+    Route::get('/products/export', [ProductController::class, 'exportData'])->name('products.exportData');
+    Route::resource('/products', ProductController::class);
 });
 
 // ====== CATEGORY PRODUCTS ======
 Route::middleware(['permission:category.menu'])->group(function () {
-    Route::resource('/categories', AdminCategoryController::class);
+    Route::resource('/categories', CategoryController::class);
 });
+
 // ====== POS ======
 //Route::middleware(['permission:pos.menu'])->group(function () {
 //    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
@@ -236,29 +249,26 @@ Route::middleware(['permission:category.menu'])->group(function () {
 // ====== ROLE CONTROLLER ======
 Route::middleware(['permission:roles.menu'])->group(function () {
     // Permissions
-    Route::get('/permission', [AdminRoleController::class, 'permissionIndex'])->name('permission.index');
-    Route::get('/permission/create', [AdminRoleController::class, 'permissionCreate'])->name('permission.create');
-    Route::post('/permission', [AdminRoleController::class, 'permissionStore'])->name('permission.store');
-    Route::get('/permission/edit/{id}', [AdminRoleController::class, 'permissionEdit'])->name('permission.edit');
-    Route::put('/permission/{id}', [AdminRoleController::class, 'permissionUpdate'])->name('permission.update');
-    Route::delete('/permission/{id}', [AdminRoleController::class, 'permissionDestroy'])->name('permission.destroy');
+    Route::get('/permission', [RoleController::class, 'permissionIndex'])->name('permission.index');
+    Route::get('/permission/create', [RoleController::class, 'permissionCreate'])->name('permission.create');
+    Route::post('/permission', [RoleController::class, 'permissionStore'])->name('permission.store');
+    Route::get('/permission/edit/{id}', [RoleController::class, 'permissionEdit'])->name('permission.edit');
+    Route::put('/permission/{id}', [RoleController::class, 'permissionUpdate'])->name('permission.update');
+    Route::delete('/permission/{id}', [RoleController::class, 'permissionDestroy'])->name('permission.destroy');
 
     // Roles
-    Route::get('/role', [AdminRoleController::class, 'roleIndex'])->name('role.index');
-    Route::get('/role/create', [AdminRoleController::class, 'roleCreate'])->name('role.create');
-    Route::post('/role', [AdminRoleController::class, 'roleStore'])->name('role.store');
-    Route::get('/role/edit/{id}', [AdminRoleController::class, 'roleEdit'])->name('role.edit');
-    Route::put('/role/{id}', [AdminRoleController::class, 'roleUpdate'])->name('role.update');
-    Route::delete('/role/{id}', [AdminRoleController::class, 'roleDestroy'])->name('role.destroy');
+    Route::get('/role', [RoleController::class, 'roleIndex'])->name('role.index');
+    Route::get('/role/create', [RoleController::class, 'roleCreate'])->name('role.create');
+    Route::post('/role', [RoleController::class, 'roleStore'])->name('role.store');
+    Route::get('/role/edit/{id}', [RoleController::class, 'roleEdit'])->name('role.edit');
+    Route::put('/role/{id}', [RoleController::class, 'roleUpdate'])->name('role.update');
+    Route::delete('/role/{id}', [RoleController::class, 'roleDestroy'])->name('role.destroy');
 
     // Role Permissions
-    Route::get('/role/permission', [AdminRoleController::class, 'rolePermissionIndex'])->name('rolePermission.index');
-    Route::get('/role/permission/create', [AdminRoleController::class, 'rolePermissionCreate'])->name('rolePermission.create');
-    Route::post('/role/permission', [AdminRoleController::class, 'rolePermissionStore'])->name('rolePermission.store');
-    Route::get('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionEdit'])->name('rolePermission.edit');
-    Route::put('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
-    Route::delete('/role/permission/{id}', [AdminRoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
+    Route::get('/role/permission', [RoleController::class, 'rolePermissionIndex'])->name('rolePermission.index');
+    Route::get('/role/permission/create', [RoleController::class, 'rolePermissionCreate'])->name('rolePermission.create');
+    Route::post('/role/permission', [RoleController::class, 'rolePermissionStore'])->name('rolePermission.store');
+    Route::get('/role/permission/{id}', [RoleController::class, 'rolePermissionEdit'])->name('rolePermission.edit');
+    Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
+    Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
-
-
-require __DIR__ . '/auth.php';

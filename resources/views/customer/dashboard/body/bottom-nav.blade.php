@@ -25,7 +25,7 @@
             </svg>
             Carts
         </a>
-        <a href="" class="text-gray-700 hover:text-gray-900 text-center">
+        <a href="{{ route('customer.order.index') }}"  class="text-center block {{ request()->routeIs('customer.order.index') ? 'text-red-500' : 'text-gray-700 hover:text-gray-900 text-center' }}">
             <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2" 
        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round"
