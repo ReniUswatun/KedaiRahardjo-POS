@@ -125,19 +125,23 @@ Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('d
 //     });
 
 
-Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
-    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
-    Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
-    Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
-    Route::post('/orders/{order}/confirm', [OrdersController::class, 'confirm'])->name('orders.confirm');
-    Route::delete('/orders/{order}', [OrdersController::class, 'destroy'])->name('orders.destroy');
+Route::prefix('cashier')->name('cashier.')->group(function () {
+    Route::get('/orders', [CashierOrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders/processing', [CashierOrdersController::class, 'processing'])->name('orders.processing');
+    Route::get('/orders/completed', [CashierOrdersController::class, 'completed'])->name('orders.completed');
+    Route::post('/orders/{order}/confirm', [CashierOrdersController::class, 'confirm'])->name('orders.confirm');
+    Route::delete('/orders/{order}', [CashierOrdersController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{order}/print', [CashierOrdersController::class, 'print'])->name('orders.print');
+    Route::post('/orders/{order}/finish', [CashierOrdersController::class, 'finish'])->name('orders.finish');
+    Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
 });
 
 
-Route::get(
-    "/cashier/history",
-    [CashierHistoryController::class, 'index']
-)->name('cashier.history.index');
+
+// Route::get(
+//     "/cashier/history",
+//     [CashierHistoryController::class, 'index']
+// )->name('cashier.history.index');
 
 // DEFAULT DASHBOARD & PROFILE
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {

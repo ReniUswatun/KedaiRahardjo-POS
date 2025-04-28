@@ -1,20 +1,24 @@
 <?php
-// app/Http/Controllers/Cashier/HistoryController.php
 
 namespace App\Http\Controllers\Cashier;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Order;
 
 class HistoryController extends Controller
 {
+
     public function index()
     {
-        $history = [
-            ['order_id' => 1, 'customer' => 'John Doe', 'status' => 'pending', 'waktu_pesan' => '2025-04-23 10:00', 'total' => 150000],
-            ['order_id' => 2, 'customer' => 'Jane Smith', 'status' => 'processing', 'waktu_pesan' => '2025-04-23 10:15', 'total' => 120000],
-            ['order_id' => 3, 'customer' => 'Alice Brown', 'status' => 'completed', 'waktu_pesan' => '2025-04-23 09:45', 'total' => 200000],
-        ];
-        return view('cashier.history.index', compact('history'));
+        $histories = Order::where('order_status', 'finished')
+                        ->orderBy('updated_at', 'desc')
+                        ->get();
+
+        $totalOrders = $histories->count();
+        $totalRevenue = $histories->sum('total_amount');
+
+        return view('cashier.history.index', compact('histories', 'totalOrders', 'totalRevenue'));
     }
+
 }
