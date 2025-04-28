@@ -145,7 +145,7 @@
                     </div>
 
                     <div class="mt-2 grid grid-cols-2 gap-2 w-full">
-                        <form action="" method="POST" class="w-full">
+                        <form action="{{ route('cashier.orders.confirm', $order->id) }}" method="POST" class="w-full">
                             @csrf
                             <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-xl">
                                 Konfirmasi

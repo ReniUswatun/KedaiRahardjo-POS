@@ -42,4 +42,17 @@ class OrdersController extends Controller
 
         return redirect()->route('cashier.orders.index')->with('message', 'Pesanan berhasil dihapus.');
     }
+
+    public function confirm(Order $order)
+    {
+        if ($order->order_status == 'pending') {
+            $order->update([
+                'order_status' => 'processing',
+            ]);
+
+            return redirect()->route('cashier.orders.index')->with('message', 'Pesanan berhasil dikonfirmasi.');
+        }
+
+        return redirect()->route('cashier.orders.index')->with('message', 'Pesanan tidak bisa dikonfirmasi.');
+    }
 }
