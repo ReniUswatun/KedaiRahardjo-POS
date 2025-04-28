@@ -97,32 +97,26 @@
 
                         <!-- Detail Section -->
                         <div id="details-{{ $order->id }}" class="hidden mt-2 mb-2">
-                            <div class="bg-gray-100 p-3 rounded-lg space-y-3">
-                                @foreach ($order->orderDetails as $detail)
-                                    @php
-                                        $product = $detail->product;
-                                        $productName = $product->name ?? 'Produk Tidak Ditemukan';
-                                        $productPrice = $product->price ?? 0;
-                                        $productImage = $product && $product->image ? asset('assets/images/product/' . $product->image) : asset('assets/images/product/default.jpg');
-                                    @endphp
-                                    <div class="flex items-center border-b border-gray-300 pb-2 last:border-b-0">
-                                        <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
-                                            <img src="{{ $productImage }}" alt="{{ $productName }}" class="w-16 h-16 rounded-xl object-cover">
-                                        </div>
-                                        <div class="flex-1 ml-3">
-                                            <div class="font-semibold text-gray-800">{{ $productName }}</div>
-                                            <div class="text-sm text-gray-500">
-                                                Harga Satuan: Rp {{ number_format($productPrice, 0, ',', '.') }}
-                                            </div>
-                                            <div class="text-sm text-gray-500">
-                                                Qty: {{ $detail->quantity }}
-                                            </div>
-                                            <div class="text-red-500 font-bold">
-                                                Subtotal: Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                                            </div>
-                                        </div>
+                            <div class="bg-white p-3 rounded-lg space-y-3">
+                            @foreach ($order->orderDetails as $detail)
+                                <div class="flex items-center border-b border-gray-300 pb-2 last:border-b-0">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
+                                        <img src="{{ asset('assets/images/product/nasi-goreng.jpg') }}" alt="{{ $detail->product->name }}" class="w-16 h-16 rounded-xl object-cover">
                                     </div>
-                                @endforeach
+                                    <div class="flex-1 ml-3">
+                                    <div class="font-semibold text-gray-800">{{ $detail->product->product_name }}</div>
+                                    <div class="text-sm text-gray-500">
+                                        Harga Satuan: Rp {{ number_format($detail->product->selling_price, 0, ',', '.') }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        Qty: {{ $detail->quantity }}
+                                    </div>
+                                    <div class="text-red-500 font-bold">
+                                        Subtotal: Rp {{ number_format($detail->total, 0, ',', '.') }}
+                                    </div>
+                                    </div>
+                                </div>
+                            @endforeach
                             </div>
 
                             <button onclick="toggleDetails('{{ $order->id }}')" class="mt-3 text-center w-full text-blue-500 hover:underline text-sm">
