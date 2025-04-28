@@ -53,6 +53,14 @@ class OrdersController extends Controller
             return redirect()->route('cashier.orders.index')->with('message', 'Pesanan berhasil dikonfirmasi.');
         }
 
+        if ($order->order_status == 'processing') {
+            $order->update([
+                'order_status' => 'completed',
+            ]);
+
+            return redirect()->route('cashier.orders.processing')->with('message', 'Pesanan berhasil dikonfirmasi.');
+        }
+
         return redirect()->route('cashier.orders.index')->with('message', 'Pesanan tidak bisa dikonfirmasi.');
     }
 
@@ -63,12 +71,12 @@ class OrdersController extends Controller
         return view('cashier.orders.processing', compact('orders'));
     }
 
-    public function complete(Order $order)
+    public function completed()
     {
-        $order->update([
-            'order_status' => 'completed',
-        ]);
+        $orders = Order::where('order_status', 'completed')->get();
 
-        return redirect()->route('cashier.orders.processing')->with('message', 'Pesanan telah diselesaikan.');
+        return view('cashier.orders.processing', compact('orders'));
+
+        return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan selesai.');
     }
 }
