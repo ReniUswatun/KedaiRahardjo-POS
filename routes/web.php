@@ -72,6 +72,9 @@ Route::prefix('')->name('customer.')->group(function () {
     Route::prefix('order')->name('order.')->controller(CustomerOrderController::class)->group(function () {
         Route::get('/', 'index')->name('index');
     });
+
+    //Payment
+
 });
 
 
@@ -91,9 +94,9 @@ Route::get('/session/clear', function () {
 //     return view('customer.menus.' . $jenis, ['jenis' => $jenis]);
 // })->where('jenis', 'makanan|minuman|snack|paket')->name('order.menus');
 
-Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
-Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
-Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
+// Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
+// Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
+// Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
 
 // ====== CASHIER ======
