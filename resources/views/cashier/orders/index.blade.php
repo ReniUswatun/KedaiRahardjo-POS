@@ -56,16 +56,16 @@
 <div class="p-4 pb-32 min-h-screen">
     <div class="mb-6">
         <div class="grid grid-cols-3 gap-2 w-full">
-            <a href="{{ route('cashier.orders.index') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center  
+            <a href="{{ route('cashier.orders.index') }}" class="w-full px-4 py-2 rounded-xl font-semibold text-center  
                 {{ request()->routeIs('cashier.orders.index') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
                 Pending
             </a>
-            <a href="{{ route('cashier.orders.processing') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center 
-                {{ request()->routeIs('cashier.orders.processing') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+            <a href="{{ route('cashier.orders.processing') }}" class="w-full px-4 py-2 rounded-xl font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.processing') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
                 Processing
             </a>
-            <a href="{{ route('cashier.orders.completed') }}" class="w-full px-4 py-2 rounded-md font-semibold text-center 
-                {{ request()->routeIs('cashier.orders.completed') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-500 hover:text-white' }} transition">
+            <a href="{{ route('cashier.orders.completed') }}" class="w-full px-4 py-2 rounded-xl font-semibold text-center 
+                {{ request()->routeIs('cashier.orders.completed') ? 'text-white bg-red-500' : 'text-red-500 bg-white border border-red-500 hover:bg-red-100 hover:text-red' }} transition">
                 Completed
             </a>
         </div>
