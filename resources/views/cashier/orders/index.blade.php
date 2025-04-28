@@ -136,7 +136,7 @@
                         <div class="mt-2">
                             <div class="flex justify-between text-sm text-gray-600">
                                 <span>Status: <strong class="capitalize">{{ $order->order_status }}</strong></span>
-                                <span>Pembayaran: <strong class="{{ $order->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">{{ $order->payment_status }}</strong></span>
+                                <span><strong class="{{ $order->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">{{ $order->payment_status }}</strong></span>
                             </div>
                         </div>
 

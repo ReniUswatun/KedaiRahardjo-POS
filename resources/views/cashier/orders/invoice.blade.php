@@ -10,11 +10,6 @@
             <p><strong>Customer:</strong> {{ $order->customer_name }}</p>
             <p><strong>Meja:</strong> {{ $order->table_number }}</p>
             <p><strong>Waktu Pesan:</strong> {{ $order->created_at->format('d-m-Y H:i') }}</p>
-            <p><strong>Status Pembayaran:</strong> 
-                <span class="{{ $order->payment_status == 'paid' ? 'text-green-500' : 'text-red-500' }}">
-                    {{ ucfirst($order->payment_status) }}
-                </span>
-            </p>
         </div>
 
         <div class="mb-4">
@@ -29,7 +24,7 @@
             </ul>
         </div>
 
-        <div class="flex justify-between font-bold text-lg border-t pt-2">
+        <div class="flex justify-between font-bold text-lg pt-2">
             <span>Total</span>
             <span>Rp{{ number_format($order->total_amount, 0, ',', '.') }}</span>
         </div>

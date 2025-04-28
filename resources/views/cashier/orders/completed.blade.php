@@ -127,7 +127,7 @@
                         <div class="mt-2">
                             <div class="flex justify-between text-sm text-gray-600">
                                 <span>Status: <strong class="capitalize">{{ $order->order_status }}</strong></span>
-                                <span>Pembayaran: <strong class="{{ $order->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">{{ $order->payment_status }}</strong></span>
+                                <span><strong class="{{ $order->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">{{ $order->payment_status }}</strong></span>
                             </div>
                         </div>
 
@@ -136,19 +136,11 @@
                             <span class="text-lg font-bold text-red-500">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                         </div>
 
-                        <div class="mt-2 grid grid-cols-2 gap-2 w-full">
-                            <form action="{{ route('cashier.orders.confirm', $order->id) }}" method="POST" class="w-full">
+                        <div class="mt-2">
+                            <form action="{{ route('cashier.orders.finish', $order->id) }}" method="POST" class="w-full">
                                 @csrf
                                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-xl">
                                     Selesai
-                                </button>
-                            </form>
-
-                            <form action="" method="POST" id="delete-form-{{ $order->id }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" onclick="deleteItem('{{ $order->id }}')" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
-                                    Hapus
                                 </button>
                             </form>
                         </div>

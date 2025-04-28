@@ -48,6 +48,7 @@ class OrdersController extends Controller
         if ($order->order_status == 'pending') {
             $order->update([
                 'order_status' => 'processing',
+                'payment_status' => 'paid', // Tambahkan ini supaya setelah confirm langsung paid
             ]);
 
             return redirect()->route('cashier.orders.print', $order->id);
@@ -80,19 +81,27 @@ class OrdersController extends Controller
     public function finish(Order $order)
     {
         if ($order->order_status == 'processing') {
+            // Step 2: Processing -> Completed
             $order->update([
                 'order_status' => 'completed',
             ]);
 
-            return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan telah selesai.');
+            return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan telah diselesaikan.');
+        } elseif ($order->order_status == 'completed') {
+            // Step 3: Completed -> Finished (History)
+            $order->update([
+                'order_status' => 'finished',
+            ]);
+
+            return redirect()->route('cashier.orders.history')->with('message', 'Pesanan dipindahkan ke riwayat.');
         }
 
-        return redirect()->back()->with('message', 'Pesanan tidak dapat diselesaikan.');
+        return redirect()->back()->with('message', 'Status pesanan tidak dapat diselesaikan.');
     }
 
     public function history()
     {
-        $histories = Order::where('order_status', 'completed')
+        $histories = Order::where('order_status', 'finished')
                         ->orderBy('updated_at', 'desc')
                         ->get();
 
@@ -100,6 +109,7 @@ class OrdersController extends Controller
         $totalOrders = $histories->count();
         $totalRevenue = $histories->sum('total_amount');
 
-        return view('cashier.orders.history', compact('histories', 'totalOrders', 'totalRevenue'));
+        // Pindahkan ke view yang benar
+        return view('cashier.history.index', compact('histories', 'totalOrders', 'totalRevenue'));
     }
 }
