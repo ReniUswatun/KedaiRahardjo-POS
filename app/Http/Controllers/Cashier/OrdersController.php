@@ -50,18 +50,10 @@ class OrdersController extends Controller
                 'order_status' => 'processing',
             ]);
 
-            return redirect()->route('cashier.orders.index')->with('message', 'Pesanan berhasil dikonfirmasi.');
+            return redirect()->route('cashier.orders.print', $order->id);
         }
 
-        if ($order->order_status == 'processing') {
-            $order->update([
-                'order_status' => 'completed',
-            ]);
-
-            return redirect()->route('cashier.orders.processing')->with('message', 'Pesanan berhasil dikonfirmasi.');
-        }
-
-        return redirect()->route('cashier.orders.index')->with('message', 'Pesanan tidak bisa dikonfirmasi.');
+        return redirect()->route('cashier.orders.processing')->with('message', 'Pesanan sudah diproses.');
     }
 
     public function processing()
@@ -78,5 +70,25 @@ class OrdersController extends Controller
         return view('cashier.orders.processing', compact('orders'));
 
         return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan selesai.');
+    }
+
+    public function print(Order $order)
+    {
+        $order->load('orderDetails.product');
+
+        return view('cashier.orders.invoice', compact('order'));
+    }
+
+    public function finish(Order $order)
+    {
+        if ($order->order_status == 'processing') {
+            $order->update([
+                'order_status' => 'completed',
+            ]);
+
+            return redirect()->route('cashier.orders.completed')->with('message', 'Pesanan telah selesai.');
+        }
+
+        return redirect()->back()->with('message', 'Pesanan tidak dapat diselesaikan.');
     }
 }

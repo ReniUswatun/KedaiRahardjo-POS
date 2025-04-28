@@ -153,7 +153,7 @@
                                 </button>
                             </form>
 
-                            <form action="" method="POST" id="delete-form-{{ $order->id }}">
+                            <form action="{{ route('cashier.orders.destroy', $order->id) }}" method="POST" id="delete-form-{{ $order->id }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" onclick="deleteItem('{{ $order->id }}')" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-xl">
