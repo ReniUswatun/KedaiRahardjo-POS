@@ -6,7 +6,6 @@
     function toggleDeleteMode() {
         deleteMode = !deleteMode;
         const deleteButtons = document.querySelectorAll('.delete-button');
-
         deleteButtons.forEach(button => {
             if (deleteMode) {
                 button.classList.remove('hidden');
@@ -21,6 +20,29 @@
             }
         });
     }
+
+    function toggleDetails(orderId) {
+        const detailSection = document.getElementById('details-' + orderId);
+        const allDetails = document.querySelectorAll('[id^="details-"]');
+
+        allDetails.forEach(section => {
+            if (section !== detailSection) {
+                section.classList.add('hidden');
+            }
+        });
+
+        detailSection.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function(event) {
+        const isClickInside = event.target.closest('.order-card');
+        if (!isClickInside) {
+            const allDetails = document.querySelectorAll('[id^="details-"]');
+            allDetails.forEach(section => {
+                section.classList.add('hidden');
+            });
+        }
+    });
 
     function deleteItem(orderId) {
         if (confirm('Yakin mau hapus pesanan ini?')) {
@@ -60,15 +82,55 @@
 
         @if (!empty($orders) && $orders->count() > 0)
             @foreach ($orders as $order)
-                <div class="bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex flex-col">
-                            <div class="text-lg font-semibold text-gray-800">Invoice {{ $order->invoice_no }}</div>
-                            <span class="text-sm text-gray-500">Customer: {{ $order->customer_name }}</span>
-                            <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
-                            <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
-                        </div>
+            <div class="order-card bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-200 relative">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex flex-col">
+                        <div class="text-lg font-semibold text-gray-800">Invoice {{ $order->invoice_no }}</div>
+                        <span class="text-sm text-gray-500">Customer: {{ $order->customer_name }}</span>
+                        <span class="text-sm text-gray-500">Meja: {{ $order->table_number }}</span>
+                        <span class="text-sm text-gray-500">Total Items: {{ $order->total_products }}</span>
                     </div>
+                    <button onclick="toggleDetails('{{ $order->id }}')" class="text-sm text-blue-500 hover:underline">
+                        Lihat Detail
+                    </button>
+                </div>
+
+                <!-- Detail Dropdown -->
+                <div id="details-{{ $order->id }}" class="hidden mt-2 mb-2">
+    <div class="bg-gray-100 p-3 rounded-lg space-y-3">
+        @foreach ($order->orderDetails as $detail)
+            @php
+                $product = $detail->product;
+                $productName = $product->name ?? 'Produk Tidak Ditemukan';
+                $productPrice = $product->price ?? 0;
+                $productImage = $product && $product->image ? asset('assets/images/product/' . $product->image) : asset('assets/images/product/default.jpg');
+            @endphp
+            <div class="flex items-center border-b border-gray-300 pb-2 last:border-b-0">
+                <div class="w-16 h-16 bg-gray-100 rounded-xl flex-shrink-0">
+                    <img src="{{ $productImage }}" alt="{{ $productName }}" class="w-16 h-16 rounded-xl object-cover">
+                </div>
+                <div class="flex-1 ml-3">
+                    <div class="font-semibold text-gray-800">{{ $productName }}</div>
+                    <div class="text-sm text-gray-500">
+                        Harga Satuan: Rp {{ number_format($productPrice, 0, ',', '.') }}
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        Qty: {{ $detail->quantity }}
+                    </div>
+                    <div class="text-red-500 font-bold">
+                        Subtotal: Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <button onclick="toggleDetails('{{ $order->id }}')" class="mt-3 text-center w-full text-blue-500 hover:underline text-sm">
+        Tutup Detail
+    </button>
+</div>
+
+
 
                     <div class="mt-2">
                         <div class="flex justify-between text-sm text-gray-600">
@@ -82,7 +144,6 @@
                         <span class="text-lg font-bold text-red-500">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                     </div>
 
-                    <!-- Tombol Konfirmasi dan Hapus berada di bawah total harga -->
                     <div class="mt-2 grid grid-cols-2 gap-2 w-full">
                         <form action="" method="POST" class="w-full">
                             @csrf
