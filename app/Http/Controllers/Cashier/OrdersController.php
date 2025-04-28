@@ -55,4 +55,20 @@ class OrdersController extends Controller
 
         return redirect()->route('cashier.orders.index')->with('message', 'Pesanan tidak bisa dikonfirmasi.');
     }
+
+    public function processing()
+    {
+        $orders = Order::where('order_status', 'processing')->get();
+
+        return view('cashier.orders.processing', compact('orders'));
+    }
+
+    public function complete(Order $order)
+    {
+        $order->update([
+            'order_status' => 'completed',
+        ]);
+
+        return redirect()->route('cashier.orders.processing')->with('message', 'Pesanan telah diselesaikan.');
+    }
 }
