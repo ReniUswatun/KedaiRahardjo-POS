@@ -142,15 +142,15 @@ class PaymentController extends Controller
     //     ]);
     // }
 
-    // public function saveCart(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'keranjang' => 'required|array',
-    //     ]);
+    public function saveCart(Request $request)
+    {
+        $validated = $request->validate([
+            'keranjang' => 'required|array',
+        ]);
 
-    //     // Simpan keranjang ke session sementara
-    //     session(['keranjang' => $validated['keranjang']]);
+        // Simpan keranjang ke session sementara
+        session(['keranjang' => $validated['keranjang']]);
 
-    //     return response()->json(['message' => 'Keranjang berhasil disimpan']);
-    // }
+        return response()->json(['message' => 'Keranjang berhasil disimpan']);
+    }
 }

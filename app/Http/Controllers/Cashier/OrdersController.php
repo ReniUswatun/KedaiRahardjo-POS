@@ -102,8 +102,8 @@ class OrdersController extends Controller
     public function history()
     {
         $histories = Order::where('order_status', 'finished')
-                        ->orderBy('updated_at', 'desc')
-                        ->get();
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         // Hitung total pesanan dan pendapatan
         $totalOrders = $histories->count();
