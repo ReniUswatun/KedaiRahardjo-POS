@@ -10,7 +10,7 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        // Mengambil data pesanan dengan detail produk yang terkait
+        // Menga                                                            mbil data pesanan dengan detail produk yang terkait
         $orders = Order::with('orderDetails.product') // Eager loading relasi
             ->orderBy('created_at', 'desc')
             ->get();
