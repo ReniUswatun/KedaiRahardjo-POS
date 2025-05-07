@@ -93,7 +93,7 @@
       <div class="grid grid-cols-2 gap-4 mt-4">
 
         <!-- Makanan -->
-        <a href="#" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
+        <a href="" class="flex flex-col items-center justify-center bg-red-50 p-4 rounded-xl shadow-sm hover:bg-red-100 transition">
           <img src="https://img.icons8.com/ios/50/FA5252/rice-bowl.png" class="w-10 h-10" />
           <p class="text-red-600 mt-2 font-medium">Makanan</p>
         </a>

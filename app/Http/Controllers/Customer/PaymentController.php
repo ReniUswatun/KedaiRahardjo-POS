@@ -10,9 +10,18 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Midtrans\Config;
+use Midtrans\Snap;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+    public function success()
+    {
+        Log::info('Halaman sukses pembayaran diakses');
+        return view('customer.orders.success');
+    }
+
     //Menuju ke halaman payment dengan menerima idCart
     public function showCheckoutForm($cartId)
     {
@@ -24,10 +33,7 @@ class PaymentController extends Controller
 
     //! masi mentah olah lagi nanti
     //Melakukan proses checkout
-    public function processCheckoutFromCart(
-        Request $request,
-        $cartId
-    ) {
+    public function processCheckoutFromCart(Request $request, $cartId) {
         // Ambil cart dari session
         $carts = session('carts', []);
         $cart = $carts[$cartId] ?? null;
@@ -88,15 +94,48 @@ class PaymentController extends Controller
             // Simpan kembali ke session
             session()->put('orders', $orders);
 
-            // Commit transaction
-            DB::commit();
-
-            return redirect()->route('customer.order.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // Jika terjadi error, tampilkan error tersebut
-            return back()->withErrors(['error' => 'Order processing failed: ' . $e->getMessage()]);
-        }
+            // Midtrans untuk QRIS
+            if ($validated['payment_method'] === 'qris') {
+                Config::$serverKey = config('services.midtrans.serverKey');
+                Config::$isProduction = false;
+                Config::$isSanitized = true;
+                Config::$is3ds = true;
+            
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => 'ORDER-' . $order->id,
+                        'gross_amount' => $order->total_amount,
+                    ],
+                    'customer_details' => [
+                        'first_name' => $order->customer_name,
+                        'email' => 'dummy@example.com', // Optional
+                    ],
+                    'item_details' => array_map(function ($item) {
+                        return [
+                            'id' => $item['id'],
+                            'price' => $item['price'],
+                            'quantity' => $item['quantity'],
+                            'name' => $item['name'] ?? 'Produk',
+                        ];
+                    }, $cart['items']),
+                ];
+            
+                $snapToken = Snap::getSnapToken($params);
+            
+                // Commit transaction
+                DB::commit();
+            
+                return view('customer.menus.midtrans-checkout', compact('snapToken'));
+            } else {
+                // Jika pembayaran melalui kasir
+                DB::commit();
+                return redirect()->route('customer.order.index');
+            }
+            
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return back()->withErrors(['error' => 'Order processing failed: ' . $e->getMessage()]);
+            }
     }
 
     // public function create()

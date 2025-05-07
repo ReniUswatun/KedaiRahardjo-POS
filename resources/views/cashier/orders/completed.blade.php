@@ -140,7 +140,7 @@
                             <form action="{{ route('cashier.orders.finish', $order->id) }}" method="POST" class="w-full">
                                 @csrf
                                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-xl">
-                                    Selesai
+                                    Finish
                                 </button>
                             </form>
                         </div>
