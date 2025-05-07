@@ -33,7 +33,8 @@ class PaymentController extends Controller
 
     //! masi mentah olah lagi nanti
     //Melakukan proses checkout
-    public function processCheckoutFromCart(Request $request, $cartId) {
+    public function processCheckoutFromCart(Request $request, $cartId)
+    {
         // Ambil cart dari session
         $carts = session('carts', []);
         $cart = $carts[$cartId] ?? null;
@@ -100,7 +101,7 @@ class PaymentController extends Controller
                 Config::$isProduction = false;
                 Config::$isSanitized = true;
                 Config::$is3ds = true;
-            
+
                 $params = [
                     'transaction_details' => [
                         'order_id' => 'ORDER-' . $order->id,
@@ -119,23 +120,22 @@ class PaymentController extends Controller
                         ];
                     }, $cart['items']),
                 ];
-            
+
                 $snapToken = Snap::getSnapToken($params);
-            
+
                 // Commit transaction
                 DB::commit();
-            
+
                 return view('customer.menus.midtrans-checkout', compact('snapToken'));
             } else {
                 // Jika pembayaran melalui kasir
                 DB::commit();
                 return redirect()->route('customer.order.index');
             }
-            
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return back()->withErrors(['error' => 'Order processing failed: ' . $e->getMessage()]);
-            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Order processing failed: ' . $e->getMessage()]);
+        }
     }
 
     // public function create()
