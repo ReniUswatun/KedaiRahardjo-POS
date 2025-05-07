@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Cashier\OrdersController;
+use App\Http\Controllers\Customer\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     DashboardController,
@@ -78,8 +79,10 @@ Route::prefix('')->name('customer.')->group(function () {
     //Payment
     Route::prefix('payment')->name('payment.')->controller(CustomerPaymentController::class)->group(function () {
         Route::get('/{cartId}', 'showCheckoutForm')->name('showCheckoutForm');
-        Route::post('/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
+        Route::post('checkout/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
     });
+
+    Route::get('/order/success', [PaymentController::class, 'success'])->name('order.success');
 });
 
 
