@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Cashier\OrdersController;
+use App\Http\Controllers\Customer\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     DashboardController,
@@ -44,9 +45,6 @@ use Illuminate\Contracts\Session\Session;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 // ====== CUSTOMER ======
@@ -78,8 +76,10 @@ Route::prefix('')->name('customer.')->group(function () {
     //Payment
     Route::prefix('payment')->name('payment.')->controller(CustomerPaymentController::class)->group(function () {
         Route::get('/{cartId}', 'showCheckoutForm')->name('showCheckoutForm');
-        Route::post('/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
+        Route::post('checkout/{cartId}', 'processCheckoutFromCart')->name('processCheckoutFromCart');
     });
+
+    Route::get('/order/success', [PaymentController::class, 'success'])->name('order.success');
 });
 
 
@@ -101,8 +101,40 @@ Route::get('/session/clear', function () {
 
 // Route::get('/data', [CustomerPaymentController::class, 'create'])->name('data.create');
 // Route::post('/bill', [CustomerPaymentController::class, 'store'])->name('data.store');
-// Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
+Route::post('/save-cart', [CustomerPaymentController::class, 'saveCart'])->name('save.cart');
 // Route::post('/checkout', [CheckoutController::class, 'confirm'])->name('data.confirm');
+
+// ====== CASHIER ======
+Route::get(
+    "/cashier/dashboard",
+    [CashierDashboardController::class, "index"]
+)->name("cashier.index");
+
+// route/web.php
+Route::post('/save-cart-customer', [CashierPaymentController::class, 'saveCart'])->name('save.cart.cashier');
+
+Route::get('cashier/data', [CashierPaymentController::class, 'create'])->name('data.create.cashier');
+Route::post('cashier/data', [CashierPaymentController::class, 'store'])->name('data.store.cashier');
+
+// Route::prefix('cashier/orders')->name('cashier.orders.')->group(function () {
+//     Route::get('/', [CashierOrdersController::class, 'index'])->name('index'); // Pending
+//     Route::get('/processing', [CashierOrdersController::class, 'processing'])->name('processing');
+//     Route::get('/completed', [CashierOrdersController::class, 'completed'])->name('completed');
+//     Route::get('/cashier/orders/{order}/invoice', [CashierOrdersController::class, 'invoice'])->name('invoice');
+//     Route::get('/cashier/orders/{order}/detail', [CashierOrdersController::class, 'detail'])->name('detail');
+//     });
+
+
+Route::prefix('cashier')->name('cashier.')->group(function () {
+    Route::get('/orders', [CashierOrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders/processing', [CashierOrdersController::class, 'processing'])->name('orders.processing');
+    Route::get('/orders/completed', [CashierOrdersController::class, 'completed'])->name('orders.completed');
+    Route::post('/orders/{order}/confirm', [CashierOrdersController::class, 'confirm'])->name('orders.confirm');
+    Route::delete('/orders/{order}', [CashierOrdersController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{order}/print', [CashierOrdersController::class, 'print'])->name('orders.print');
+    Route::post('/orders/{order}/finish', [CashierOrdersController::class, 'finish'])->name('orders.finish');
+    Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
+});
 
 // ====== CASHIER ======
 Route::get(
@@ -143,7 +175,22 @@ Route::prefix('cashier')->name('cashier.')->group(function () {
 //     [CashierHistoryController::class, 'index']
 // )->name('cashier.history.index');
 
+
+
+
+
+
+
+
+
+
+
+// ====== ADMIN ====== (SEMUA ROUTE UNTUK ADMIN)
 // DEFAULT DASHBOARD & PROFILE
+
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
@@ -158,21 +205,6 @@ Route::middleware(['permission:user.menu'])->group(function () {
     Route::resource('/users', UserController::class)->except(['show']);
 });
 
-// // ====== CUSTOMERS ======
-// Route::middleware(['permission:customer.menu'])->group(function () {
-//     Route::resource('/customers', CustomerController::class);
-// });
-
-// ====== CASHIER ======
-Route::prefix('cashier')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('cashier.index'); // ini akan aktif saat user buka /cashier
-    });
-
-    Route::get('/dashboard', [CashierDashboardController::class, 'index'])->name('cashier.index');
-    Route::get('/orders', [CashierOrdersController::class, 'index'])->name('cashier.orders.index');
-    Route::get('/history', [CashierHistoryController::class, 'index'])->name('cashier.history.index');
-});
 
 
 // ====== SUPPLIERS ======
@@ -281,3 +313,5 @@ Route::middleware(['permission:roles.menu'])->group(function () {
     Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
     Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
+
+require __DIR__ . '/auth.php';
