@@ -45,9 +45,6 @@ use Illuminate\Contracts\Session\Session;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 // ====== CUSTOMER ======
@@ -139,33 +136,6 @@ Route::prefix('cashier')->name('cashier.')->group(function () {
     Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
 });
 
-
-
-// Route::get(
-//     "/cashier/history",
-//     [CashierHistoryController::class, 'index']
-// )->name('cashier.history.index');
-
-// DEFAULT DASHBOARD & PROFILE
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
-});
-
-// ====== USERS ======
-Route::middleware(['permission:user.menu'])->group(function () {
-    Route::resource('/users', UserController::class)->except(['show']);
-});
-
-// // ====== CUSTOMERS ======
-// Route::middleware(['permission:customer.menu'])->group(function () {
-//     Route::resource('/customers', CustomerController::class);
-// });
-
 // ====== CASHIER ======
 Route::get(
     "/cashier/dashboard",
@@ -197,6 +167,44 @@ Route::prefix('cashier')->name('cashier.')->group(function () {
     Route::post('/orders/{order}/finish', [CashierOrdersController::class, 'finish'])->name('orders.finish');
     Route::get('/orders/history', [CashierOrdersController::class, 'history'])->name('orders.history');
 });
+
+
+
+// Route::get(
+//     "/cashier/history",
+//     [CashierHistoryController::class, 'index']
+// )->name('cashier.history.index');
+
+
+
+
+
+
+
+
+
+
+
+// ====== ADMIN ====== (SEMUA ROUTE UNTUK ADMIN)
+// DEFAULT DASHBOARD & PROFILE
+
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+});
+
+// ====== USERS ======
+Route::middleware(['permission:user.menu'])->group(function () {
+    Route::resource('/users', UserController::class)->except(['show']);
+});
+
 
 
 // ====== SUPPLIERS ======
@@ -305,3 +313,5 @@ Route::middleware(['permission:roles.menu'])->group(function () {
     Route::put('/role/permission/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
     Route::delete('/role/permission/{id}', [RoleController::class, 'rolePermissionDestroy'])->name('rolePermission.destroy');
 });
+
+require __DIR__ . '/auth.php';
