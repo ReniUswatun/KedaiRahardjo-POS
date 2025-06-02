@@ -32,6 +32,8 @@ use App\Http\Controllers\Cashier\{
     HistoryController as CashierHistoryController,
     PaymentController as CashierPaymentController
 };
+
+
 use Illuminate\Contracts\Session\Session;
 
 /*
