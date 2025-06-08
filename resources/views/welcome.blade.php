@@ -20,7 +20,8 @@
     </head>
     <body class="antialiased">
         <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
-            @if (Route::has('login'))
+            <nav class="bg-white border-b border-gray-200 shadow-sm">
+                @if (Route::has('login'))
                 <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
                     @auth
                         <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900  focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
@@ -33,6 +34,7 @@
                     @endauth
                 </div>
             @endif
+            </nav>
 
             <div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
