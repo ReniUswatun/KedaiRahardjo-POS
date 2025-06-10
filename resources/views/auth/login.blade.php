@@ -1,4 +1,4 @@
-@extends('admin.auth.body.main')
+@extends('auth.body.main')
 
 @section('container')
 
